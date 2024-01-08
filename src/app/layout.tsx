@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
-import './globals.css';
 import Navbar from '@/components/navbar/Navbar';
+import ThemeProvider, {
+  ThemeWrapper,
+} from '@/components/darkThemeProvider/DarkThemeProvider';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Maged Faiz - Software Developer',
@@ -14,10 +17,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className='bg-background text-copy'>
-        <Navbar />
-        {children}
-      </body>
+      <ThemeProvider>
+        <body>
+          <ThemeWrapper>
+            <Navbar />
+            {children}
+          </ThemeWrapper>
+        </body>
+      </ThemeProvider>
     </html>
   );
 }

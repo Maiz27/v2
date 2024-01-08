@@ -21,7 +21,7 @@ const TextArea = () => {
             Innovating Web & Mobile
             <span className='text-primary'> Experiences</span>
           </h1>
-          <p className='max-w-xl text-copy text-sm md:text-base'>
+          <p className='max-w-2xl md:text-lg'>
             Blending cutting-edge technology with creative design, I specialize
             in crafting seamless, responsive, and user-centric web and mobile
             solutions. Driven by passion and precision, my work is dedicated to
@@ -46,12 +46,12 @@ const WatermarkWrapper = () => {
 const Watermark = ({ reverse, text }: { reverse?: boolean; text: string }) => (
   <div className='flex -translate-y-12 select-none overflow-hidden'>
     <TranslateWrapper reverse={reverse}>
-      <span className='w-fit whitespace-nowrap text-[20vmax] font-black uppercase leading-[0.75] text-slate-300'>
+      <span className='w-fit whitespace-nowrap text-[20vmax] font-black uppercase leading-[0.75] text-slate-300 dark:text-slate-700'>
         {text}
       </span>
     </TranslateWrapper>
     <TranslateWrapper reverse={reverse}>
-      <span className='ml-48 w-fit whitespace-nowrap text-[20vmax] font-black uppercase leading-[0.75] text-slate-300'>
+      <span className='ml-48 w-fit whitespace-nowrap text-[20vmax] font-black uppercase leading-[0.75] text-slate-300 dark:text-slate-700'>
         {text}
       </span>
     </TranslateWrapper>
