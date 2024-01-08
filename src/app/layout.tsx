@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className=''>
+      <body className='bg-background text-copy'>
         <Navbar />
         {children}
       </body>
