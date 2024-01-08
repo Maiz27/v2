@@ -48,7 +48,7 @@ export const ToggleTheme = () => {
       title='Change Theme'
       className='text-3xl transition-all duration-300 hover:text-primary'
     >
-      {darkTheme ? <BiMoon /> : <BiSun />}
+      {darkTheme ? <BiSun /> : <BiMoon />}
     </button>
   );
 };
