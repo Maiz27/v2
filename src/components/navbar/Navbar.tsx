@@ -127,7 +127,7 @@ const MenuIconButton = ({
         whileHover={{ rotate: '180deg' }}
         whileTap={{ scale: 0.9 }}
         onClick={toggleMenu}
-        className='text-3xl hover:text-primary transition-colors z-50 shadow-2xl'
+        className='text-4xl hover:text-primary transition-colors z-50 shadow-2xl'
       >
         <Icon />
       </motion.button>

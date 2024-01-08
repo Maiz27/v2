@@ -5,7 +5,7 @@ import { heroBackgroundText } from '@/Constants';
 
 const Hero = () => {
   return (
-    <section className='h-screen'>
+    <section className='h-screen overflow-hidden'>
       <TextArea />
       <WatermarkWrapper />
     </section>
@@ -21,11 +21,16 @@ const TextArea = () => {
             Innovating Web & Mobile
             <span className='text-primary'> Experiences</span>
           </h1>
-          <p className='max-w-2xl md:text-lg'>
-            Blending cutting-edge technology with creative design, I specialize
-            in crafting seamless, responsive, and user-centric web and mobile
-            solutions. Driven by passion and precision, my work is dedicated to
-            enhancing digital interactions and elevating online presence.
+          <p className='max-w-2xl md:text-lg text-balance'>
+            Hello, I&apos;m{' '}
+            <span className='text-primary font-bold'>Maged Faiz Ismail</span>, a
+            software engineer from Juba, South Sudan. I specialize in responsive
+            web and mobile solutions, blending advanced technology with creative
+            design. Interested in tech collaborations or a chat? Let&apos;s{' '}
+            <button className='text-primary underline font-medium'>
+              Connect
+            </button>{' '}
+            and bring ideas to life!
           </p>
         </div>
       </div>

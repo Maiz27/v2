@@ -30,7 +30,7 @@ export const ThemeWrapper = ({ children }: { children: ReactNode }) => {
     <div
       className={
         darkTheme
-          ? 'dark bg-[#122021] text-foreground'
+          ? 'dark bg-[#171c1c] text-foreground'
           : 'light bg-background text-copy'
       }
     >
