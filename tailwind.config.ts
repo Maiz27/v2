@@ -10,23 +10,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: '#00adb5',
-        'primary-content': '#b5fcff',
-        'primary-dark': '#007c82',
-        'primary-light': '#00dee8',
+        primary: '#96b7e3',
+        'primary-content': '#1a3860',
+        'primary-dark': '#6e9bd8',
+        'primary-light': '#bed3ee',
 
-        secondary: '#00b535',
-        'secondary-content': '#b5ffcb',
-        'secondary-dark': '#008226',
-        'secondary-light': '#00e844',
+        // secondary: '#00b535',
+        // 'secondary-content': '#b5ffcb',
+        // 'secondary-dark': '#008226',
+        // 'secondary-light': '#00e844',
 
-        background: '#ebf4f4',
-        foreground: '#fafcfc',
-        border: '#d6e7e8',
+        background: '#010001',
+        foreground: '#121212',
+        border: '#121212',
 
-        copy: '#1c3031',
-        'copy-light': '#4a8082',
-        'copy-lighter': '#6da9ac',
+        copy: '#fafbfc',
+        'copy-light': '#cdd7e5',
+        'copy-lighter': '#cdd7e5',
 
         success: '#00b500',
         warning: '#b5b500',

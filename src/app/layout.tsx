@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import Navbar from '@/components/navbar/Navbar';
-import ThemeProvider, {
-  ThemeWrapper,
-} from '@/components/darkThemeProvider/DarkThemeProvider';
+import Left from '@/components/aside/Left';
+import Right from '@/components/aside/Right';
+import Header from '@/components/header/Header';
+import Footer from '@/components/footer/Footer';
+import { IsClientCtxProvider } from '@/lib/context/IsClientContext';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -17,14 +18,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <ThemeProvider>
-        <body>
-          <ThemeWrapper>
-            <Navbar />
+      <body className='bg-background text-copy flex'>
+        <IsClientCtxProvider>
+          <Left />
+          <div className='w-full mx-auto md:max-w-lg lg:max-w-3xl xl:max-w-full xl:border-x xl:border-copy/20'>
+            <Header />
             {children}
-          </ThemeWrapper>
-        </body>
-      </ThemeProvider>
+            <Footer />
+          </div>
+          <Right />
+        </IsClientCtxProvider>
+      </body>
     </html>
   );
 }

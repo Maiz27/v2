@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { BiMoon, BiSun } from 'react-icons/bi';
+import CTA from '../CTA/CTA';
 
 const DarkThemeContext = createContext({
   darkTheme: false,
@@ -43,12 +44,8 @@ export const ToggleTheme = () => {
   const { darkTheme, toggleTheme } = useDarkTheme();
 
   return (
-    <button
-      onClick={toggleTheme}
-      title='Change Theme'
-      className='text-3xl transition-all duration-300 hover:text-primary'
-    >
+    <CTA onClick={toggleTheme} title='Change Theme' className='text-3xl'>
       {darkTheme ? <BiSun /> : <BiMoon />}
-    </button>
+    </CTA>
   );
 };
