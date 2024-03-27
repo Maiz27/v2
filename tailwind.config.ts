@@ -15,11 +15,6 @@ const config: Config = {
         'primary-dark': '#6e9bd8',
         'primary-light': '#bed3ee',
 
-        // secondary: '#00b535',
-        // 'secondary-content': '#b5ffcb',
-        // 'secondary-dark': '#008226',
-        // 'secondary-light': '#00e844',
-
         background: '#010001',
         foreground: '#121212',
         border: '#121212',

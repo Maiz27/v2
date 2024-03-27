@@ -6,6 +6,7 @@
 
 body {
   font-family: 'Roboto', sans-serif;
+  @apply 2xl:text-lg;
 }
 
 h1,
@@ -26,5 +27,9 @@ h6 {
 }
 
 main {
-  @apply px-4;
+  @apply px-4 pt-6 mx-auto lg:py-20 lg:max-w-[700px] xl:max-w-3xl 2xl:max-w-none xl:w-4/5 2xl:w-[70%];
+}
+
+p {
+  @apply opacity-70;
 }

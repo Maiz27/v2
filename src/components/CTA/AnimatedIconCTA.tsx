@@ -9,6 +9,7 @@ type ButtonProps = {
   onClick: () => void;
   x?: number;
   direction?: 'x' | 'y';
+  isActive?: boolean;
 };
 
 type LinkProps = {
@@ -17,12 +18,13 @@ type LinkProps = {
   href: string;
   x?: number;
   direction?: 'x' | 'y';
+  isActive?: boolean;
 };
 
 type Props = ButtonProps | LinkProps;
 
 const AnimatedIconCTA = (props: Props) => {
-  const { Icon, name, x = 100, direction = 'x' } = props;
+  const { Icon, name, x = 100, direction = 'x', isActive = false } = props;
   const controls = useAnimation();
   const tooltipVariants = {
     hover: { opacity: 1, [direction]: direction === 'y' ? -x : x },
@@ -35,7 +37,9 @@ const AnimatedIconCTA = (props: Props) => {
 
   const content = (
     <motion.div
-      className='p-4 rounded-xl text-2xl transition-colors opacity-70 hover:opacity-100 hover:bg-foreground cursor-pointer relative group'
+      className={`p-4 rounded-xl text-2xl transition-colors opacity-70 hover:opacity-100 hover:bg-foreground cursor-pointer relative group ${
+        isActive ? 'bg-foreground' : ''
+      }`}
       onHoverStart={() => controls.start('hover')}
       onHoverEnd={() => controls.start('initial')}
     >
@@ -51,6 +55,7 @@ const AnimatedIconCTA = (props: Props) => {
           className='w-max h-full bg-foreground px-4 py-2 rounded-lg uppercase text-base'
           variants={tooltipVariants}
           animate={controls}
+          transition={{ delay: 0.2 }}
         >
           {name}
         </motion.div>
