@@ -30,6 +30,7 @@ main {
   @apply px-4 pt-6 mx-auto lg:py-20 lg:max-w-[700px] xl:max-w-3xl 2xl:max-w-none xl:w-4/5 2xl:w-[70%];
 }
 
-p {
+p,
+span {
   @apply opacity-70;
 }

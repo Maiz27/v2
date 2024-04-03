@@ -30,7 +30,7 @@ const TimeZone = ({ timeZone }: Props) => {
       <div className='rounded-lg bg-foreground px-4 py-3 text-xl xl:text-2xl'>
         {isClient
           ? date.toLocaleTimeString('en-US', { hour12: false, timeZone })
-          : 'Pre rendered'}
+          : ''}
       </div>
     </>
   );
