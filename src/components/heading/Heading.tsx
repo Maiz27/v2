@@ -1,4 +1,7 @@
 type props = {
+  icon: JSX.Element;
+  heading: string;
+  paragraph: string;
   Tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   size?:
     | 'xs'
@@ -12,23 +15,27 @@ type props = {
     | '5xl'
     | '6xl'
     | '7xl';
-  icon: JSX.Element;
-  text: string;
   isCentered?: boolean;
 };
 
 const Heading = ({
-  Tag = 'h2',
-  text,
+  heading,
+  paragraph,
   icon,
+  Tag = 'h2',
   size = '4xl',
   isCentered = false,
 }: props) => {
   return (
-    <Tag className='flex items-center gap-2'>
-      <span className='opacity-100 text-3xl'>{icon}</span>
-      <span className={`opacity-100 text-3xl lg:text-${size}`}>{text}</span>
-    </Tag>
+    <div className='space-y-6 border-b border-copy/10 py-6'>
+      <Tag className='flex items-center gap-2'>
+        <span className='opacity-100 text-3xl'>{icon}</span>
+        <span className={`opacity-100 text-3xl lg:text-${size}`}>
+          {heading}
+        </span>
+      </Tag>
+      <p>{paragraph}</p>
+    </div>
   );
 };
 

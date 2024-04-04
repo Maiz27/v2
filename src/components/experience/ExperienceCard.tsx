@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { getDomain } from '@/lib/utilities';
 import { FaLink, FaMapPin } from 'react-icons/fa6';
+import HoverStrips from '../hoverStrips/HoverStrips';
 
 type Company = {
   name: string;
@@ -34,13 +35,7 @@ const ExperienceCard = ({ item }: Props) => {
   } = item;
   return (
     <div className='w-full bg-foreground/50 rounded-lg p-6 border border-copy/10 relative group overflow-hidden'>
-      <div className='absolute -bottom-28 lg:-bottom-40 -right-4 w-full translate-x-1/4 translate-y-1/4 rotate-[-30deg]'>
-        <div className='-ml-4 h-12 w-full border-t bg-gradient-to-r to-background duration-500 group-hover:-translate-y-1 border-primary/80 from-primary via-primary/90 via-30%'></div>
-        <div className='-ml-8 h-12 w-full border-t bg-gradient-to-r to-background duration-500 group-hover:-translate-y-5 border-primary/80 from-primary via-primary/90 via-30%'></div>
-        <div className='-ml-12 h-12 w-full border-t bg-gradient-to-r to-background duration-500 group-hover:-translate-y-8 border-primary/80 from-primary via-primary/90 via-30%'></div>
-        <div className='-ml-16 h-12 w-full border-t bg-gradient-to-r to-background duration-500 group-hover:-translate-y-12 border-primary/80 from-primary via-primary/90 via-30%'></div>
-        <div className='-ml-16 h-12 w-full border-t bg-gradient-to-r to-background duration-500 group-hover:-translate-y-16 border-primary/80 from-primary via-primary/90 via-30%'></div>
-      </div>
+      <HoverStrips bottom='-bottom-28 lg:-bottom-40' />
 
       <div className='flex flex-col lg:flex-row justify-between lg:items-center gap-8 lg:gap-0 z-10 relative'>
         <div className='flex items-center gap-2'>

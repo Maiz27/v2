@@ -1,12 +1,13 @@
 import logo from '/public/imgs/logo/logo.png';
+
 import {
-  FaRegUser,
-  FaRegStar,
-  FaRegEnvelope,
-  FaGithub,
-  FaXTwitter,
-  FaLinkedinIn,
-} from 'react-icons/fa6';
+  HiOutlineUser,
+  HiOutlineBolt,
+  HiOutlineEnvelope,
+  HiOutlineGlobeAlt,
+  HiOutlineDevicePhoneMobile,
+  HiOutlineRocketLaunch,
+} from 'react-icons/hi2';
 
 import {
   SiReact,
@@ -26,25 +27,30 @@ import {
   SiYarn,
   SiFramer,
   SiSanity,
+  SiVisualstudiocode,
+  SiVite,
+  SiGithub,
+  SiTwitter,
+  SiLinkedin,
 } from 'react-icons/si';
 
 export const LOGO = logo;
 
 export const ROUTES = [
-  { icon: <FaRegUser />, name: 'Home', href: '/' },
-  { icon: <FaRegStar />, name: 'Services', href: '/services', x: 120 },
-  { icon: <FaRegEnvelope />, name: 'Contact', href: '/contact', x: 120 },
+  { icon: <HiOutlineUser />, name: 'Home', href: '/' },
+  { icon: <HiOutlineBolt />, name: 'Services', href: '/services', x: 120 },
+  { icon: <HiOutlineEnvelope />, name: 'Contact', href: '/contact', x: 120 },
 ];
 
 export const SOCIALS = [
-  { icon: <FaGithub />, name: 'Github', href: 'https://github.com/Maiz27' },
+  { icon: <SiGithub />, name: 'Github', href: 'https://github.com/Maiz27' },
   {
-    icon: <FaXTwitter />,
+    icon: <SiTwitter />,
     name: 'Twitter',
     href: 'https://twitter.com/_Maiz27_',
   },
   {
-    icon: <FaLinkedinIn />,
+    icon: <SiLinkedin />,
     name: 'LinkedIn',
     href: 'https://www.linkedin.com/in/maiz27/',
   },
@@ -59,6 +65,7 @@ export const TOOLS = [
   { icon: <SiSvelte />, name: 'Svelte' },
   { icon: <SiRedux />, name: 'Redux' },
   { icon: <SiNodedotjs />, name: 'Node.js' },
+  { icon: <SiVite />, name: 'Vite' },
 
   // CSS
   { icon: <SiTailwindcss />, name: 'Tailwind CSS' },
@@ -76,9 +83,11 @@ export const TOOLS = [
   { icon: <SiFlutter />, name: 'Flutter' },
 
   // Other tools
+  { icon: <SiGithub />, name: 'Github' },
   { icon: <SiYarn />, name: 'Yarn' },
   { icon: <SiFramer />, name: 'Framer' },
   { icon: <SiSanity />, name: 'Sanity' },
+  { icon: <SiVisualstudiocode />, name: 'VS Code' },
 ];
 
 export const STATS = [
@@ -156,5 +165,23 @@ export const EXPERIENCE = [
       'Contributed to strategic planning, feature research, and implemented a monorepo structure to optimize shared resources and streamline development.',
       "Actively participated in the app's lifecycle from conception to deployment, ensuring scalability and efficiency through effective backend solutions in Express.js.",
     ],
+  },
+];
+
+export const SERVICES = [
+  {
+    icon: <HiOutlineGlobeAlt />,
+    title: 'Web Development',
+    paragraph: 'Bringing ideas to life with robust and scalable web solutions.',
+  },
+  {
+    icon: <HiOutlineDevicePhoneMobile />,
+    title: 'Mobile Development',
+    paragraph: 'Creating seamless mobile experiences that delight users.',
+  },
+  {
+    icon: <HiOutlineRocketLaunch />,
+    title: 'SEO Optimization',
+    paragraph: 'Boosting your online presence with effective SEO strategies.',
   },
 ];

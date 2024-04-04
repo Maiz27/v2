@@ -2,7 +2,7 @@ import CTA from '@/components/CTA/CTA';
 import Tools from '@/components/tools/Tools';
 import ImageCard from '@/components/imageCard/ImageCard';
 import { STATS } from '@/lib/Constants';
-import { FaRegStar, FaRegEnvelope } from 'react-icons/fa6';
+import { HiOutlineDocumentText, HiOutlineEnvelope } from 'react-icons/hi2';
 
 const AboutCard = () => {
   return (
@@ -31,9 +31,9 @@ const AboutCard = () => {
               text='Email Me'
               href='mailto:email@me.com'
               external={true}
-              icon={<FaRegEnvelope />}
+              icon={<HiOutlineEnvelope />}
             />
-            <CTA text='My Services' href='/services' icon={<FaRegStar />} />
+            <CTA text='View Resume' href='/' icon={<HiOutlineDocumentText />} />
           </div>
         </div>
       </div>
