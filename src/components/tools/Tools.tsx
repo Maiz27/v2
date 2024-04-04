@@ -26,10 +26,10 @@ const Tools = () => {
 export default Tools;
 
 const Tool = ({ tool }: { tool: { icon: JSX.Element; name: string } }) => (
-  <div className='flex justify-center items-center space-x-1'>
+  <li className='flex justify-center items-center space-x-1'>
     <div className='text-4xl'>{tool.icon}</div>
     <span className='mt-2 text-sm text-center w-max font-bold'>
       {tool.name}
     </span>
-  </div>
+  </li>
 );

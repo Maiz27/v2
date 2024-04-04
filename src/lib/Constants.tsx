@@ -2,7 +2,7 @@ import logo from '/public/imgs/logo/logo.png';
 
 import {
   HiOutlineUser,
-  HiOutlineBolt,
+  HiOutlineSquare3Stack3D,
   HiOutlineEnvelope,
   HiOutlineGlobeAlt,
   HiOutlineDevicePhoneMobile,
@@ -37,9 +37,29 @@ import {
 export const LOGO = logo;
 
 export const ROUTES = [
-  { icon: <HiOutlineUser />, name: 'Home', href: '/' },
-  { icon: <HiOutlineBolt />, name: 'Services', href: '/services', x: 120 },
-  { icon: <HiOutlineEnvelope />, name: 'Contact', href: '/contact', x: 120 },
+  {
+    icon: (
+      <HiOutlineUser className='group-hover:text-primary transition-colors' />
+    ),
+    name: 'Home',
+    href: '/',
+  },
+  {
+    icon: (
+      <HiOutlineSquare3Stack3D className='group-hover:text-primary transition-colors' />
+    ),
+    name: 'Portfolio',
+    href: '/portfolio',
+    x: 120,
+  },
+  {
+    icon: (
+      <HiOutlineEnvelope className='group-hover:text-primary transition-colors' />
+    ),
+    name: 'Contact',
+    href: '/contact',
+    x: 120,
+  },
 ];
 
 export const SOCIALS = [
@@ -184,4 +204,27 @@ export const SERVICES = [
     title: 'SEO Optimization',
     paragraph: 'Boosting your online presence with effective SEO strategies.',
   },
+];
+
+export const BENEFITS = [
+  'Speed Delivery',
+  'Custom Solutions',
+  'Continuous Improvement',
+  'Exceptional Quality',
+  'Strategic Planning',
+  'Security',
+  '24/7 Support',
+  'Cost-Effective Solutions',
+  'Timely Communication',
+  'User-Centric Design',
+  'Scalability',
+  'Flexibility',
+  'Innovation',
+  'Collaboration',
+  'Agile Development',
+  'Performance Optimization',
+  'Cross-Platform Compatibility',
+  'Accessibility',
+  'Data Privacy',
+  'Technical Expertise',
 ];

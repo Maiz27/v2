@@ -2,7 +2,7 @@ import CTA from '@/components/CTA/CTA';
 import Tools from '@/components/tools/Tools';
 import ImageCard from '@/components/imageCard/ImageCard';
 import { STATS } from '@/lib/Constants';
-import { HiOutlineDocumentText, HiOutlineEnvelope } from 'react-icons/hi2';
+import { HiOutlineSquare3Stack3D, HiOutlineEnvelope } from 'react-icons/hi2';
 
 const AboutCard = () => {
   return (
@@ -13,13 +13,17 @@ const AboutCard = () => {
             <ImageCard src='/imgs/avatar.webp' />
           </div>
           <div className='lg:hidden'>
-            <span className='opacity-70'>Hello I Am</span>
+            <span className='opacity-100 font-semibold text-primary'>
+              Hello I Am
+            </span>
             <h1 className='font-bold text-3xl'>Maged Faiz</h1>
           </div>
         </div>
         <div className='space-y-4'>
           <div className='hidden lg:block'>
-            <span className='opacity-70'>Hello I Am</span>
+            <span className='opacity-100 font-semibold text-primary'>
+              Hello I Am
+            </span>
             <h1 className='font-bold text-4xl'>Maged Faiz</h1>
           </div>
           <p className='lg:text-balance'>
@@ -33,26 +37,36 @@ const AboutCard = () => {
               external={true}
               icon={<HiOutlineEnvelope />}
             />
-            <CTA text='View Resume' href='/' icon={<HiOutlineDocumentText />} />
+            <CTA
+              text='My Projects'
+              href='/portfolio'
+              icon={<HiOutlineSquare3Stack3D />}
+            />
           </div>
         </div>
       </div>
       <div className='w-full space-y-8'>
         <Tools />
-        <div className='grid place-items-center grid-cols-2 lg:grid-cols-4 gap-5 py-5 border-b border-copy/10'>
-          {STATS.map(({ count, label }) => (
-            <div
-              key={label}
-              className='w-full flex flex-col gap-2 justify-center items-center'
-            >
-              <span className='text-4xl font-bold opacity-100'>{count}+</span>
-              <span className='font-bold'>{label}</span>
-            </div>
-          ))}
-        </div>
+        <Stats stats={STATS} />
       </div>
     </section>
   );
 };
 
 export default AboutCard;
+
+const Stats = ({ stats }: { stats: typeof STATS }) => (
+  <div className='grid place-items-center grid-cols-2 lg:grid-cols-4 gap-5 py-5 border-b border-copy/10'>
+    {stats.map(({ count, label }) => (
+      <div
+        key={label}
+        className='w-full flex flex-col gap-2 justify-center items-center'
+      >
+        <span className='text-4xl font-bold opacity-100 text-primary'>
+          {count}+
+        </span>
+        <span className='font-bold'>{label}</span>
+      </div>
+    ))}
+  </div>
+);

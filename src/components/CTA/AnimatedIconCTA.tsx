@@ -52,7 +52,7 @@ const AnimatedIconCTA = (props: Props) => {
         } `}
       >
         <motion.div
-          className='w-max h-full bg-foreground px-4 py-2 rounded-lg uppercase text-base'
+          className='w-max h-full bg-foreground px-4 py-2 rounded-lg uppercase text-base text-primary'
           variants={tooltipVariants}
           animate={controls}
           transition={{ delay: 0.2 }}

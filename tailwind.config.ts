@@ -34,7 +34,7 @@ const config: Config = {
       keyframes: {
         slide: {
           '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-250%)' },
+          '100%': { transform: 'translateX(-100%)' },
         },
       },
       animation: {

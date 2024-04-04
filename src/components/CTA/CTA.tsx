@@ -73,7 +73,7 @@ const CTA = (props: CTAProps) => {
     onMouseLeave: stopScramble,
     onTouchStart: scramble,
     onTouchEnd: stopScramble,
-    className: `flex justify-center items-center gap-2 bg-foreground rounded-lg w-full py-3 border border-copy/5 uppercase opacity-70 hover:opacity-100 transition-colors ${className}`,
+    className: `flex justify-center items-center gap-2 bg-foreground rounded-lg w-full py-3 border border-copy/5 hover:border-primary uppercase opacity-70 hover:opacity-100 hover:text-primary transition-colors ${className}`,
   };
 
   if ('onClick' in props) {
@@ -86,7 +86,7 @@ const CTA = (props: CTAProps) => {
         onClick={onClick}
         {...commonProps}
       >
-        <div className='text-2xl'>{icon}</div>
+        <div className='text-2xl text-primary'>{icon}</div>
         <span>{_text}</span>
       </button>
     );
@@ -101,14 +101,14 @@ const CTA = (props: CTAProps) => {
           rel='noopener noreferrer'
           {...commonProps}
         >
-          <div className='text-xl'>{icon}</div>
+          <div className='text-xl text-primary'>{icon}</div>
           <span>{_text}</span>
         </a>
       );
     }
     return (
       <Link href={props.href} {...commonProps}>
-        <div className='text-xl'>{icon}</div>
+        <div className='text-xl text-primary'>{icon}</div>
         <span>{_text}</span>
       </Link>
     );

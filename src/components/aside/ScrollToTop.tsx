@@ -8,7 +8,7 @@ const ScrollToTop = () => {
   };
   return (
     <AnimatedIconCTA
-      Icon={<HiMiniArrowUp />}
+      Icon={<HiMiniArrowUp className='text-primary' />}
       name='Go top'
       onClick={handleScrollToTop}
       direction='y'

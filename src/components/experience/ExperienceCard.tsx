@@ -51,7 +51,7 @@ const ExperienceCard = ({ item }: Props) => {
           <div className='flex flex-col space-y-2 flex-grow'>
             <h3 className='text-lg xl:text-2xl w-full lg:w-fit flex justify-between items-center space-x-2'>
               <span className='opacity-100'>{company.name}</span>
-              <span className='px-4 py-1 rounded-xl bg-foreground text-sm xl:text-lg font-normal'>
+              <span className='px-4 py-1 rounded-xl bg-foreground text-sm xl:text-lg font-normal opacity-100 group-hover:text-primary transition-colors'>
                 {company.label}
               </span>
             </h3>
@@ -72,7 +72,7 @@ const ExperienceCard = ({ item }: Props) => {
             </div>
           </div>
         </div>
-        <div className='font-bold text-xl py-2 border-y border-copy/10 lg:border-0'>
+        <div className='font-bold text-xl py-2 border-y border-copy/10 lg:border-0 group-hover:text-primary transition-colors'>
           {duration.from} - {duration.to ?? 'Present'}
         </div>
       </div>
@@ -81,7 +81,7 @@ const ExperienceCard = ({ item }: Props) => {
         <h4 className='text-lg xl:text-xl w-full flex items-center space-x-2'>
           <span className='opacity-100'>{title}</span>
           {isPartTime && (
-            <span className='px-4 py-1 rounded-xl bg-foreground text-sm xl:text-base font-normal'>
+            <span className='px-4 py-1 rounded-xl bg-foreground text-sm xl:text-base font-normal group-hover:text-primary transition-colors'>
               Part Time
             </span>
           )}
