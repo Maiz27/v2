@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import IconCTA from '../CTA/IconCTA';
 import TimeZone from '../header/TimeZone';
-import { routes, socials } from '@/lib/Constants';
+import { ROUTES, SOCIALS } from '@/lib/Constants';
 
 const Footer = () => {
   return (
@@ -12,7 +12,7 @@ const Footer = () => {
         </div>
 
         <div className='flex justify-center items-center gap-2'>
-          {socials.map(({ icon, name, href }) => (
+          {SOCIALS.map(({ icon, name, href }) => (
             <IconCTA key={href} Icon={icon} name={name} href={href} />
           ))}
         </div>
@@ -20,7 +20,7 @@ const Footer = () => {
 
       <div className='flex flex-col lg:flex-row lg:justify-between justify-center items-center py-4 gap-4 px-4'>
         <nav className='xl:hidden flex justify-center items-center gap-4'>
-          {routes.map(({ name, href }) => (
+          {ROUTES.map(({ name, href }) => (
             <Link
               key={href}
               href={href}

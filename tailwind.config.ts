@@ -31,6 +31,15 @@ const config: Config = {
         'warning-content': '#000000',
         'error-content': '#ffb5b5',
       },
+      keyframes: {
+        slide: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-250%)' },
+        },
+      },
+      animation: {
+        slide: 'slide 30s linear infinite',
+      },
     },
   },
   plugins: [],

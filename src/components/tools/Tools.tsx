@@ -1,7 +1,4 @@
-'use client';
-import React from 'react';
-import { motion } from 'framer-motion';
-import { tools } from '@/lib/Constants';
+import { TOOLS } from '@/lib/Constants';
 
 const Tools = () => {
   return (
@@ -12,21 +9,16 @@ const Tools = () => {
           'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',
       }}
     >
-      <motion.div
-        className='flex w-full h-full'
-        initial={{ x: '0%' }}
-        animate={{ x: '-150%' }}
-        transition={{ ease: 'linear', duration: 30, repeat: Infinity }}
-      >
+      <div className='flex w-full h-full animate-slide'>
         <ul className='flex space-x-8 max-w-7xl opacity-60'>
-          {tools.map((tool) => (
+          {TOOLS.map((tool) => (
             <Tool key={tool.name} tool={tool} />
           ))}
-          {tools.map((tool) => (
+          {TOOLS.map((tool) => (
             <Tool key={`${tool.name}-duplicate`} tool={tool} />
           ))}
         </ul>
-      </motion.div>
+      </div>
     </div>
   );
 };

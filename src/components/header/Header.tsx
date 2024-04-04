@@ -2,17 +2,17 @@ import Link from 'next/link';
 import { ReactElement } from 'react';
 import PingIcon from './PingIcon';
 import TimeZone from './TimeZone';
-import { routes } from '@/lib/Constants';
+import { ROUTES } from '@/lib/Constants';
 
 const Header = () => {
   return (
-    <header className='h-28 lg:border-b lg:border-copy/10 flex lg:justify-between items-center pt-6 pb-4 lg:px-4 xl:px-8'>
+    <header className='h-28 lg:border-b lg:border-copy/10 flex lg:justify-between items-center py-6 lg:px-4 xl:px-8'>
       <div className='hidden lg:flex justify-center items-center gap-2 rounded-2xl bg-foreground px-4 py-2'>
         <PingIcon />
         <span>Available For Work</span>
       </div>
       <nav className='flex-grow lg:flex-grow-0 xl:hidden flex justify-center items-center gap-2 px-4'>
-        {routes.map(({ icon, name, href }) => (
+        {ROUTES.map(({ icon, name, href }) => (
           <NavLink key={href} Icon={icon} href={href} name={name} />
         ))}
       </nav>
