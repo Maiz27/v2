@@ -39,7 +39,7 @@ const ExperienceCard = ({ item }: Props) => {
 
       <div className='flex flex-col lg:flex-row justify-between lg:items-center gap-8 lg:gap-0 z-10 relative'>
         <div className='flex items-center gap-2'>
-          <div className='bg-copy/90 rounded-lg size-12 xl:size-16 grid place-items-center'>
+          <div className='bg-copy/90 rounded-lg size-14 xl:size-16 grid place-items-center'>
             <Image
               width={50}
               height={50}

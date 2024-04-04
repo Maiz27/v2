@@ -37,8 +37,8 @@ const AnimatedIconCTA = (props: Props) => {
 
   const content = (
     <motion.div
-      className={`p-4 rounded-xl text-2xl transition-colors opacity-70 hover:opacity-100 hover:bg-foreground cursor-pointer relative group ${
-        isActive ? 'bg-foreground' : ''
+      className={`p-4 rounded-xl text-2xl transition-colors hover:opacity-100 hover:bg-foreground cursor-pointer relative group ${
+        isActive ? 'bg-foreground text-primary opacity-100' : 'opacity-70'
       }`}
       onHoverStart={() => controls.start('hover')}
       onHoverEnd={() => controls.start('initial')}
@@ -52,7 +52,7 @@ const AnimatedIconCTA = (props: Props) => {
         } `}
       >
         <motion.div
-          className='w-max h-full bg-foreground px-4 py-2 rounded-lg uppercase text-base text-primary'
+          className='w-max h-full bg-foreground px-4 py-2 rounded-lg uppercase text-base text-primary border border-primary'
           variants={tooltipVariants}
           animate={controls}
           transition={{ delay: 0.2 }}

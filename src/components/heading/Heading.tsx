@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 type props = {
   icon: JSX.Element;
   heading: string;
@@ -15,7 +17,7 @@ type props = {
     | '5xl'
     | '6xl'
     | '7xl';
-  isCentered?: boolean;
+  children?: ReactNode;
 };
 
 const Heading = ({
@@ -24,7 +26,7 @@ const Heading = ({
   icon,
   Tag = 'h2',
   size = '4xl',
-  isCentered = false,
+  children,
 }: props) => {
   return (
     <div className='space-y-6 border-b border-copy/10 py-6'>
@@ -35,6 +37,7 @@ const Heading = ({
         </span>
       </Tag>
       <p>{paragraph}</p>
+      {children}
     </div>
   );
 };
