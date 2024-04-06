@@ -8,9 +8,7 @@ import React, {
   useState,
 } from 'react';
 
-const CYCLES_PER_LETTER = 2;
-const SHUFFLE_TIME = 50;
-const CHARS = '!@#$%^&*():{};|,.<>/?';
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 type ButtonProps = {
   text: string;
@@ -40,25 +38,28 @@ const CTA = (props: CTAProps) => {
   const [_text, setText] = useState(text);
 
   const scramble = useCallback(() => {
-    let pos = 0;
+    let iteration = 0;
 
     intervalRef.current = setInterval(() => {
       const scrambled = text
         .split('')
-        .map((char, index) =>
-          pos / CYCLES_PER_LETTER > index
-            ? char
-            : CHARS[Math.floor(Math.random() * CHARS.length)]
-        )
+        .map((_, index) => {
+          if (index < iteration) {
+            return text[index];
+          }
+
+          return LETTERS[Math.floor(Math.random() * LETTERS.length)];
+        })
         .join('');
 
       setText(scrambled);
-      pos++;
 
-      if (pos >= text.length) {
+      if (iteration >= text.length) {
         stopScramble();
       }
-    }, SHUFFLE_TIME);
+
+      iteration += 1 / 4;
+    }, 30);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [text]);
 

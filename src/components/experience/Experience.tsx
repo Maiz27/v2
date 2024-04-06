@@ -8,8 +8,8 @@ const Experience = () => {
     <section className='mt-20'>
       <Heading
         icon={<HiOutlineBriefcase />}
-        heading='My Experience'
-        paragraph='Navigating diverse environments with adaptability and expertise for holistic solutions.'
+        heading='Professional Journey'
+        paragraph='A chronicle of dedication and innovation across various tech landscapes, delivering exceptional solutions that drive growth.'
       />
 
       <div className='flex flex-col space-y-6 py-12'>

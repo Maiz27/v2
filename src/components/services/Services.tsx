@@ -1,5 +1,5 @@
 import Heading from '@/components/heading/Heading';
-import HoverStrips from '../hoverStrips/HoverStrips';
+import BaseCard from '@/components/ui/BaseCard';
 import { BENEFITS, SERVICES } from '@/lib/Constants';
 import { HiOutlineBolt, HiOutlineCheckCircle } from 'react-icons/hi2';
 
@@ -8,18 +8,13 @@ const Services = () => {
     <section className='mt-20'>
       <Heading
         icon={<HiOutlineBolt />}
-        heading='My Services'
-        paragraph='Formulating comprehensive strategies to meet your development goals
-            and exceed expectations.'
+        heading='Expertise Offered'
+        paragraph='Crafting tailor-made digital experiences with a blend of creativity, latest technology, and strategic insights to propel your business forward.'
       />
 
       <div className='py-12 grid place-items-center grid-cols-1 lg:grid-cols-2 gap-6'>
         {SERVICES.map((e, idx) => (
-          <div
-            key={idx}
-            className='w-full bg-foreground/50 rounded-lg p-6 border border-copy/10 relative group overflow-hidden'
-          >
-            <HoverStrips bottom='-bottom-36' />
+          <BaseCard key={idx} hoverStripsBottom='-bottom-36'>
             <div className='flex items-center gap-2 relative z-10'>
               <span className='text-3xl rounded-lg p-4 border border-copy/10 opacity-100 group-hover:text-primary group-hover:border-primary transition-colors'>
                 {e.icon}
@@ -30,11 +25,11 @@ const Services = () => {
             <p className='text-sm xl:text-base relative z-10 mt-4'>
               {e.paragraph}
             </p>
-          </div>
+          </BaseCard>
         ))}
       </div>
 
-      <div className='mx-auto space-y-4'>
+      <div className='mx-auto space-y-4 pb-10'>
         <h3 className='text-center'>Benefits in Services</h3>
 
         <div

@@ -6,7 +6,7 @@ import {
   HiOutlineEnvelope,
   HiOutlineGlobeAlt,
   HiOutlineDevicePhoneMobile,
-  HiOutlineRocketLaunch,
+  HiOutlineChartBarSquare,
 } from 'react-icons/hi2';
 
 import {
@@ -29,10 +29,17 @@ import {
   SiSanity,
   SiVisualstudiocode,
   SiVite,
+  SiSass,
+  SiNetlify,
+  SiVercel,
+  SiTurborepo,
+  SiExpress,
+  SiKotlin,
   SiGithub,
   SiTwitter,
   SiLinkedin,
 } from 'react-icons/si';
+import { Project } from './types';
 
 export const LOGO = logo;
 
@@ -86,9 +93,16 @@ export const TOOLS = [
   { icon: <SiRedux />, name: 'Redux' },
   { icon: <SiNodedotjs />, name: 'Node.js' },
   { icon: <SiVite />, name: 'Vite' },
+  { icon: <SiTurborepo />, name: 'Turborepo' },
+  { icon: <SiExpress />, name: 'Express.js' },
 
   // CSS
   { icon: <SiTailwindcss />, name: 'Tailwind CSS' },
+  { icon: <SiSass />, name: 'Sass' },
+
+  //Deployment
+  { icon: <SiNetlify />, name: 'Netlify' },
+  { icon: <SiVercel />, name: 'Vercel' },
 
   // Database
   { icon: <SiPostgresql />, name: 'PostgreSQL' },
@@ -104,10 +118,13 @@ export const TOOLS = [
 
   // Other tools
   { icon: <SiGithub />, name: 'Github' },
-  { icon: <SiYarn />, name: 'Yarn' },
   { icon: <SiFramer />, name: 'Framer' },
   { icon: <SiSanity />, name: 'Sanity' },
+  { icon: <SiYarn />, name: 'Yarn' },
   { icon: <SiVisualstudiocode />, name: 'VS Code' },
+
+  //Languages
+  { icon: <SiKotlin />, name: 'Kotlin' },
 ];
 
 export const STATS = [
@@ -200,7 +217,7 @@ export const SERVICES = [
     paragraph: 'Creating seamless mobile experiences that delight users.',
   },
   {
-    icon: <HiOutlineRocketLaunch />,
+    icon: <HiOutlineChartBarSquare />,
     title: 'SEO Optimization',
     paragraph: 'Boosting your online presence with effective SEO strategies.',
   },
@@ -294,4 +311,45 @@ export const FAQS = [
     answer:
       "Success is measured by meeting the goals we set together, whether it's increased traffic, sales, user engagement, or all of the above.",
   },
+];
+
+export const PROJECTS: Project[] = [
+  {
+    title: 'Zim',
+    description:
+      'An android file manager featuring a clean UI & multi-threaded processing, offering essential features like file organization, renaming, and decompression.',
+    tech: ['Flutter', 'Dart', 'Kotlin'],
+    status: 'completed',
+    image: '/imgs/avatar.webp',
+    href: null,
+    source: 'https://github.com/Maiz27/zim',
+  },
+  {
+    title: 'Sahil',
+    description:
+      'Sahil is a platform  linking businesses with suppliers and customers, facilitating automated procurement and distribution of goods. ',
+    tech: [
+      'Turborepo',
+      'Next.js',
+      'Express.js',
+      'Tailwind CSS',
+      'Hasura',
+      'GraphQL',
+      'TypeScript',
+    ],
+    status: 'ongoing',
+    image: '/imgs/avatar.webp',
+    href: 'https://sahil.app/',
+    source: 'https://github.com/Sahil-Connect/sahil',
+  },
+  // {
+  //   title: 'Amigos',
+  //   description:
+  //     'Amigos Restaurant in Juba: Savor the blend of local and global flavors at a friendly spot where every meal is a celebration of community.',
+  //   tech: ['Vite', 'React', 'Sass', 'Firebase', 'Netlify', 'JavaScript'],
+  //   status: 'completed',
+  //   image: '/imgs/avatar.webp',
+  //   href: 'https://amigos211.netlify.app/',
+  //   source: null,
+  // },
 ];

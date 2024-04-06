@@ -20,8 +20,8 @@ const ImageCard = ({ src }: Props) => {
 
   return (
     <>
-      <div className='relative'>
-        <div className='absolute inset-0 grid grid-cols-10 grid-rows-10'>
+      <div className='relative h-full'>
+        <div className='absolute inset-0 grid grid-cols-10 grid-rows-10 pointer-events-none'>
           {boxes.map((box) => (
             <motion.div
               key={box}
@@ -37,7 +37,7 @@ const ImageCard = ({ src }: Props) => {
           alt='avatar'
           width={500}
           height={500}
-          className={`object-cover ${
+          className={`h-full object-cover ${
             imageVisible ? 'opacity-100' : 'opacity-0'
           }`}
         />

@@ -1,7 +1,7 @@
 import Image from 'next/image';
+import BaseCard from '@/components/ui/BaseCard';
 import { getDomain } from '@/lib/utilities';
-import { FaLink, FaMapPin } from 'react-icons/fa6';
-import HoverStrips from '../hoverStrips/HoverStrips';
+import { HiLink, HiOutlineMapPin } from 'react-icons/hi2';
 
 type Company = {
   name: string;
@@ -34,10 +34,8 @@ const ExperienceCard = ({ item }: Props) => {
     isPartTime = false,
   } = item;
   return (
-    <div className='w-full bg-foreground/50 rounded-lg p-6 border border-copy/10 relative group overflow-hidden'>
-      <HoverStrips bottom='-bottom-28 lg:-bottom-40' />
-
-      <div className='flex flex-col lg:flex-row justify-between lg:items-center gap-8 lg:gap-0 z-10 relative'>
+    <BaseCard hoverStripsBottom='-bottom-28 lg:-bottom-40'>
+      <div className='flex flex-col lg:flex-row justify-between lg:items-center gap-8 lg:gap-0'>
         <div className='flex items-center gap-2'>
           <div className='bg-copy/90 rounded-lg size-14 xl:size-16 grid place-items-center'>
             <Image
@@ -48,25 +46,25 @@ const ExperienceCard = ({ item }: Props) => {
               className='w-2/3 object-contain'
             />
           </div>
-          <div className='flex flex-col space-y-2 flex-grow'>
+          <div className='flex flex-col space-y-1 flex-grow'>
             <h3 className='text-lg xl:text-2xl w-full lg:w-fit flex justify-between items-center space-x-2'>
               <span className='opacity-100'>{company.name}</span>
               <span className='px-4 py-1 rounded-xl bg-foreground text-sm xl:text-lg font-normal opacity-100 group-hover:text-primary transition-colors'>
                 {company.label}
               </span>
             </h3>
-            <div className='flex items-center space-x-4'>
+            <div className='flex items-center space-x-4 text-sm'>
               <a
                 href={company.href}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='text-sm opacity-70 hover:opacity-100 transition-opacity flex items-center space-x-1'
+                className='opacity-70 hover:opacity-100 hover:text-primary transition-all flex items-center space-x-1'
               >
-                <FaLink />
+                <HiLink />
                 <span>{getDomain(company.href)}</span>
               </a>
-              <span className='text-sm flex items-center space-x-1'>
-                <FaMapPin />
+              <span className='flex items-center space-x-1'>
+                <HiOutlineMapPin />
                 <p>{location}</p>
               </span>
             </div>
@@ -94,7 +92,7 @@ const ExperienceCard = ({ item }: Props) => {
           ))}
         </ul>
       </div>
-    </div>
+    </BaseCard>
   );
 };
 

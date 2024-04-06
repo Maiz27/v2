@@ -9,8 +9,8 @@ const page = () => {
     <main>
       <Heading
         icon={<HiOutlineEnvelope />}
-        heading={`Let's Connect & Create!`}
-        paragraph={`Connect with Me Today. Let's Create Something Amazing Together!`}
+        heading='Start a Conversation'
+        paragraph="Interested in collaborating? Reach out and let's turn your vision into digital reality. I'm just a message away!"
       >
         <div className='w-full xl:w-1/2 flex flex-col lg:flex-row items-center gap-2 lg:gap-4'>
           <CTA
