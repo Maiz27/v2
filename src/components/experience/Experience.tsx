@@ -14,7 +14,7 @@ const Experience = () => {
 
       <div className='flex flex-col space-y-6 py-12'>
         {EXPERIENCE.map((e, idx) => (
-          <ExperienceCard key={idx} item={e} />
+          <ExperienceCard key={idx} experience={e} />
         ))}
       </div>
     </section>

@@ -1,30 +1,14 @@
 import Image from 'next/image';
 import BaseCard from '@/components/ui/BaseCard';
 import { getDomain } from '@/lib/utilities';
+import { Experience } from '@/lib/types';
 import { HiLink, HiOutlineMapPin } from 'react-icons/hi2';
 
-type Company = {
-  name: string;
-  href: string;
-  label: string;
-  logo: string;
-};
-
 type Props = {
-  item: {
-    title: string;
-    company: Company;
-    location: string;
-    duration: {
-      from: string;
-      to?: string;
-    };
-    description: string[];
-    isPartTime?: boolean;
-  };
+  experience: Experience;
 };
 
-const ExperienceCard = ({ item }: Props) => {
+const ExperienceCard = ({ experience: item }: Props) => {
   const {
     title,
     company,

@@ -2,12 +2,13 @@ import { ReactNode } from 'react';
 import BaseCard from '@/components/ui/BaseCard';
 import ImageCard from '@/components/imageCard/ImageCard';
 import { Project } from '@/lib/types';
-import { getDomain, getToolIcon } from '@/lib/utilities';
+import { getDomain, getToolDetails } from '@/lib/utilities';
 import {
   HiLink,
   HiOutlineCheckCircle,
   HiOutlineClock,
   HiOutlinePauseCircle,
+  HiOutlineQuestionMarkCircle,
 } from 'react-icons/hi2';
 import { SiGithub } from 'react-icons/si';
 
@@ -67,10 +68,21 @@ const ProjectCard = ({ project, hasImage = true }: Props) => {
 
           <div className='flex items-center gap-4 py-2 px-4 border-y border-copy/10'>
             {tech.map((name) => {
+              const { icon, href } = getToolDetails(name) ?? {
+                icon: <HiOutlineQuestionMarkCircle />,
+                href: null,
+              };
               return (
-                <span key={name} className='text-xl' title={name}>
-                  {getToolIcon(name)}
-                </span>
+                <a
+                  key={name}
+                  href={href!}
+                  data-tip={name}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-xl hover:text-primary transition-colors'
+                >
+                  {icon}
+                </a>
               );
             })}
           </div>

@@ -39,7 +39,7 @@ import {
   SiTwitter,
   SiLinkedin,
 } from 'react-icons/si';
-import { Project } from './types';
+import { Project, Tool } from './types';
 
 export const LOGO = logo;
 
@@ -83,48 +83,72 @@ export const SOCIALS = [
   },
 ];
 
-export const TOOLS = [
+export const TOOLS: Tool[] = [
   // JavaScript ecosystem
-  { icon: <SiJavascript />, name: 'JavaScript' },
-  { icon: <SiTypescript />, name: 'TypeScript' },
-  { icon: <SiReact />, name: 'React' },
-  { icon: <SiNextdotjs />, name: 'Next.js' },
-  { icon: <SiSvelte />, name: 'Svelte' },
-  { icon: <SiRedux />, name: 'Redux' },
-  { icon: <SiNodedotjs />, name: 'Node.js' },
-  { icon: <SiVite />, name: 'Vite' },
-  { icon: <SiTurborepo />, name: 'Turborepo' },
-  { icon: <SiExpress />, name: 'Express.js' },
+  {
+    icon: <SiJavascript />,
+    name: 'JavaScript',
+    href: 'https://javascript.com',
+  },
+  {
+    icon: <SiTypescript />,
+    name: 'TypeScript',
+    href: 'https://typescriptlang.org',
+  },
+  { icon: <SiReact />, name: 'React', href: 'https://react.dev' },
+  { icon: <SiNextdotjs />, name: 'Next.js', href: 'https://nextjs.org' },
+  { icon: <SiSvelte />, name: 'Svelte', href: 'https://svelte.dev' },
+  { icon: <SiRedux />, name: 'Redux', href: 'https://redux.js.org' },
+  { icon: <SiNodedotjs />, name: 'Node.js', href: 'https://nodejs.org' },
+  { icon: <SiVite />, name: 'Vite', href: 'https://vitejs.dev' },
+  { icon: <SiTurborepo />, name: 'Turborepo', href: 'https://turbo.build' },
+  { icon: <SiExpress />, name: 'Express.js', href: 'https://expressjs.com' },
 
   // CSS
-  { icon: <SiTailwindcss />, name: 'Tailwind CSS' },
-  { icon: <SiSass />, name: 'Sass' },
+  {
+    icon: <SiTailwindcss />,
+    name: 'Tailwind CSS',
+    href: 'https://tailwindcss.com',
+  },
+  { icon: <SiSass />, name: 'Sass', href: 'https://sass-lang.com' },
 
   //Deployment
-  { icon: <SiNetlify />, name: 'Netlify' },
-  { icon: <SiVercel />, name: 'Vercel' },
+  { icon: <SiNetlify />, name: 'Netlify', href: 'https://netlify.com' },
+  { icon: <SiVercel />, name: 'Vercel', href: 'https://vercel.com' },
 
   // Database
-  { icon: <SiPostgresql />, name: 'PostgreSQL' },
-  { icon: <SiGraphql />, name: 'GraphQL' },
-  { icon: <SiHasura />, name: 'Hasura' },
+  {
+    icon: <SiPostgresql />,
+    name: 'PostgreSQL',
+    href: 'https://postgresql.org',
+  },
+  { icon: <SiGraphql />, name: 'GraphQL', href: 'https://graphql.org' },
+  { icon: <SiHasura />, name: 'Hasura', href: 'https://hasura.io' },
 
   // Firebase
-  { icon: <SiFirebase />, name: 'Firebase' },
+  {
+    icon: <SiFirebase />,
+    name: 'Firebase',
+    href: 'https://firebase.google.com',
+  },
 
   // Dart ecosystem
-  { icon: <SiDart />, name: 'Dart' },
-  { icon: <SiFlutter />, name: 'Flutter' },
+  { icon: <SiDart />, name: 'Dart', href: 'https://dart.dev' },
+  { icon: <SiFlutter />, name: 'Flutter', href: 'https://flutter.dev' },
 
   // Other tools
-  { icon: <SiGithub />, name: 'Github' },
-  { icon: <SiFramer />, name: 'Framer' },
-  { icon: <SiSanity />, name: 'Sanity' },
-  { icon: <SiYarn />, name: 'Yarn' },
-  { icon: <SiVisualstudiocode />, name: 'VS Code' },
+  { icon: <SiGithub />, name: 'Github', href: 'https://github.com' },
+  { icon: <SiFramer />, name: 'Framer', href: 'https://www.framer.com' },
+  { icon: <SiSanity />, name: 'Sanity', href: 'https://sanity.io' },
+  { icon: <SiYarn />, name: 'Yarn', href: 'https://yarnpkg.com' },
+  {
+    icon: <SiVisualstudiocode />,
+    name: 'VS Code',
+    href: 'https://code.visualstudio.com',
+  },
 
   //Languages
-  { icon: <SiKotlin />, name: 'Kotlin' },
+  { icon: <SiKotlin />, name: 'Kotlin', href: 'https://kotlinlang.org' },
 ];
 
 export const STATS = [

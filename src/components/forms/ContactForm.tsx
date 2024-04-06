@@ -1,5 +1,6 @@
 'use client';
 import CTA from '../CTA/CTA';
+import { HiOutlineArrowUpRight } from 'react-icons/hi2';
 
 const ContactForm = () => {
   return (
@@ -10,7 +11,12 @@ const ContactForm = () => {
           <input placeholder='Email' type='email' />
         </div>
         <textarea className='h-52 resize-y' placeholder='Message' />
-        <CTA text='Send Your Message' onClick={() => {}} type='submit' />
+        <CTA
+          icon={<HiOutlineArrowUpRight />}
+          text='Send Message'
+          onClick={() => {}}
+          type='submit'
+        />
       </form>
     </section>
   );

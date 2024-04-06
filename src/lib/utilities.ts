@@ -9,7 +9,7 @@ export const getDomain = (url: string) => {
   return parts.join('.');
 };
 
-export const getToolIcon = (toolName: string) => {
+export const getToolDetails = (toolName: string) => {
   const tool = TOOLS.find((tool) => tool.name === toolName);
-  return tool ? tool.icon : null;
+  return tool ? { icon: tool.icon, href: tool.href } : null;
 };
