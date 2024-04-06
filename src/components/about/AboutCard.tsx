@@ -39,7 +39,7 @@ const AboutCard = () => {
             />
             <CTA
               text='My Projects'
-              href='/portfolio'
+              href='/projects'
               icon={<HiOutlineSquare3Stack3D />}
             />
           </div>

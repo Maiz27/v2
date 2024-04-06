@@ -1,8 +1,10 @@
+export type ProjectStatus = 'completed' | 'ongoing' | 'paused';
+
 export type Project = {
   title: string;
   description: string;
   tech: string[];
-  status: 'completed' | 'ongoing' | 'paused';
+  status: ProjectStatus;
   image: string;
   href: string | null;
   source: string | null;

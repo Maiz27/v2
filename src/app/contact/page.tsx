@@ -8,6 +8,7 @@ const page = () => {
   return (
     <main>
       <Heading
+        Tag='h1'
         icon={<HiOutlineEnvelope />}
         heading='Start a Conversation'
         paragraph="Interested in collaborating? Reach out and let's turn your vision into digital reality. I'm just a message away!"
@@ -21,7 +22,7 @@ const page = () => {
           />
           <CTA
             text='My Projects'
-            href='/portfolio'
+            href='/projects'
             icon={<HiOutlineSquare3Stack3D />}
           />
         </div>

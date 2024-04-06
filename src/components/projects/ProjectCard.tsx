@@ -79,7 +79,7 @@ const ProjectCard = ({ project, hasImage = true }: Props) => {
                   data-tip={name}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='text-xl hover:text-primary transition-colors'
+                  className='text-xl opacity-70 hover:opacity-100 hover:text-primary transition-all'
                 >
                   {icon}
                 </a>

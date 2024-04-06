@@ -39,7 +39,7 @@ import {
   SiTwitter,
   SiLinkedin,
 } from 'react-icons/si';
-import { Project, Tool } from './types';
+import { Project, ProjectStatus, Tool } from './types';
 
 export const LOGO = logo;
 
@@ -55,8 +55,8 @@ export const ROUTES = [
     icon: (
       <HiOutlineSquare3Stack3D className='group-hover:text-primary transition-colors' />
     ),
-    name: 'Portfolio',
-    href: '/portfolio',
+    name: 'Projects',
+    href: '/projects',
     x: 130,
   },
   {
@@ -149,6 +149,14 @@ export const TOOLS: Tool[] = [
 
   //Languages
   { icon: <SiKotlin />, name: 'Kotlin', href: 'https://kotlinlang.org' },
+];
+
+export const NON_STACK_TOOLS = [
+  'Github',
+  'VS Code',
+  'Yarn',
+  'PostgreSQL',
+  'Node.js',
 ];
 
 export const STATS = [
@@ -337,6 +345,12 @@ export const FAQS = [
   },
 ];
 
+export const PROJECT_STATUS: ProjectStatus[] = [
+  'completed',
+  'ongoing',
+  'paused',
+];
+
 export const PROJECTS: Project[] = [
   {
     title: 'Zim',
@@ -366,14 +380,14 @@ export const PROJECTS: Project[] = [
     href: 'https://sahil.app/',
     source: 'https://github.com/Sahil-Connect/sahil',
   },
-  // {
-  //   title: 'Amigos',
-  //   description:
-  //     'Amigos Restaurant in Juba: Savor the blend of local and global flavors at a friendly spot where every meal is a celebration of community.',
-  //   tech: ['Vite', 'React', 'Sass', 'Firebase', 'Netlify', 'JavaScript'],
-  //   status: 'completed',
-  //   image: '/imgs/avatar.webp',
-  //   href: 'https://amigos211.netlify.app/',
-  //   source: null,
-  // },
+  {
+    title: 'Amigos',
+    description:
+      'Amigos Restaurant in Juba: Savor the blend of local and global flavors at a friendly spot where every meal is a celebration of community.',
+    tech: ['Vite', 'React', 'Sass', 'Firebase', 'Netlify', 'JavaScript'],
+    status: 'completed',
+    image: '/imgs/avatar.webp',
+    href: 'https://amigos211.netlify.app/',
+    source: null,
+  },
 ];
