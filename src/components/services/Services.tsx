@@ -39,15 +39,15 @@ const Services = () => {
               'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',
           }}
         >
-          <div className='flex h-full animate-[slide_180s_linear_infinite] py-4'>
-            <ul className='flex space-x-8 opacity-70 '>
+          <div className='w-full flex h-full animate-[slide_180s_linear_infinite] py-4'>
+            <ul className='w-full flex space-x-8 opacity-70 '>
               {BENEFITS.map((name) => (
                 <li key={name} className='flex items-center space-x-2 text-3xl'>
                   <HiOutlineCheckCircle className='text-primary' />
                   <span className='text-base w-max opacity-100'>{name}</span>
                 </li>
               ))}
-              {BENEFITS.map((name, idx) => (
+              {/* {BENEFITS.map((name, idx) => (
                 <li
                   key={`${name}-duplicate`}
                   className='flex items-center space-x-2 text-3xl'
@@ -55,7 +55,7 @@ const Services = () => {
                   <HiOutlineCheckCircle className='text-primary' />
                   <span className='text-base w-max opacity-100'>{name}</span>
                 </li>
-              ))}
+              ))} */}
             </ul>
           </div>
         </div>

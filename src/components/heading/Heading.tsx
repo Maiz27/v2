@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 type props = {
   icon: JSX.Element;
   heading: string;
-  paragraph: string;
+  paragraph?: string;
   Tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   size?:
     | 'xs'
@@ -36,7 +36,7 @@ const Heading = ({
           {heading}
         </span>
       </Tag>
-      <p>{paragraph}</p>
+      {paragraph && <p>{paragraph}</p>}
       {children}
     </div>
   );

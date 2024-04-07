@@ -12,11 +12,11 @@ const page = () => {
         icon={<HiOutlineLightBulb />}
         heading='My Projects'
         paragraph='Explore the landscape of innovation and technology through my projects, each a testament to creative solutions and technical prowess.'
-      />
+      >
+        <ProjectsFilter />
+      </Heading>
 
       <section className='mb-10'>
-        <ProjectsFilter />
-
         <div className='mt-10 grid place-items-center grid-cols-1 lg:grid-cols-2 gap-4'>
           {PROJECTS.map((project, idx) => (
             <ProjectCard

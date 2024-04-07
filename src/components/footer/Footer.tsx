@@ -13,7 +13,7 @@ const Footer = () => {
 
         <div className='flex justify-center items-center gap-2'>
           {SOCIALS.map(({ icon, name, href }) => (
-            <IconCTA key={href} Icon={icon} name={name} href={href} />
+            <IconCTA key={href} icon={icon} name={name} href={href} />
           ))}
         </div>
       </div>
