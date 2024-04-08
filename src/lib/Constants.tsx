@@ -138,7 +138,11 @@ export const TOOLS: Tool[] = [
 
   // Other tools
   { icon: <SiGithub />, name: 'Github', href: 'https://github.com' },
-  { icon: <SiFramer />, name: 'Framer', href: 'https://www.framer.com' },
+  {
+    icon: <SiFramer />,
+    name: 'Framer Motion',
+    href: 'https://www.framer.com/motion/',
+  },
   { icon: <SiSanity />, name: 'Sanity', href: 'https://sanity.io' },
   { icon: <SiYarn />, name: 'Yarn', href: 'https://yarnpkg.com' },
   {

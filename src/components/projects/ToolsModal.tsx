@@ -22,12 +22,11 @@ const ToolsModal = ({ selectedTools, handleConfirm }: Props) => {
     } else {
       setSelection((prev) => [...prev, tool]);
     }
-  }
-  
+  };
+
   const confirm = () => {
     handleConfirm(selection);
   };
-  
 
   return (
     <BaseModal
@@ -35,7 +34,7 @@ const ToolsModal = ({ selectedTools, handleConfirm }: Props) => {
       buttonIcon={<HiOutlineAdjustmentsVertical />}
       buttonText='All Tools'
       classNames={`${
-        selection?.length > 0 ? 'border border-primary text-primary' : ''
+        selectedTools?.length > 0 ? 'border border-primary text-primary' : ''
       }`}
     >
       <Heading
