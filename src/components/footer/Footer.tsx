@@ -1,26 +1,26 @@
 import Link from 'next/link';
 import IconCTA from '../CTA/IconCTA';
 import TimeZone from '../header/TimeZone';
-import { routes, socials } from '@/lib/Constants';
+import { ROUTES, SOCIALS } from '@/lib/Constants';
 
 const Footer = () => {
   return (
-    <footer className='min-h-20 xl:border-t border-copy/20'>
+    <footer className='min-h-20 xl:border-t border-copy/10'>
       <div className='flex flex-col lg:flex-row lg:justify-between xl:hidden justify-center items-center border-y border-copy/10 gap-6 py-4 px-4 xl:px-8'>
         <div className='flex flex-col lg:flex-row justify-center items-center gap-2'>
           <TimeZone timeZone='Africa/Juba' />
         </div>
 
         <div className='flex justify-center items-center gap-2'>
-          {socials.map(({ icon, name, href }) => (
-            <IconCTA key={href} Icon={icon} name={name} href={href} />
+          {SOCIALS.map(({ icon, name, href }) => (
+            <IconCTA key={href} icon={icon} name={name} href={href} />
           ))}
         </div>
       </div>
 
       <div className='flex flex-col lg:flex-row lg:justify-between justify-center items-center py-4 gap-4 px-4'>
         <nav className='xl:hidden flex justify-center items-center gap-4'>
-          {routes.map(({ name, href }) => (
+          {ROUTES.map(({ name, href }) => (
             <Link
               key={href}
               href={href}
@@ -43,9 +43,9 @@ const Footer = () => {
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
-            stroke-width='2'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
             className='inline-block h-5 w-5 text-primary'
           >
             <rect x='14' y='14' width='4' height='6' rx='2'></rect>

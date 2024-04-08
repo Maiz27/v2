@@ -15,11 +15,6 @@ const config: Config = {
         'primary-dark': '#6e9bd8',
         'primary-light': '#bed3ee',
 
-        // secondary: '#00b535',
-        // 'secondary-content': '#b5ffcb',
-        // 'secondary-dark': '#008226',
-        // 'secondary-light': '#00e844',
-
         background: '#010001',
         foreground: '#121212',
         border: '#121212',
@@ -35,6 +30,15 @@ const config: Config = {
         'success-content': '#b5ffb5',
         'warning-content': '#000000',
         'error-content': '#ffb5b5',
+      },
+      keyframes: {
+        slide: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-300%)' },
+        },
+      },
+      animation: {
+        slide: 'slide 30s linear infinite',
       },
     },
   },

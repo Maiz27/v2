@@ -1,6 +1,6 @@
 'use client';
 import AnimatedIconCTA from '../CTA/AnimatedIconCTA';
-import { FaArrowUp } from 'react-icons/fa6';
+import { HiMiniArrowUp } from 'react-icons/hi2';
 
 const ScrollToTop = () => {
   const handleScrollToTop = () => {
@@ -8,7 +8,7 @@ const ScrollToTop = () => {
   };
   return (
     <AnimatedIconCTA
-      Icon={<FaArrowUp />}
+      Icon={<HiMiniArrowUp className='text-primary' />}
       name='Go top'
       onClick={handleScrollToTop}
       direction='y'
