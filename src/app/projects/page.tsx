@@ -29,9 +29,6 @@ const fetchProjects = async (
   query +=
     ']{ title, featured, status, description, href, source, tech[]->{ name }, "images": images[].image.asset->url } | order(featured desc)';
 
-  console.log(params.tech);
-  console.log('query', query);
-
   const projects: Project[] = await fetchSanityData(query, params);
 
   return projects;

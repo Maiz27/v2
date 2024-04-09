@@ -60,15 +60,15 @@ const RichTextParser = memo(({ content }: props) => {
         <h6 className='text-base px-2 mt-3 mb-1 '>{children}</h6>
       ),
       normal: ({ children }) => (
-        <p className='text-base mb-4 p-2'>{children}</p>
+        <p className='text-base mb-2 p-2'>{children}</p>
       ),
     },
     list: {
       bullet: ({ children }) => (
-        <ul className='list-disc pl-10 pr-2 mb-4 space-y-2'>{children}</ul>
+        <ul className='list-disc pl-10 pr-2 space-y-2'>{children}</ul>
       ),
       number: ({ children }) => (
-        <ol className='list-decimal pl-10 pr-2 mb-4 space-y-2'>{children}</ol>
+        <ol className='list-decimal pl-10 pr-2 space-y-2'>{children}</ol>
       ),
       // Add any other custom list types you want to handle
     },

@@ -1,4 +1,4 @@
-export const getAboutMe = `*[_type == "about"]{
+export const getAboutMe = `*[_type == "aboutMe"]{
   name,
   bio,
   "imageUrl": image.asset->url,

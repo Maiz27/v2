@@ -5,6 +5,8 @@ import ContactForm from '@/components/forms/ContactForm';
 import { HiOutlineEnvelope, HiOutlineSquare3Stack3D } from 'react-icons/hi2';
 import { EMAIL } from '@/lib/Constants';
 
+export const revalidate = 60;
+
 const page = () => {
   return (
     <main>
