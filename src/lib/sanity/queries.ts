@@ -22,7 +22,9 @@ export const getFeaturedProjects = `*[_type == "project" && featured == true]{
   description,
   href,
   source,
-  tech->,
+  tech[]->{
+    name,
+  },
   "images": images[].image.asset->url
 }`;
 

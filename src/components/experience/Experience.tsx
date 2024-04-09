@@ -10,7 +10,6 @@ export const revalidate = 60;
 const Experience = async () => {
   const experience: ExperienceType[] = await fetchSanityData(getExperiences);
 
-  console.log(experience);
   return (
     <section className='mt-20'>
       <Heading

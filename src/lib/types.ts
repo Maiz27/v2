@@ -13,13 +13,17 @@ export type AboutMeStats = {
 };
 
 export type ProjectStatus = 'completed' | 'ongoing' | 'paused';
+export type ProjectTech = {
+  name: string;
+};
 
 export type Project = {
   title: string;
-  description: string;
-  tech: string[];
+  featured: boolean;
   status: ProjectStatus;
-  image: string;
+  description: string;
+  images: string[];
+  tech: ProjectTech[];
   href: string | null;
   source: string | null;
 };

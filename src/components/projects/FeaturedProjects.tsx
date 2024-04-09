@@ -1,10 +1,16 @@
 import CTA from '@/components/CTA/CTA';
 import Heading from '@/components/heading/Heading';
 import ProjectCard from '@/components/projects/ProjectCard';
-import { PROJECTS } from '@/lib/Constants';
+import { fetchSanityData } from '@/lib/sanity/client';
+import { getFeaturedProjects } from '@/lib/sanity/queries';
+import { Project } from '@/lib/types';
 import { HiOutlineSquare3Stack3D, HiOutlineStar } from 'react-icons/hi2';
 
-const Projects = () => {
+export const revalidate = 60;
+
+const FeaturedProjects = async () => {
+  const projects: Project[] = await fetchSanityData(getFeaturedProjects);
+
   return (
     <section className='my-20'>
       <Heading
@@ -14,11 +20,9 @@ const Projects = () => {
       />
 
       <div className='py-12 grid place-items-center grid-cols-1 lg:grid-cols-2 gap-6'>
-        {PROJECTS.map((project, idx) => {
-          return (
-            idx < 2 && <ProjectCard key={project.href} project={project} />
-          );
-        })}
+        {projects.map((project, idx) => (
+          <ProjectCard key={project.href} project={project} />
+        ))}
       </div>
 
       <CTA
@@ -30,4 +34,4 @@ const Projects = () => {
   );
 };
 
-export default Projects;
+export default FeaturedProjects;

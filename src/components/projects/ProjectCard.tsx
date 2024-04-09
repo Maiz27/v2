@@ -33,13 +33,13 @@ const STATUS = {
 };
 
 const ProjectCard = ({ project, hasImage = true }: Props) => {
-  const { image, title, status, href, source, description, tech } = project;
+  const { images, title, status, href, source, description, tech } = project;
   return (
     <BaseCard hoverStripsBottom='-bottom-40' className='w-full h-full'>
       <div className='w-full h-full flex flex-col gap-5'>
         {hasImage && (
           <div className='w-full h-64 overflow-hidden rounded-lg'>
-            <ImageCard src={image} />
+            <ImageCard src={images[0]} />
           </div>
         )}
         <div className='min-h-52 grow flex flex-col justify-around '>
@@ -67,7 +67,7 @@ const ProjectCard = ({ project, hasImage = true }: Props) => {
           </div>
 
           <div className='flex items-center gap-4 py-2 px-4 border-y border-copy/10'>
-            {tech.map((name) => {
+            {tech.map(({ name }) => {
               const { icon, href } = getToolDetails(name) ?? {
                 icon: <HiOutlineQuestionMarkCircle />,
                 href: null,
