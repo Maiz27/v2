@@ -12,7 +12,7 @@ export const getExperiences = `*[_type == "experience"]{
   duration,
   company,
   description,
-  "companyLogo": company.logo.asset->url
+  "logo": company.logo.asset->url
 } | order(duration.from desc)`;
 
 export const getFeaturedProjects = `*[_type == "project" && featured == true]{

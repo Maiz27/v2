@@ -26,21 +26,21 @@ export type Project = {
 
 export type Experience = {
   title: string;
-  company: Company;
   location: string;
+  partTime: boolean;
   duration: {
     from: string;
     to?: string;
   };
-  description: string[];
-  isPartTime?: boolean;
+  company: Company;
+  description: RichText;
 };
 
 export type Company = {
   name: string;
   href: string;
   label: string;
-  logo: string;
+  logo: Object;
 };
 
 export type Tool = {
@@ -48,3 +48,12 @@ export type Tool = {
   icon: JSX.Element;
   href: string;
 };
+
+export type RichText = Array<{
+  _type: string;
+  style: string;
+  children: Array<{
+    _type: string;
+    text: string;
+  }>;
+}>;

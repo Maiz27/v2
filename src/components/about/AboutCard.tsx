@@ -13,7 +13,6 @@ const AboutCard = async () => {
 
   const { name, bio, imageUrl, stats } = about;
 
-  console.log(about);
   return (
     <section className='flex flex-col gap-8 items-center'>
       <div className='flex flex-col lg:flex-row justify-center items-start lg:items-center gap-4'>

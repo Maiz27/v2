@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import BaseCard from '@/components/ui/BaseCard';
-import { getDomain } from '@/lib/utilities';
+import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import { Experience } from '@/lib/types';
+import { urlFor } from '@/lib/sanity/client';
+import { getDomain, roundYear } from '@/lib/utilities';
 import { HiLink, HiOutlineMapPin } from 'react-icons/hi2';
 
 type Props = {
@@ -9,14 +11,9 @@ type Props = {
 };
 
 const ExperienceCard = ({ experience: item }: Props) => {
-  const {
-    title,
-    company,
-    location,
-    duration,
-    description,
-    isPartTime = false,
-  } = item;
+  const { title, company, location, duration, description, partTime } = item;
+  const logo = urlFor(company.logo).url();
+
   return (
     <BaseCard hoverStripsBottom='-bottom-28 lg:-bottom-40'>
       <div className='flex flex-col lg:flex-row justify-between lg:items-center gap-8 lg:gap-0'>
@@ -25,7 +22,7 @@ const ExperienceCard = ({ experience: item }: Props) => {
             <Image
               width={50}
               height={50}
-              src={company.logo}
+              src={logo}
               alt={company.name}
               className='w-2/3 object-contain'
             />
@@ -55,26 +52,24 @@ const ExperienceCard = ({ experience: item }: Props) => {
           </div>
         </div>
         <div className='font-bold text-xl py-2 border-y border-copy/10 lg:border-0 group-hover:text-primary transition-colors'>
-          {duration.from} - {duration.to ?? 'Present'}
+          {roundYear(duration.from)} -{' '}
+          {duration.to ? roundYear(duration.to) : 'Present'}
         </div>
       </div>
 
       <div className='border border-copy/10 rounded-lg p-6 space-y-2 z-10 relative mt-6'>
         <h4 className='text-lg xl:text-xl w-full flex items-center space-x-2'>
           <span className='opacity-100'>{title}</span>
-          {isPartTime && (
+          {partTime && (
             <span className='px-4 py-1 rounded-xl bg-foreground text-sm xl:text-base font-normal group-hover:text-primary transition-colors'>
               Part Time
             </span>
           )}
         </h4>
-        <ul className='list-disc px-4 space-y-1'>
-          {description.map((desc, index) => (
-            <li key={index} className='text-sm'>
-              <p>{desc}</p>
-            </li>
-          ))}
-        </ul>
+
+        <div className='text-sm'>
+          <RichTextParser content={description} />
+        </div>
       </div>
     </BaseCard>
   );

@@ -1,9 +1,16 @@
 import Heading from '@/components/heading/Heading';
 import ExperienceCard from '@/components/experience/ExperienceCard';
-import { EXPERIENCE } from '@/lib/Constants';
+import { getExperiences } from '@/lib/sanity/queries';
+import { fetchSanityData } from '@/lib/sanity/client';
+import { Experience as ExperienceType } from '@/lib/types';
 import { HiOutlineBriefcase } from 'react-icons/hi2';
 
-const Experience = () => {
+export const revalidate = 60;
+
+const Experience = async () => {
+  const experience: ExperienceType[] = await fetchSanityData(getExperiences);
+
+  console.log(experience);
   return (
     <section className='mt-20'>
       <Heading
@@ -13,7 +20,7 @@ const Experience = () => {
       />
 
       <div className='flex flex-col space-y-6 py-12'>
-        {EXPERIENCE.map((e, idx) => (
+        {experience.map((e, idx) => (
           <ExperienceCard key={idx} experience={e} />
         ))}
       </div>

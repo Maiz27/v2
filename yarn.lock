@@ -209,6 +209,26 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@portabletext/react@^3.0.17":
+  version "3.0.17"
+  resolved "https://registry.yarnpkg.com/@portabletext/react/-/react-3.0.17.tgz#fafa5e5cae6aa2d410c3cfdbb2a367b7180d1ab9"
+  integrity sha512-a5z2CoEG6vtRNnMZ95hH1IRYMpY2Zhmeri839p0Os2CRlQX7PldL7B91NIhwuJd0D+9ESMNAMf4Or/XsVQWZew==
+  dependencies:
+    "@portabletext/toolkit" "^2.0.14"
+    "@portabletext/types" "^2.0.12"
+
+"@portabletext/toolkit@^2.0.14":
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/@portabletext/toolkit/-/toolkit-2.0.14.tgz#f0547aa28e08f3d6b5b9441f43873fd3cb44d01d"
+  integrity sha512-SIg7bnfJ3nUA5N8JF6jcLE20CCrguqZDJkopHiUYBJ3y/OHIFdkBL5roLlMAY8VQOHK0CYKr9CnJ2BK/ihuuOw==
+  dependencies:
+    "@portabletext/types" "^2.0.12"
+
+"@portabletext/types@^2.0.12":
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/@portabletext/types/-/types-2.0.12.tgz#ad45069d152ac76244bec44399ba0b7ef45d5995"
+  integrity sha512-dk8CcVDg7Y3DCXhuCdEJeV1GYzIfjCdEgZhrODhIiz+Zd7iXQYsdoRJXoz5lsT5w0UFxYkG+1KhQpIXSlKvyhA==
+
 "@rushstack/eslint-patch@^1.3.3":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.6.1.tgz#9ab8f811930d7af3e3d549183a50884f9eb83f36"
