@@ -34,7 +34,7 @@ const ProjectsFilter = ({ projectsTotal }: { projectsTotal: number }) => {
               </option>
             ))}
           </select>
-          <div className='w-full lg:w-56'>
+          <div className='w-full lg:w-40'>
             <ToolsModal
               selectedTech={state.selectedTech}
               handleConfirm={handleTechSelection}

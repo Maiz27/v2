@@ -1,6 +1,6 @@
 import Heading from '@/components/heading/Heading';
-import ProjectCard from '@/components/projects/ProjectCard';
 import ProjectsFilter from '@/components/projects/ProjectsFilter';
+import AnimatedProjectsGrid from '@/components/projects/AnimatedProjectsGrid';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { Project } from '@/lib/types';
 import { HiOutlineLightBulb } from 'react-icons/hi2';
@@ -42,7 +42,7 @@ const page = async ({
   const projects: Project[] = await fetchProjects(searchParams);
 
   return (
-    <main>
+    <main className='min-h-screen'>
       <Heading
         Tag='h1'
         icon={<HiOutlineLightBulb />}
@@ -52,17 +52,7 @@ const page = async ({
         <ProjectsFilter projectsTotal={projects.length} />
       </Heading>
 
-      <section className='mb-10'>
-        <div className='mt-10 grid place-items-center grid-cols-1 lg:grid-cols-2 gap-4'>
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.href}
-              project={project}
-              hasImage={false}
-            />
-          ))}
-        </div>
-      </section>
+      <AnimatedProjectsGrid projects={projects} />
     </main>
   );
 };
