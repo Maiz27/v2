@@ -1,3 +1,17 @@
+export type AboutMe = {
+  name: string;
+  bio: string;
+  imageUrl: string;
+  stats: AboutMeStats;
+};
+
+export type AboutMeStats = {
+  clients: number;
+  experience: number;
+  projects: number;
+  contributions: number;
+};
+
 export type ProjectStatus = 'completed' | 'ongoing' | 'paused';
 
 export type Project = {

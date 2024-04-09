@@ -163,25 +163,6 @@ export const NON_STACK_TOOLS = [
   'Node.js',
 ];
 
-export const STATS = [
-  {
-    count: 15,
-    label: 'Happy Clients',
-  },
-  {
-    count: 3,
-    label: 'Years of Experience',
-  },
-  {
-    count: 20,
-    label: 'Projects Completed',
-  },
-  {
-    count: '999',
-    label: 'Contributions',
-  },
-];
-
 export const EXPERIENCE = [
   {
     title: 'Teaching Assistant',
