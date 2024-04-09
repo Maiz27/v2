@@ -1,12 +1,18 @@
 import FaqCard from './FaqCard';
 import Heading from '../heading/Heading';
-import { FAQS } from '@/lib/Constants';
+import { fetchSanityData } from '@/lib/sanity/client';
+import { getFaqs } from '@/lib/sanity/queries';
+import { Faq } from '@/lib/types';
 import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
 
-const Faqs = () => {
-  const midIndex = Math.ceil(FAQS.length / 2);
-  const firstHalf = FAQS.slice(0, midIndex);
-  const secondHalf = FAQS.slice(midIndex);
+export const revalidate = 60;
+
+const Faqs = async () => {
+  const faqs: Faq[] = await fetchSanityData(getFaqs);
+
+  const midIndex = Math.ceil(faqs.length / 2);
+  const firstHalf = faqs.slice(0, midIndex);
+  const secondHalf = faqs.slice(midIndex);
 
   return (
     <section className='my-20'>

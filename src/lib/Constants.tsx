@@ -39,9 +39,11 @@ import {
   SiTwitter,
   SiLinkedin,
 } from 'react-icons/si';
-import { Project, ProjectStatus, Tool } from './types';
+import { ProjectStatus, Tool } from './types';
 
 export const LOGO = logo;
+
+export const EMAIL = 'mailto:email@me.com';
 
 export const ROUTES = [
   {
@@ -202,73 +204,6 @@ export const BENEFITS = [
   'Accessibility',
   'Data Privacy',
   'Technical Expertise',
-];
-
-export const FAQS = [
-  {
-    question:
-      'What can I expect in terms of communication and project updates?',
-    answer:
-      'You can expect regular updates and open lines of communication. I believe in keeping clients informed and involved throughout the development process.',
-  },
-  {
-    question: 'How do you ensure my website will look good on all devices?',
-    answer:
-      'I use responsive design practices to make sure your website is compatible and performs well on smartphones, tablets, and desktops.',
-  },
-  {
-    question: 'Can you help my website rank higher on Google?',
-    answer:
-      'Yes, through SEO optimization techniques, I ensure your content is favored by search engines, improving your visibility online.',
-  },
-  {
-    question: 'How long does it take to build a website or app?',
-    answer:
-      'The timeline varies based on complexity, but I focus on efficient and agile development to deliver quality products in a timely manner.',
-  },
-  {
-    question: 'How do I know which platform is best for my project?',
-    answer:
-      "I can help you decide based on your target audience, budget, and project goals. Whether it's a website, a mobile app, or both, we’ll find the perfect fit.",
-  },
-  {
-    question: 'Will I be able to update my website by myself?',
-    answer:
-      'Absolutely. I provide tools and training for you to manage content and keep your site updated without needing technical expertise.',
-  },
-  {
-    question:
-      'What kind of support can I expect after my website or app launches?',
-    answer:
-      'I offer post-launch support to address any immediate issues and provide ongoing maintenance packages for continual improvements and updates.',
-  },
-  {
-    question:
-      'Do you offer any training or user manuals for the sites you develop?',
-    answer:
-      'Yes, I provide user-friendly training and documentation tailored to your needs so you can confidently manage your website or app.',
-  },
-  {
-    question:
-      'How do you handle changes or new features requests during development?',
-    answer:
-      'I adopt an agile development approach, allowing for flexibility to accommodate changes and incorporate new features as the project evolves.',
-  },
-  {
-    question: "What's required from me to start a project with you?",
-    answer:
-      "Just your vision! We'll start with a discussion about your goals and requirements, and I'll guide you through every step of the process.",
-  },
-  {
-    question: 'Can you integrate e-commerce capabilities into my website?',
-    answer:
-      'Certainly, I can build a secure and intuitive e-commerce platform tailored to your business needs, ensuring a seamless shopping experience for your customers.',
-  },
-  {
-    question: 'How do you measure the success of a website or app you develop?',
-    answer:
-      "Success is measured by meeting the goals we set together, whether it's increased traffic, sales, user engagement, or all of the above.",
-  },
 ];
 
 export const PROJECT_STATUS: ProjectStatus[] = [

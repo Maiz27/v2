@@ -5,6 +5,7 @@ import { getAboutMe } from '@/lib/sanity/queries';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { AboutMe, AboutMeStats } from '@/lib/types';
 import { HiOutlineSquare3Stack3D, HiOutlineEnvelope } from 'react-icons/hi2';
+import { EMAIL } from '@/lib/Constants';
 
 export const revalidate = 60;
 
@@ -38,7 +39,7 @@ const AboutCard = async () => {
           <div className='flex flex-col lg:flex-row justify-center items-center gap-2 lg:gap-4'>
             <CTA
               text='Email Me'
-              href='mailto:email@me.com'
+              href={EMAIL}
               external={true}
               icon={<HiOutlineEnvelope />}
             />

@@ -61,3 +61,9 @@ export type RichText = Array<{
     text: string;
   }>;
 }>;
+
+export type Faq = {
+  index: number;
+  question: string;
+  answer: string;
+};

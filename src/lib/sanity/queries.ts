@@ -40,3 +40,9 @@ export const getProjects = `*[_type == "project"]{
   },
   "images": images[].image.asset->url
 } | order(featured desc)`;
+
+export const getFaqs = `*[_type == "faq"]{
+  index,
+  question,
+  answer,
+} | order(featured asc)`;
