@@ -3,6 +3,9 @@ import Faqs from '@/components/faq/Faqs';
 import Heading from '@/components/heading/Heading';
 import ContactForm from '@/components/forms/ContactForm';
 import { HiOutlineEnvelope, HiOutlineSquare3Stack3D } from 'react-icons/hi2';
+import { EMAIL } from '@/lib/Constants';
+
+export const revalidate = 60;
 
 const page = () => {
   return (
@@ -16,7 +19,7 @@ const page = () => {
         <div className='w-full xl:w-1/2 flex flex-col lg:flex-row items-center gap-2 lg:gap-4'>
           <CTA
             text='Email Me'
-            href='mailto:email@me.com'
+            href={EMAIL}
             external={true}
             icon={<HiOutlineEnvelope />}
           />

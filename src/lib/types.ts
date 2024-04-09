@@ -1,32 +1,53 @@
+import { ReactNode } from 'react';
+import { TargetAndTransition } from 'framer-motion';
+
+export type AboutMe = {
+  name: string;
+  bio: string;
+  imageUrl: string;
+  stats: AboutMeStats;
+};
+
+export type AboutMeStats = {
+  clients: number;
+  experience: number;
+  projects: number;
+  contributions: number;
+};
+
 export type ProjectStatus = 'completed' | 'ongoing' | 'paused';
+export type ProjectTech = {
+  name: string;
+};
 
 export type Project = {
   title: string;
-  description: string;
-  tech: string[];
+  featured: boolean;
   status: ProjectStatus;
-  image: string;
+  description: string;
+  images: string[];
+  tech: ProjectTech[];
   href: string | null;
   source: string | null;
 };
 
 export type Experience = {
   title: string;
-  company: Company;
   location: string;
+  partTime: boolean;
   duration: {
     from: string;
     to?: string;
   };
-  description: string[];
-  isPartTime?: boolean;
+  company: Company;
+  description: RichText;
 };
 
 export type Company = {
   name: string;
   href: string;
   label: string;
-  logo: string;
+  logo: Object;
 };
 
 export type Tool = {
@@ -34,3 +55,49 @@ export type Tool = {
   icon: JSX.Element;
   href: string;
 };
+
+export type RichText = Array<{
+  _type: string;
+  style: string;
+  children: Array<{
+    _type: string;
+    text: string;
+  }>;
+}>;
+
+export type Faq = {
+  index: number;
+  question: string;
+  answer: string;
+};
+
+export type BaseAnimationWrapperProps = {
+  children: ReactNode;
+  threshold?: number;
+  delay?: number;
+  className?: string;
+  tag?: MotionTag;
+  initial?: TargetAndTransition;
+  whileInView?: TargetAndTransition;
+  once?: boolean;
+  [x: string]: any;
+};
+
+export type MotionTag =
+  | 'main'
+  | 'div'
+  | 'section'
+  | 'article'
+  | 'ul'
+  | 'a'
+  | 'form'
+  | 'span'
+  | 'aside'
+  | 'p'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'button';

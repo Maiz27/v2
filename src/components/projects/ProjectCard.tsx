@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import BaseCard from '@/components/ui/BaseCard';
-import ImageCard from '@/components/imageCard/ImageCard';
+import ImageCarousel from '@/components/projects/ImageCarousel';
+import BoxesReveal from '@/components/animationWrappers/BoxesReveal';
 import { Project } from '@/lib/types';
 import { getDomain, getToolDetails } from '@/lib/utilities';
 import {
@@ -33,14 +34,14 @@ const STATUS = {
 };
 
 const ProjectCard = ({ project, hasImage = true }: Props) => {
-  const { image, title, status, href, source, description, tech } = project;
+  const { images, title, status, href, source, description, tech } = project;
   return (
     <BaseCard hoverStripsBottom='-bottom-40' className='w-full h-full'>
       <div className='w-full h-full flex flex-col gap-5'>
         {hasImage && (
-          <div className='w-full h-64 overflow-hidden rounded-lg'>
-            <ImageCard src={image} />
-          </div>
+          <BoxesReveal className='w-full h-64 overflow-hidden rounded-lg'>
+            <ImageCarousel imgs={images} />
+          </BoxesReveal>
         )}
         <div className='min-h-52 grow flex flex-col justify-around '>
           <div className='flex flex-col space-y-1'>
@@ -67,7 +68,7 @@ const ProjectCard = ({ project, hasImage = true }: Props) => {
           </div>
 
           <div className='flex items-center gap-4 py-2 px-4 border-y border-copy/10'>
-            {tech.map((name) => {
+            {tech.map(({ name }) => {
               const { icon, href } = getToolDetails(name) ?? {
                 icon: <HiOutlineQuestionMarkCircle />,
                 href: null,
