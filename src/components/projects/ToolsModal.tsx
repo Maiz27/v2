@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
-import { TOOLS, NON_STACK_TOOLS } from '@/lib/Constants';
-import { HiOutlineAdjustmentsVertical } from 'react-icons/hi2';
 import Heading from '../heading/Heading';
 import BaseModal from '../ui/BaseModal';
+import { TOOLS, NON_STACK_TOOLS } from '@/lib/Constants';
+import { HiOutlineAdjustmentsVertical } from 'react-icons/hi2';
 
 type Props = {
-  selectedTools: string[];
+  selectedTech: string[];
   handleConfirm: (tools: string[]) => void;
 };
 
-const ToolsModal = ({ selectedTools, handleConfirm }: Props) => {
-  const [selection, setSelection] = useState<string[]>(selectedTools);
+const ToolsModal = ({ selectedTech, handleConfirm }: Props) => {
+  const [selection, setSelection] = useState<string[]>(selectedTech);
 
   useEffect(() => {
-    setSelection(selectedTools);
-  }, [selectedTools]);
+    setSelection(selectedTech);
+  }, [selectedTech]);
 
   const handleSelect = (tool: string) => {
     if (selection.includes(tool)) {
@@ -34,7 +34,7 @@ const ToolsModal = ({ selectedTools, handleConfirm }: Props) => {
       buttonIcon={<HiOutlineAdjustmentsVertical />}
       buttonText='All Tools'
       classNames={`${
-        selectedTools?.length > 0 ? 'border border-primary text-primary' : ''
+        selectedTech?.length > 0 ? 'border border-primary text-primary' : ''
       }`}
     >
       <Heading

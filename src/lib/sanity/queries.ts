@@ -39,4 +39,4 @@ export const getProjects = `*[_type == "project"]{
     name,
   },
   "images": images[].image.asset->url
-}`;
+} | order(featured desc)`;

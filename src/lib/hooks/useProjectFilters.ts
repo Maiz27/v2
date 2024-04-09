@@ -2,9 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type State = {
-  name: string;
   status: string;
-  selectedTools: string[];
+  selectedTech: string[];
 };
 
 const useProjectFilters = () => {
@@ -14,9 +13,8 @@ const useProjectFilters = () => {
 
   const initialState = useMemo(
     () => ({
-      name: (searchParams.get('name') as string) || '',
       status: (searchParams.get('status') as string) || '',
-      selectedTools: (searchParams.get('tools') as string)?.split(',') || [],
+      selectedTech: (searchParams.get('tech') as string)?.split(',') || [],
     }),
     [searchParams]
   );
@@ -27,16 +25,12 @@ const useProjectFilters = () => {
     (newState: State) => {
       const query = new URLSearchParams();
 
-      if (newState.name) {
-        query.set('name', newState.name);
-      }
-
       if (newState.status) {
         query.set('status', newState.status);
       }
 
-      if (newState.selectedTools?.length > 0) {
-        query.set('tools', newState.selectedTools.join(','));
+      if (newState.selectedTech?.length > 0) {
+        query.set('tech', newState.selectedTech.join(','));
       }
 
       router.push(`${pathname}?${query.toString()}`);
@@ -44,10 +38,10 @@ const useProjectFilters = () => {
     [pathname, router]
   );
 
-  const handleToolsSelection = useCallback(
+  const handleTechSelection = useCallback(
     (tools: string[]) => {
       setState((prevState) => {
-        const newState = { ...prevState, selectedTools: tools };
+        const newState = { ...prevState, selectedTech: tools };
         updateURL(newState);
         return newState;
       });
@@ -68,7 +62,7 @@ const useProjectFilters = () => {
   );
 
   const resetFilters = useCallback(() => {
-    const newState = { name: '', status: '', selectedTools: [] };
+    const newState = { name: '', status: '', selectedTech: [] };
     setState(newState);
     updateURL(newState);
   }, [updateURL]);
@@ -76,16 +70,15 @@ const useProjectFilters = () => {
   // Update state when URL changes
   useEffect(() => {
     setState({
-      name: (searchParams.get('name') as string) || '',
       status: (searchParams.get('status') as string) || '',
-      selectedTools: (searchParams.get('tools') as string)?.split(',') || [],
+      selectedTech: (searchParams.get('tech') as string)?.split(',') || [],
     });
   }, [searchParams]);
 
   return {
     state,
     handleChange,
-    handleToolsSelection,
+    handleTechSelection,
     resetFilters,
   };
 };
