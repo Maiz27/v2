@@ -1,4 +1,5 @@
 import Heading from '@/components/heading/Heading';
+import EmptyState from '@/components/ui/EmptyState';
 import ProjectsFilter from '@/components/projects/ProjectsFilter';
 import AnimatedProjectsGrid from '@/components/projects/AnimatedProjectsGrid';
 import { fetchSanityData } from '@/lib/sanity/client';
@@ -40,6 +41,7 @@ const page = async ({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) => {
   const projects: Project[] = await fetchProjects(searchParams);
+  const isEmpty = projects.length <= 0;
 
   return (
     <main className='min-h-screen'>
@@ -52,7 +54,16 @@ const page = async ({
         <ProjectsFilter projectsTotal={projects.length} />
       </Heading>
 
-      <AnimatedProjectsGrid projects={projects} />
+      {isEmpty ? (
+        <EmptyState
+          heading='No Projects Found'
+          paragraph={
+            "We couldn't find any projects matching your filters. Adjust your selections or reset the filters to explore all projects."
+          }
+        />
+      ) : (
+        <AnimatedProjectsGrid projects={projects} />
+      )}
     </main>
   );
 };
