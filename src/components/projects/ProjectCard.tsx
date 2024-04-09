@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import BaseCard from '@/components/ui/BaseCard';
-import ImageCard from '@/components/imageCard/ImageCard';
+import ImageCarousel from '@/components/projects/ImageCarousel';
+import BoxesReveal from '@/components/animationWrappers/BoxesReveal';
 import { Project } from '@/lib/types';
 import { getDomain, getToolDetails } from '@/lib/utilities';
 import {
@@ -38,9 +39,9 @@ const ProjectCard = ({ project, hasImage = true }: Props) => {
     <BaseCard hoverStripsBottom='-bottom-40' className='w-full h-full'>
       <div className='w-full h-full flex flex-col gap-5'>
         {hasImage && (
-          <div className='w-full h-64 overflow-hidden rounded-lg'>
-            <ImageCard src={images[0]} />
-          </div>
+          <BoxesReveal className='w-full h-64 overflow-hidden rounded-lg'>
+            <ImageCarousel imgs={images} />
+          </BoxesReveal>
         )}
         <div className='min-h-52 grow flex flex-col justify-around '>
           <div className='flex flex-col space-y-1'>

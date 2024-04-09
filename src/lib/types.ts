@@ -1,3 +1,6 @@
+import { ReactNode } from 'react';
+import { TargetAndTransition } from 'framer-motion';
+
 export type AboutMe = {
   name: string;
   bio: string;
@@ -67,3 +70,34 @@ export type Faq = {
   question: string;
   answer: string;
 };
+
+export type BaseAnimationWrapperProps = {
+  children: ReactNode;
+  threshold?: number;
+  delay?: number;
+  className?: string;
+  tag?: MotionTag;
+  initial?: TargetAndTransition;
+  whileInView?: TargetAndTransition;
+  once?: boolean;
+  [x: string]: any;
+};
+
+export type MotionTag =
+  | 'main'
+  | 'div'
+  | 'section'
+  | 'article'
+  | 'ul'
+  | 'a'
+  | 'form'
+  | 'span'
+  | 'aside'
+  | 'p'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'button';

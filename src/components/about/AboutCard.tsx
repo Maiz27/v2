@@ -1,6 +1,7 @@
+import Image from 'next/image';
 import CTA from '@/components/CTA/CTA';
 import Tools from '@/components/tools/Tools';
-import ImageCard from '@/components/imageCard/ImageCard';
+import BoxesReveal from '../animationWrappers/BoxesReveal';
 import { getAboutMe } from '@/lib/sanity/queries';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { AboutMe, AboutMeStats } from '@/lib/types';
@@ -18,9 +19,18 @@ const AboutCard = async () => {
     <section className='flex flex-col gap-8 items-center'>
       <div className='flex flex-col lg:flex-row justify-center items-start lg:items-center gap-4'>
         <div className='flex justify-center items-center gap-4'>
-          <div className='size-32 lg:size-60 xl:size-72 2xl:size-80 overflow-hidden rounded-lg'>
-            <ImageCard src={imageUrl} />
-          </div>
+          <BoxesReveal
+            once={false}
+            className='size-32 lg:size-60 xl:size-72 2xl:size-80 overflow-hidden rounded-lg'
+          >
+            <Image
+              src={imageUrl}
+              alt='avatar'
+              width={500}
+              height={500}
+              className='h-full object-cover'
+            />
+          </BoxesReveal>
           <div className='lg:hidden'>
             <span className='opacity-100 font-semibold text-primary'>
               Hello I Am
