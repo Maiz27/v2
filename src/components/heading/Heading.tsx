@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import AnimateInView from '../animationWrappers/AnimateInView';
+import { SLIDE_LEFT } from '@/lib/Constants';
 
 type props = {
   icon: JSX.Element;
@@ -29,16 +31,27 @@ const Heading = ({
   children,
 }: props) => {
   return (
-    <div className='space-y-6 border-b border-copy/10 py-6'>
-      <Tag className='flex items-center gap-2'>
-        <span className='opacity-100 text-3xl'>{icon}</span>
-        <span className={`opacity-100 text-3xl lg:text-${size}`}>
+    <AnimateInView className='space-y-6 border-b border-copy/10 py-6'>
+      <Tag className='flex lg:items-center gap-2'>
+        <AnimateInView tag='span' delay={0.8} className='opacity-100 text-3xl'>
+          {icon}
+        </AnimateInView>
+        <AnimateInView
+          tag='span'
+          initial={SLIDE_LEFT.initial}
+          whileInView={SLIDE_LEFT.whileInView}
+          className={`opacity-100 text-3xl lg:text-${size}`}
+        >
           {heading}
-        </span>
+        </AnimateInView>
       </Tag>
-      {paragraph && <p>{paragraph}</p>}
+      {paragraph && (
+        <AnimateInView tag='p' delay={1}>
+          {paragraph}
+        </AnimateInView>
+      )}
       {children}
-    </div>
+    </AnimateInView>
   );
 };
 

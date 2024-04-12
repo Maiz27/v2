@@ -7,6 +7,7 @@ import { fetchSanityData } from '@/lib/sanity/client';
 import { AboutMe, AboutMeStats } from '@/lib/types';
 import { HiOutlineSquare3Stack3D, HiOutlineEnvelope } from 'react-icons/hi2';
 import { EMAIL } from '@/lib/Constants';
+import AnimateInView from '../animationWrappers/AnimateInView';
 
 export const revalidate = 60;
 
@@ -31,33 +32,39 @@ const AboutCard = async () => {
               className='h-full object-cover'
             />
           </BoxesReveal>
-          <div className='lg:hidden'>
+          <AnimateInView className='lg:hidden'>
             <span className='opacity-100 font-semibold text-primary'>
               Hello I Am
             </span>
             <h1 className='font-bold text-3xl'>{name}</h1>
-          </div>
+          </AnimateInView>
         </div>
         <div className='space-y-4'>
-          <div className='hidden lg:block'>
+          <AnimateInView className='hidden lg:block'>
             <span className='opacity-100 font-semibold text-primary'>
               Hello I Am
             </span>
             <h1 className='font-bold text-4xl'>{name}</h1>
-          </div>
-          <p className='lg:text-balance'>{bio}</p>
+          </AnimateInView>
+          <AnimateInView tag='p' delay={0.8} className='lg:text-balance'>
+            {bio}
+          </AnimateInView>
           <div className='flex flex-col lg:flex-row justify-center items-center gap-2 lg:gap-4'>
-            <CTA
-              text='Email Me'
-              href={EMAIL}
-              external={true}
-              icon={<HiOutlineEnvelope />}
-            />
-            <CTA
-              text='My Projects'
-              href='/projects'
-              icon={<HiOutlineSquare3Stack3D />}
-            />
+            <AnimateInView delay={1.2} className='w-full'>
+              <CTA
+                text='Email Me'
+                href={EMAIL}
+                external={true}
+                icon={<HiOutlineEnvelope />}
+              />
+            </AnimateInView>
+            <AnimateInView delay={1.6} className='w-full'>
+              <CTA
+                text='My Projects'
+                href='/projects'
+                icon={<HiOutlineSquare3Stack3D />}
+              />
+            </AnimateInView>
           </div>
         </div>
       </div>
@@ -93,9 +100,13 @@ const Stats = ({ stats }: { stats: AboutMeStats }) => {
     },
   ];
   return (
-    <div className='grid place-items-center grid-cols-2 lg:grid-cols-4 gap-5 py-5 border-b border-copy/10'>
-      {list.map(({ count, label }) => (
-        <div
+    <AnimateInView
+      delay={2.4}
+      className='grid place-items-center grid-cols-2 lg:grid-cols-4 gap-5 py-5 border-b border-copy/10'
+    >
+      {list.map(({ count, label }, idx) => (
+        <AnimateInView
+          delay={2.4 + 0.4 * idx}
           key={label}
           className='w-full flex flex-col gap-2 justify-center items-center'
         >
@@ -103,8 +114,8 @@ const Stats = ({ stats }: { stats: AboutMeStats }) => {
             {count}+
           </span>
           <span className='font-bold'>{label}</span>
-        </div>
+        </AnimateInView>
       ))}
-    </div>
+    </AnimateInView>
   );
 };

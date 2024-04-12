@@ -17,6 +17,7 @@ export const getExperiences = `*[_type == "experience"]{
 
 export const getFeaturedProjects = `*[_type == "project" && featured == true]{
   title,
+  slug,
   featured,
   status,
   description,
@@ -30,6 +31,7 @@ export const getFeaturedProjects = `*[_type == "project" && featured == true]{
 
 export const getProjects = `*[_type == "project"]{
   title,
+  slug,
   featured,
   status,
   description,
@@ -40,6 +42,21 @@ export const getProjects = `*[_type == "project"]{
   },
   "images": images[].image.asset->url
 } | order(featured desc)`;
+
+export const getProjectBySlug = `*[_type == "project" && slug.current == $slug]{
+  title,
+  slug,
+  status,
+  description,
+  href,
+  source,
+  tech[]->{
+    name,
+  },
+  "images": images[].image.asset->url,
+  contentTitle,
+  content,
+}[0]`;
 
 export const getFaqs = `*[_type == "faq"]{
   index,

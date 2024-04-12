@@ -5,6 +5,7 @@ import { fetchSanityData } from '@/lib/sanity/client';
 import { getFaqs } from '@/lib/sanity/queries';
 import { Faq } from '@/lib/types';
 import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
+import AnimateInView from '../animationWrappers/AnimateInView';
 
 export const revalidate = 60;
 
@@ -18,7 +19,11 @@ const Faqs = async () => {
     const secondHalf = faqs.slice(midIndex);
 
     return (
-      <div className='w-full flex basis-auto mt-10 flex-wrap lg:flex-nowrap gap-4'>
+      <AnimateInView
+        delay={1}
+        threshold={0.15}
+        className='w-full flex basis-auto mt-10 flex-wrap lg:flex-nowrap gap-4'
+      >
         <div className='h-min flex flex-col place-content-center items-center gap-4'>
           {firstHalf.map(({ question, answer }, index) => (
             <FaqCard key={index} question={question} answer={answer} />
@@ -29,7 +34,7 @@ const Faqs = async () => {
             <FaqCard key={index} question={question} answer={answer} />
           ))}
         </div>
-      </div>
+      </AnimateInView>
     );
   };
 

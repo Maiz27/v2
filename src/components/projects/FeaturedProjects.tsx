@@ -6,6 +6,7 @@ import { fetchSanityData } from '@/lib/sanity/client';
 import { getFeaturedProjects } from '@/lib/sanity/queries';
 import { Project } from '@/lib/types';
 import { HiOutlineSquare3Stack3D, HiOutlineStar } from 'react-icons/hi2';
+import AnimateInView from '../animationWrappers/AnimateInView';
 
 export const revalidate = 60;
 
@@ -31,16 +32,18 @@ const FeaturedProjects = async () => {
       ) : (
         <div className='py-12 grid place-items-center grid-cols-1 lg:grid-cols-2 gap-6'>
           {projects.map((project, idx) => (
-            <ProjectCard key={project.href} project={project} />
+            <ProjectCard key={project.href} project={project} index={idx} />
           ))}
         </div>
       )}
 
-      <CTA
-        icon={<HiOutlineSquare3Stack3D />}
-        text='All Projects'
-        href='/projects'
-      />
+      <AnimateInView>
+        <CTA
+          icon={<HiOutlineSquare3Stack3D />}
+          text='All Projects'
+          href='/projects'
+        />
+      </AnimateInView>
     </section>
   );
 };

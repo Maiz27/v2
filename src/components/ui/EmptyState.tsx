@@ -13,7 +13,7 @@ const EmptyState = ({
   paragraph,
 }: Props) => {
   return (
-    <BaseCard hasHoverStrips={false} className='my-8'>
+    <BaseCard delay={1} hasHoverStrips={false} className='my-8'>
       <div className='flex flex-col items-center space-y-8'>
         <div className='flex flex-col items-center space-y-2 text-3xl'>
           {icon}

@@ -6,6 +6,7 @@ import { PROJECT_STATUS } from '@/lib/Constants';
 import useProjectFilters from '@/lib/hooks/useProjectFilters';
 import { Suspense } from 'react';
 import { HiOutlineMinusCircle } from 'react-icons/hi2';
+import AnimateInView from '../animationWrappers/AnimateInView';
 
 const ProjectsFilter = ({ projectsTotal }: { projectsTotal: number }) => {
   return (
@@ -21,9 +22,13 @@ const Filter = ({ projectsTotal }: { projectsTotal: number }) => {
   const { state, handleChange, handleTechSelection, resetFilters } =
     useProjectFilters();
 
+  const selectedOptions = state.status || state.selectedTech?.length > 0;
   return (
-    <div>
-      <div className='flex flex-col-reverse lg:flex-row justify-between mt-5 gap-2'>
+    <>
+      <AnimateInView
+        delay={1.4}
+        className='flex flex-col-reverse lg:flex-row justify-between mt-5 gap-2'
+      >
         <h2 className='text-xl text-center lg:text-left my-auto'>
           <span className='text-primary opacity-100 pr-2'>{projectsTotal}</span>
           Projects
@@ -51,7 +56,7 @@ const Filter = ({ projectsTotal }: { projectsTotal: number }) => {
               handleConfirm={handleTechSelection}
             />
           </div>
-          {(state.status || state.selectedTech?.length > 0) && (
+          {selectedOptions && (
             <>
               <CTA
                 icon={<HiOutlineMinusCircle />}
@@ -68,13 +73,12 @@ const Filter = ({ projectsTotal }: { projectsTotal: number }) => {
             </>
           )}
         </div>
-      </div>
+      </AnimateInView>
 
       <div className='mt-2 px-2 flex flex-col items-start'>
-        {/* <FilterInfo label='Project Name' value={state.name} /> */}
         <FilterInfo label='Selected Tools' value={state.selectedTech} />
       </div>
-    </div>
+    </>
   );
 };
 

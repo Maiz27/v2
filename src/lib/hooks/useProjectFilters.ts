@@ -38,27 +38,23 @@ const useProjectFilters = () => {
     [pathname, router]
   );
 
-  const handleTechSelection = useCallback(
-    (tools: string[]) => {
-      setState((prevState) => {
-        const newState = { ...prevState, selectedTech: tools };
-        updateURL(newState);
-        return newState;
-      });
-    },
-    [updateURL]
-  );
+  const handleTechSelection = useCallback((tools: string[]) => {
+    setState((prevState) => {
+      const newState = { ...prevState, selectedTech: tools };
+
+      return newState;
+    });
+  }, []);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value } = e.target;
       setState((prevState) => {
         const newState = { ...prevState, [name]: value };
-        updateURL(newState);
         return newState;
       });
     },
-    [updateURL]
+    []
   );
 
   const resetFilters = useCallback(() => {
@@ -67,13 +63,9 @@ const useProjectFilters = () => {
     updateURL(newState);
   }, [updateURL]);
 
-  // Update state when URL changes
   useEffect(() => {
-    setState({
-      status: (searchParams.get('status') as string) || '',
-      selectedTech: (searchParams.get('tech') as string)?.split(',') || [],
-    });
-  }, [searchParams]);
+    updateURL(state);
+  }, [state, updateURL]);
 
   return {
     state,

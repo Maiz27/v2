@@ -7,6 +7,11 @@ import {
   HiOutlineGlobeAlt,
   HiOutlineDevicePhoneMobile,
   HiOutlineChartBarSquare,
+  HiOutlineCheckCircle,
+  HiOutlineInformationCircle,
+  HiOutlineXMark,
+  HiOutlineExclamationCircle,
+  HiEnvelope,
 } from 'react-icons/hi2';
 
 import {
@@ -36,10 +41,23 @@ import {
   SiExpress,
   SiKotlin,
   SiGithub,
-  SiTwitter,
+  SiX,
   SiLinkedin,
+  SiFacebook,
+  SiTelegram,
+  SiWhatsapp,
 } from 'react-icons/si';
+
 import { ProjectStatus, Tool } from './types';
+
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  LinkedinShareButton,
+  TelegramShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+} from 'react-share';
 
 export const LOGO = logo;
 
@@ -74,7 +92,7 @@ export const ROUTES = [
 export const SOCIALS = [
   { icon: <SiGithub />, name: 'Github', href: 'https://github.com/Maiz27' },
   {
-    icon: <SiTwitter />,
+    icon: <SiX />,
     name: 'Twitter',
     href: 'https://twitter.com/_Maiz27_',
   },
@@ -211,3 +229,64 @@ export const PROJECT_STATUS: ProjectStatus[] = [
   'ongoing',
   'paused',
 ];
+
+export const TOAST_STATUS = {
+  success: <HiOutlineCheckCircle className='text-green-500' />,
+  error: <HiOutlineXMark className='text-red-500' />,
+  info: <HiOutlineInformationCircle className='text-blue-500' />,
+  warning: <HiOutlineExclamationCircle className='text-yellow-500' />,
+};
+
+export const SHARE_PLATFORMS = [
+  {
+    id: 'email',
+    icon: (
+      <HiEnvelope className='text-xl xl:text-2xl group-hover:text-primary' />
+    ),
+    ShareButton: EmailShareButton,
+  },
+  {
+    id: 'facebook',
+    icon: (
+      <SiFacebook className='text-xl xl:text-2xl group-hover:text-primary' />
+    ),
+    ShareButton: FacebookShareButton,
+  },
+  {
+    id: 'linkedin',
+    icon: (
+      <SiLinkedin className='text-xl xl:text-2xl group-hover:text-primary' />
+    ),
+    ShareButton: LinkedinShareButton,
+  },
+  {
+    id: 'telegram',
+    icon: (
+      <SiTelegram className='text-xl xl:text-2xl group-hover:text-primary' />
+    ),
+    ShareButton: TelegramShareButton,
+  },
+  {
+    id: 'twitter',
+    icon: <SiX className='text-xl xl:text-2xl group-hover:text-primary' />,
+    ShareButton: TwitterShareButton,
+  },
+  {
+    id: 'whatsapp',
+    icon: (
+      <SiWhatsapp className='text-xl xl:text-2xl group-hover:text-primary' />
+    ),
+    ShareButton: WhatsappShareButton,
+  },
+];
+
+// Framer Motion Animation Variants
+export const SLIDE_RIGHT = {
+  initial: { opacity: 0, x: -30 },
+  whileInView: { opacity: 1, x: 0 },
+};
+
+export const SLIDE_LEFT = {
+  initial: { opacity: 0, x: 30 },
+  whileInView: { opacity: 1, x: 0 },
+};

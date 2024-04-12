@@ -1,12 +1,15 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import HoverStrips from './HoverStrips';
+import AnimateInView from '../animationWrappers/AnimateInView';
+import { BaseAnimationWrapperProps } from '@/lib/types';
 
 type Props = {
   children: ReactNode;
   className?: string;
   hasHoverStrips?: boolean;
   hoverStripsBottom?: string;
-} & HTMLAttributes<HTMLDivElement>;
+} & HTMLAttributes<HTMLDivElement> &
+  BaseAnimationWrapperProps;
 
 const BaseCard = ({
   className,
@@ -16,13 +19,13 @@ const BaseCard = ({
   ...additional
 }: Props) => {
   return (
-    <div
+    <AnimateInView
       className={`w-full bg-foreground/50 rounded-lg p-6 border border-copy/10 relative group overflow-hidden ${className}`}
       {...additional}
     >
       {hasHoverStrips ? <HoverStrips bottom={hoverStripsBottom} /> : null}
       <div className='w-full h-full z-10 relative'>{children}</div>
-    </div>
+    </AnimateInView>
   );
 };
 

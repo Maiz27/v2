@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { ReactNode } from 'react';
 import BaseCard from '@/components/ui/BaseCard';
 import ImageCarousel from '@/components/projects/ImageCarousel';
@@ -12,10 +13,12 @@ import {
   HiOutlineQuestionMarkCircle,
 } from 'react-icons/hi2';
 import { SiGithub } from 'react-icons/si';
+import AnimateInView from '../animationWrappers/AnimateInView';
 
 type Props = {
   project: Project;
   hasImage?: boolean;
+  index?: number;
 };
 
 const STATUS = {
@@ -33,20 +36,35 @@ const STATUS = {
   },
 };
 
-const ProjectCard = ({ project, hasImage = true }: Props) => {
-  const { images, title, status, href, source, description, tech } = project;
+const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
+  const { images, title, status, href, source, description, tech, slug } =
+    project;
   return (
-    <BaseCard hoverStripsBottom='-bottom-40' className='w-full h-full'>
+    <BaseCard
+      delay={0.6 * index}
+      hoverStripsBottom='-bottom-40'
+      className='w-full h-full'
+    >
       <div className='w-full h-full flex flex-col gap-5'>
         {hasImage && (
           <BoxesReveal className='w-full h-64 overflow-hidden rounded-lg'>
-            <ImageCarousel imgs={images} />
+            <ImageCarousel imgs={images} dotsAlwaysVisible={false} />
           </BoxesReveal>
         )}
         <div className='min-h-52 grow flex flex-col justify-around '>
           <div className='flex flex-col space-y-1'>
-            <h3 className='text-2xl font-bold w-fit'>{title}</h3>
-            <div className='flex items-center space-x-4 text-sm'>
+            <h3 className='text-2xl font-bold w-fit flex items-center'>
+              <Link
+                href={`/projects/${slug.current}`}
+                className='px-2 hover:text-primary transition-colors'
+              >
+                {title}
+              </Link>
+            </h3>
+            <AnimateInView
+              delay={1}
+              className='flex items-center space-x-4 text-sm'
+            >
               <StatusIcon status={status} />
               {href && (
                 <CardLink href={href}>
@@ -60,15 +78,18 @@ const ProjectCard = ({ project, hasImage = true }: Props) => {
                   <span>Source</span>
                 </CardLink>
               )}
-            </div>
+            </AnimateInView>
           </div>
 
           <div className='grow my-2'>
             <p className='text-sm p-2 text-balance'>{description}</p>
           </div>
 
-          <div className='flex items-center gap-4 py-2 px-4 border-y border-copy/10'>
-            {tech.map(({ name }) => {
+          <AnimateInView
+            delay={1}
+            className='flex items-center gap-4 py-2 px-4 border-y border-copy/10'
+          >
+            {tech.map(({ name }, idx) => {
               const { icon, href } = getToolDetails(name) ?? {
                 icon: <HiOutlineQuestionMarkCircle />,
                 href: null,
@@ -86,7 +107,7 @@ const ProjectCard = ({ project, hasImage = true }: Props) => {
                 </a>
               );
             })}
-          </div>
+          </AnimateInView>
         </div>
       </div>
     </BaseCard>
@@ -95,7 +116,7 @@ const ProjectCard = ({ project, hasImage = true }: Props) => {
 
 export default ProjectCard;
 
-const StatusIcon = ({ status }: { status: Project['status'] }) => {
+export const StatusIcon = ({ status }: { status: Project['status'] }) => {
   const { icon, text } = STATUS[status];
   return (
     <span className='opacity-70 flex items-center space-x-1'>
@@ -105,7 +126,7 @@ const StatusIcon = ({ status }: { status: Project['status'] }) => {
   );
 };
 
-const CardLink = ({
+export const CardLink = ({
   href,
   children,
 }: {

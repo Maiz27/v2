@@ -34,11 +34,21 @@ const config: Config = {
       keyframes: {
         slide: {
           '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-150%)' },
+        },
+        'slide-2': {
+          '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-300%)' },
+        },
+        'slide-3': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-450%)' },
         },
       },
       animation: {
-        slide: 'slide 30s linear infinite',
+        slide: 'slide 20s linear infinite',
+        'slide-2': 'slide-2 30s linear infinite',
+        'slide-3': 'slide-2 40s linear infinite',
       },
     },
   },

@@ -1,12 +1,14 @@
 'use client';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 5;
 
-const ImageCarousel = ({ imgs }: { imgs: string[] }) => {
+type Props = { imgs: string[]; dotsAlwaysVisible?: boolean };
+
+const ImageCarousel = ({ imgs, dotsAlwaysVisible = true }: Props) => {
   const [imgIndex, setImgIndex] = useState(0);
 
   useEffect(() => {
@@ -33,7 +35,12 @@ const ImageCarousel = ({ imgs }: { imgs: string[] }) => {
         <Images imgs={imgs} />
       </motion.div>
 
-      <Dots imgs={imgs} imgIndex={imgIndex} setImgIndex={setImgIndex} />
+      <Dots
+        imgs={imgs}
+        imgIndex={imgIndex}
+        setImgIndex={setImgIndex}
+        alwaysVisible={dotsAlwaysVisible}
+      />
     </div>
   );
 };
@@ -45,13 +52,13 @@ const Images = ({ imgs }: { imgs: string[] }) => {
     <>
       {imgs.map((imgSrc, idx) => {
         return (
-          <motion.div key={idx} className='w-full h-full shrink-0 '>
+          <motion.div key={idx} className='w-full h-full shrink-0'>
             <Image
               src={imgSrc}
               alt='avatar'
               width={500}
               height={500}
-              className={`h-full object-cover ${
+              className={`w-full h-full object-cover ${
                 true ? 'opacity-100' : 'opacity-0'
               }`}
             />
@@ -66,13 +73,19 @@ const Dots = ({
   imgs,
   imgIndex,
   setImgIndex,
+  alwaysVisible,
 }: {
   imgs: string[];
   imgIndex: number;
   setImgIndex: Dispatch<SetStateAction<number>>;
+  alwaysVisible: boolean;
 }) => {
   return (
-    <div className='opacity-0 group-hover:opacity-100 flex transition-opacity w-full justify-center gap-2 absolute bottom-2 z-10'>
+    <div
+      className={`${
+        alwaysVisible ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+      } flex transition-opacity w-full justify-center gap-2 absolute bottom-2 z-10`}
+    >
       {imgs.map((_, idx) => {
         return (
           <button

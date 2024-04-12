@@ -20,7 +20,12 @@ const RichTextParser = memo(({ content }: props) => {
       ),
       callToAction: ({ value, isInline }) =>
         isInline ? (
-          <a href={value.url}>{value.text}</a>
+          <a
+            href={value.url}
+            className='underline underline-offset-4 text-primary'
+          >
+            {value.text}
+          </a>
         ) : (
           <div className='callToAction'>{value.text}</div>
         ),
@@ -32,7 +37,12 @@ const RichTextParser = memo(({ content }: props) => {
         const rel = target === '_blank' ? 'noreferrer noopener' : undefined;
 
         return (
-          <a href={value.href} target={target} rel={rel}>
+          <a
+            href={value.href}
+            target={target}
+            rel={rel}
+            className='underline underline-offset-4 text-primary'
+          >
             {children}
           </a>
         );
@@ -60,7 +70,7 @@ const RichTextParser = memo(({ content }: props) => {
         <h6 className='text-base px-2 mt-3 mb-1 '>{children}</h6>
       ),
       normal: ({ children }) => (
-        <p className='text-base mb-2 p-2'>{children}</p>
+        <p className='text-base mb-2 p-2 opacity-80'>{children}</p>
       ),
     },
     list: {

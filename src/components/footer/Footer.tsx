@@ -30,10 +30,10 @@ const Footer = () => {
             </Link>
           ))}
         </nav>
-        <div className='hidden xl:block'>
+        <span className='hidden xl:block'>
           &copy;
           {new Date().getFullYear().toString()}, All Rights Reserved
-        </div>
+        </span>
         <span>
           {`Built with `}
           <svg

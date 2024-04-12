@@ -22,6 +22,7 @@ export type ProjectTech = {
 
 export type Project = {
   title: string;
+  slug: { current: string };
   featured: boolean;
   status: ProjectStatus;
   description: string;
@@ -29,6 +30,8 @@ export type Project = {
   tech: ProjectTech[];
   href: string | null;
   source: string | null;
+  contentTitle: string;
+  content: RichText;
 };
 
 export type Experience = {
@@ -80,6 +83,7 @@ export type BaseAnimationWrapperProps = {
   initial?: TargetAndTransition;
   whileInView?: TargetAndTransition;
   once?: boolean;
+  duration?: number;
   [x: string]: any;
 };
 
