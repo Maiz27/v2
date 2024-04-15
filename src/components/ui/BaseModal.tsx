@@ -62,7 +62,7 @@ const BaseModal = ({
               animate={{ scale: 1, rotate: '0deg' }}
               exit={{ scale: 0, rotate: '0deg' }}
               onClick={(e) => e.stopPropagation()}
-              className='bg-foreground/50 p-6 rounded-lg w-full shadow-xl max-w-lg border border-copy/10 cursor-default relative overflow-hidden'
+              className='bg-foreground/50 p-6 rounded-lg w-full shadow-xl max-w-lg border border-border cursor-default relative overflow-hidden'
             >
               <div className='w-full flex flex-col gap-8'>
                 {children}

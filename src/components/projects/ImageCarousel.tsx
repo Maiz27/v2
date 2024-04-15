@@ -56,11 +56,9 @@ const Images = ({ imgs }: { imgs: string[] }) => {
             <Image
               src={imgSrc}
               alt='avatar'
-              width={500}
-              height={500}
-              className={`w-full h-full object-cover ${
-                true ? 'opacity-100' : 'opacity-0'
-              }`}
+              width={720}
+              height={480}
+              className={`w-full h-full object-cover`}
             />
           </motion.div>
         );
@@ -91,7 +89,7 @@ const Dots = ({
           <button
             key={idx}
             onClick={() => setImgIndex(idx)}
-            className={`size-3 rounded transition-colors ${
+            className={`size-3 rounded transition-colors border border-white ${
               idx === imgIndex ? 'bg-primary' : 'bg-background'
             }`}
           />

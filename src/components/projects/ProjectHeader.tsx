@@ -67,10 +67,10 @@ const ProjectHeader = ({ project }: Props) => {
 
       <AnimateInView
         delay={1.4}
-        className='flex w-full h-[25rem] overflow-hidden max-w-full border-b border-copy/10 py-4'
+        className='flex w-full h-[30rem] overflow-hidden max-w-full border-b border-border py-4'
         style={{
           maskImage:
-            'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',
+            'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',
         }}
       >
         <ImageCarousel imgs={project.images} />

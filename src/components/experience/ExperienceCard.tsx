@@ -64,13 +64,13 @@ const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
             </AnimateInView>
           </div>
         </div>
-        <div className='font-bold text-xl py-2 border-y border-copy/10 lg:border-0 group-hover:text-primary transition-colors'>
+        <div className='font-bold text-xl py-2 border-y border-border lg:border-0 group-hover:text-primary transition-colors'>
           {roundYear(duration.from)} -{' '}
           {duration.to ? roundYear(duration.to) : 'Present'}
         </div>
       </div>
 
-      <div className='border border-copy/10 rounded-lg p-6 space-y-2 z-10 relative mt-6'>
+      <div className='border border-border rounded-lg p-6 space-y-2 z-10 relative mt-6'>
         <h4 className='text-lg xl:text-xl w-full flex items-center space-x-2'>
           <span className='opacity-100'>{title}</span>
           {partTime && (

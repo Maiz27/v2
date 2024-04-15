@@ -33,7 +33,9 @@ const BoxesReveal = ({
           />
         ))}
       </div>
-      <div className={` ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+      <div
+        className={`h-full w-full ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+      >
         {children}
       </div>
     </div>

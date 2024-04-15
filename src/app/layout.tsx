@@ -4,6 +4,7 @@ import Right from '@/components/aside/Right';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import { IsClientCtxProvider } from '@/lib/context/IsClientContext';
+import { MobileScrollToTop } from '@/components/aside/ScrollToTop';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -21,10 +22,11 @@ export default function RootLayout({
       <body className='bg-background text-copy flex'>
         <IsClientCtxProvider>
           <Left />
-          <div className='w-full mx-auto md:max-w-lg lg:max-w-3xl xl:max-w-full xl:border-x xl:border-copy/10'>
+          <div className='w-full mx-auto md:max-w-lg lg:max-w-3xl xl:max-w-full xl:border-x xl:border-border'>
             <Header />
             {children}
             <Footer />
+            <MobileScrollToTop />
           </div>
           <Right />
         </IsClientCtxProvider>

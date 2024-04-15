@@ -19,9 +19,8 @@ const AnimatedProjectsGrid = ({ projects }: Props) => {
           <motion.div
             key={project.href}
             initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 15 }}
-            transition={{ delay: idx * 0.6, duration: 0.5 }}
+            animate={{ opacity: 1, y: 0, transition: { delay: idx * 0.6 } }}
+            exit={{ opacity: 0, y: 15, transition: { delay: idx * 0.1 } }}
             className='h-full w-full'
           >
             <ProjectCard

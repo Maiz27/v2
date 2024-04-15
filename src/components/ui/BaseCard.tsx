@@ -20,7 +20,7 @@ const BaseCard = ({
 }: Props) => {
   return (
     <AnimateInView
-      className={`w-full bg-foreground/50 rounded-lg p-6 border border-copy/10 relative group overflow-hidden ${className}`}
+      className={`w-full bg-foreground/50 rounded-lg p-6 border border-border relative group overflow-hidden ${className}`}
       {...additional}
     >
       {hasHoverStrips ? <HoverStrips bottom={hoverStripsBottom} /> : null}

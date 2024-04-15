@@ -31,7 +31,7 @@ const Heading = ({
   children,
 }: props) => {
   return (
-    <AnimateInView className='space-y-6 border-b border-copy/10 py-6'>
+    <AnimateInView className='space-y-6 border-b border-border py-6'>
       <Tag className='flex lg:items-center gap-2'>
         <AnimateInView tag='span' delay={0.8} className='opacity-100 text-3xl'>
           {icon}

@@ -6,7 +6,7 @@ const Tools = () => {
   return (
     <AnimateInView
       delay={2}
-      className='flex w-full overflow-hidden max-w-full border-b border-copy/10 p-4'
+      className='flex w-full overflow-hidden max-w-full border-b border-border p-4'
       style={{
         maskImage:
           'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',

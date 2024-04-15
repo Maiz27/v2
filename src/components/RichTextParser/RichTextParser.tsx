@@ -1,7 +1,12 @@
 import React, { memo } from 'react';
 import Image from 'next/image';
-import { PortableText, PortableTextReactComponents } from '@portabletext/react';
-import { RichText } from '@/lib/types';
+import {
+  PortableText,
+  PortableTextReactComponents,
+  PortableTextTypeComponentProps,
+} from '@portabletext/react';
+import { Code, RichText } from '@/lib/types';
+import CodeParser from './CodeParser';
 
 type props = {
   content: RichText;
@@ -29,6 +34,15 @@ const RichTextParser = memo(({ content }: props) => {
         ) : (
           <div className='callToAction'>{value.text}</div>
         ),
+      code: ({ value }: PortableTextTypeComponentProps<Code>) => {
+        return (
+          <CodeParser
+            code={value.code}
+            language={value.language}
+            filename={value.filename}
+          />
+        );
+      },
     },
     marks: {
       em: ({ children }) => <em className=''>{children}</em>,
@@ -72,10 +86,17 @@ const RichTextParser = memo(({ content }: props) => {
       normal: ({ children }) => (
         <p className='text-base mb-2 p-2 opacity-80'>{children}</p>
       ),
+      blockquote: ({ children }) => (
+        <blockquote className='text-base italic border-l-4 pl-2 mb-2 opacity-80'>
+          {children}
+        </blockquote>
+      ),
     },
     list: {
       bullet: ({ children }) => (
-        <ul className='list-disc pl-10 pr-2 space-y-2'>{children}</ul>
+        <ul className='list-disc pl-10 pr-2 space-y-2 opacity-80 mb-4'>
+          {children}
+        </ul>
       ),
       number: ({ children }) => (
         <ol className='list-decimal pl-10 pr-2 space-y-2'>{children}</ol>

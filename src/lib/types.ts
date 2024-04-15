@@ -26,6 +26,7 @@ export type Project = {
   featured: boolean;
   status: ProjectStatus;
   description: string;
+  mainImage: string;
   images: string[];
   tech: ProjectTech[];
   href: string | null;
@@ -67,6 +68,12 @@ export type RichText = Array<{
     text: string;
   }>;
 }>;
+
+export type Code = {
+  code: string;
+  language: string;
+  filename: string;
+};
 
 export type Faq = {
   index: number;

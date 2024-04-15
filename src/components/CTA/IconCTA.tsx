@@ -21,7 +21,7 @@ const IconCTA = (props: Props) => {
   const { icon, name, className } = props;
 
   const content = (
-    <div className='p-4 rounded-xl text-lg transition-colors opacity-70 hover:opacity-100 hover:text-primary hover:border-primary bg-foreground border border-copy/10 cursor-pointer'>
+    <div className='p-4 rounded-xl text-lg transition-colors opacity-70 hover:opacity-100 hover:text-primary hover:border-primary bg-foreground border border-border cursor-pointer'>
       {icon}
     </div>
   );

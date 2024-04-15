@@ -102,7 +102,7 @@ const Stats = ({ stats }: { stats: AboutMeStats }) => {
   return (
     <AnimateInView
       delay={2.4}
-      className='grid place-items-center grid-cols-2 lg:grid-cols-4 gap-5 py-5 border-b border-copy/10'
+      className='grid place-items-center grid-cols-2 lg:grid-cols-4 gap-5 py-5 border-b border-border'
     >
       {list.map(({ count, label }, idx) => (
         <AnimateInView

@@ -1,7 +1,7 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ReactNode } from 'react';
 import BaseCard from '@/components/ui/BaseCard';
-import ImageCarousel from '@/components/projects/ImageCarousel';
 import BoxesReveal from '@/components/animationWrappers/BoxesReveal';
 import { Project } from '@/lib/types';
 import { getDomain, getToolDetails } from '@/lib/utilities';
@@ -37,7 +37,7 @@ const STATUS = {
 };
 
 const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
-  const { images, title, status, href, source, description, tech, slug } =
+  const { mainImage, title, status, href, source, description, tech, slug } =
     project;
   return (
     <BaseCard
@@ -47,8 +47,14 @@ const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
     >
       <div className='w-full h-full flex flex-col gap-5'>
         {hasImage && (
-          <BoxesReveal className='w-full h-64 overflow-hidden rounded-lg'>
-            <ImageCarousel imgs={images} dotsAlwaysVisible={false} />
+          <BoxesReveal className='w-full h-full overflow-hidden rounded-lg border border-border'>
+            <Image
+              src={mainImage}
+              alt={title}
+              width={500}
+              height={500}
+              className='w-full h-full object-cover'
+            />
           </BoxesReveal>
         )}
         <div className='min-h-52 grow flex flex-col justify-around '>
@@ -61,10 +67,7 @@ const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
                 {title}
               </Link>
             </h3>
-            <AnimateInView
-              delay={1}
-              className='flex items-center space-x-4 text-sm'
-            >
+            <AnimateInView className='flex items-center space-x-4 text-sm'>
               <StatusIcon status={status} />
               {href && (
                 <CardLink href={href}>
@@ -85,10 +88,7 @@ const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
             <p className='text-sm p-2 text-balance'>{description}</p>
           </div>
 
-          <AnimateInView
-            delay={1}
-            className='flex items-center gap-4 py-2 px-4 border-y border-copy/10'
-          >
+          <AnimateInView className='flex items-center gap-4 py-2 px-4 border-y border-border'>
             {tech.map(({ name }, idx) => {
               const { icon, href } = getToolDetails(name) ?? {
                 icon: <HiOutlineQuestionMarkCircle />,

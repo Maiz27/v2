@@ -37,7 +37,7 @@ const FaqCard = ({ question, answer }: Props) => {
             style={{
               border: isOpen ? 'none' : '1px solid',
             }}
-            className='p-2 border border-copy/10 rounded-lg text-2xl opacity-100 group-hover:text-primary group-hover:border-primary transition-colors'
+            className='p-2 border border-border rounded-lg text-2xl opacity-100 group-hover:text-primary group-hover:border-primary transition-colors'
           >
             <HiMiniPlus />
           </motion.span>

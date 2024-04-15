@@ -5,8 +5,8 @@ import { ROUTES, SOCIALS } from '@/lib/Constants';
 
 const Footer = () => {
   return (
-    <footer className='min-h-20 xl:border-t border-copy/10'>
-      <div className='flex flex-col lg:flex-row lg:justify-between xl:hidden justify-center items-center border-y border-copy/10 gap-6 py-4 px-4 xl:px-8'>
+    <footer className='min-h-20 xl:border-t border-border'>
+      <div className='flex flex-col lg:flex-row lg:justify-between xl:hidden justify-center items-center border-y border-border gap-6 py-4 px-4 xl:px-8'>
         <div className='flex flex-col lg:flex-row justify-center items-center gap-2'>
           <TimeZone timeZone='Africa/Juba' />
         </div>

@@ -36,7 +36,7 @@ const Toast = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ duration: 0.3 }}
-            className='flex items-center gap-2 py-2 px-4 bg-foreground rounded-lg border border-copy/10'
+            className='flex items-center gap-2 py-2 px-4 bg-foreground rounded-lg border border-border'
           >
             {TOAST_STATUS[status]}
             <span>{message}</span>

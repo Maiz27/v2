@@ -26,8 +26,8 @@ export const getFeaturedProjects = `*[_type == "project" && featured == true]{
   tech[]->{
     name,
   },
-  "images": images[].image.asset->url
-}`;
+  "mainImage": images[0].image.asset->url
+} | order(title asc)`;
 
 export const getProjects = `*[_type == "project"]{
   title,
