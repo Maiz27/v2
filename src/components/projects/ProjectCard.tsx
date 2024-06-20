@@ -3,17 +3,19 @@ import Image from 'next/image';
 import { ReactNode } from 'react';
 import BaseCard from '@/components/ui/BaseCard';
 import BoxesReveal from '@/components/animationWrappers/BoxesReveal';
-import { Project } from '@/lib/types';
-import { getDomain, getToolDetails } from '@/lib/utilities';
+import SvgTool from '../tools/SvgTool';
+import AnimateInView from '../animationWrappers/AnimateInView';
+import { getDomain, getMonthYear, getToolDetails } from '@/lib/utilities';
+import { Project, ProjectTech } from '@/lib/types';
 import {
   HiLink,
+  HiOutlineCalendarDays,
   HiOutlineCheckCircle,
   HiOutlineClock,
   HiOutlinePauseCircle,
   HiOutlineQuestionMarkCircle,
 } from 'react-icons/hi2';
 import { SiGithub } from 'react-icons/si';
-import AnimateInView from '../animationWrappers/AnimateInView';
 
 type Props = {
   project: Project;
@@ -37,8 +39,17 @@ const STATUS = {
 };
 
 const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
-  const { mainImage, title, status, href, source, description, tech, slug } =
-    project;
+  const {
+    mainImage,
+    title,
+    status,
+    href,
+    source,
+    description,
+    tech,
+    slug,
+    date,
+  } = project;
   return (
     <BaseCard
       delay={0.6 * index}
@@ -58,17 +69,24 @@ const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
           </BoxesReveal>
         )}
         <div className='min-h-52 grow flex flex-col justify-around '>
-          <div className='flex flex-col space-y-1'>
-            <h3 className='text-2xl font-bold w-fit flex items-center'>
-              <Link
-                href={`/projects/${slug.current}`}
-                className='px-2 hover:text-primary transition-colors'
-              >
-                {title}
-              </Link>
-            </h3>
-            <AnimateInView className='flex items-center space-x-4 text-sm'>
+          <div className='flex flex-col space-y-2'>
+            <div className='flex justify-between items-center'>
+              <h3 className='text-2xl font-bold w-fit flex items-center'>
+                <Link
+                  href={`/projects/${slug.current}`}
+                  className='px-2 hover:text-primary transition-colors'
+                >
+                  {title}
+                </Link>
+              </h3>
+              <span className='opacity-70 flex items-center space-x-1 text-sm'>
+                <HiOutlineCalendarDays />
+                <span>{getMonthYear(date)}</span>
+              </span>
+            </div>
+            <AnimateInView className='flex items-center flex-w space-x-4 text-sm px-1'>
               <StatusIcon status={status} />
+
               {href && (
                 <CardLink href={href}>
                   <HiLink />
@@ -89,24 +107,7 @@ const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
           </div>
 
           <AnimateInView className='flex items-center gap-4 py-2 px-4 border-y border-border'>
-            {tech.map(({ name }, idx) => {
-              const { icon, href } = getToolDetails(name) ?? {
-                icon: <HiOutlineQuestionMarkCircle />,
-                href: null,
-              };
-              return (
-                <a
-                  key={name}
-                  href={href!}
-                  data-tip={name}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-xl opacity-70 hover:opacity-100 hover:text-primary transition-all'
-                >
-                  {icon}
-                </a>
-              );
-            })}
+            <TechRow tech={tech} />
           </AnimateInView>
         </div>
       </div>
@@ -142,3 +143,30 @@ export const CardLink = ({
     {children}
   </a>
 );
+
+export const TechRow = ({ tech }: { tech: ProjectTech[] }) => {
+  return tech.map(({ name }) => {
+    const { icon, href } = getToolDetails(name) ?? {
+      icon: <HiOutlineQuestionMarkCircle />,
+      href: null,
+    };
+    const isImage = typeof icon === 'string';
+
+    return (
+      <a
+        key={name}
+        href={href!}
+        data-tip={name}
+        target='_blank'
+        rel='noopener noreferrer'
+        className='text-xl opacity-70 hover:opacity-100 hover:text-primary transition-all'
+      >
+        {isImage ? (
+          <SvgTool name={name} className='w-5 h-5' fill='currentColor' />
+        ) : (
+          <>{icon}</>
+        )}
+      </a>
+    );
+  });
+};

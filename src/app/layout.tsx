@@ -22,7 +22,7 @@ export default function RootLayout({
       <body className='bg-background text-copy flex'>
         <IsClientCtxProvider>
           <Left />
-          <div className='w-full mx-auto md:max-w-lg lg:max-w-3xl xl:max-w-full xl:border-x xl:border-border'>
+          <div className='w-full mx-auto md:max-w-2xl lg:max-w-4xl xl:max-w-full xl:border-x xl:border-border'>
             <Header />
             {children}
             <Footer />

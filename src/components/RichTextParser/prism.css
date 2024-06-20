@@ -32,13 +32,13 @@ pre[class*='language-'] {
 pre[class*='language-'] {
   padding: 1em;
   margin: 0.5em 0;
-  overflow: scroll;
+  overflow: auto;
   /* border-radius: 0.3em; */
 }
 
 pre[class*='language-']::-webkit-scrollbar {
   @apply size-2 rounded-lg;
-  background-color: #f4f4f4;
+  /* background-color: #f4f4f4; */
 }
 
 pre[class*='language-']::-webkit-scrollbar-thumb {

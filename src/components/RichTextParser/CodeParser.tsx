@@ -41,7 +41,9 @@ const CodeParser = ({ language, code, filename }: Code) => {
           href={link!}
           target='_blank'
           rel='noreferrer noopener'
-          className='flex items-center gap-1 text-primary pl-2 hover:underline underline-offset-4'
+          className={`flex items-center gap-1 text-primary pl-2 ${
+            link ? 'hover:underline underline-offset-4' : ''
+          }`}
         >
           <span className='opacity-100'>{name}</span>
           {link && <HiOutlineArrowTopRightOnSquare />}

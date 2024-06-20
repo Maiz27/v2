@@ -1,13 +1,14 @@
 import Heading from '../heading/Heading';
 import ImageCarousel from './ImageCarousel';
-import { StatusIcon, CardLink } from './ProjectCard';
-import { getToolDetails, getDomain } from '@/lib/utilities';
+import { StatusIcon, CardLink, TechRow } from './ProjectCard';
+import { getToolDetails, getDomain, getMonthYear } from '@/lib/utilities';
 import { Project } from '@/lib/types';
 import { SiGithub } from 'react-icons/si';
 import {
   HiOutlineLightBulb,
   HiOutlineQuestionMarkCircle,
   HiLink,
+  HiOutlineCalendarDays,
 } from 'react-icons/hi2';
 import AnimateInView from '../animationWrappers/AnimateInView';
 
@@ -16,7 +17,8 @@ type Props = {
 };
 
 const ProjectHeader = ({ project }: Props) => {
-  const { contentTitle, description, tech, source, href, status } = project;
+  const { contentTitle, description, tech, source, href, status, date } =
+    project;
   return (
     <>
       <Heading
@@ -25,28 +27,12 @@ const ProjectHeader = ({ project }: Props) => {
         heading={contentTitle}
         paragraph={description}
       >
-        <div className='flex flex-col lg:flex-row-reverse lg:justify-between pt-6 gap-4'>
-          <div className='w-full lg:w-fit flex justify-center items-center gap-4'>
-            {tech.map(({ name }) => {
-              const { icon, href } = getToolDetails(name) ?? {
-                icon: <HiOutlineQuestionMarkCircle />,
-                href: null,
-              };
-              return (
-                <a
-                  key={name}
-                  href={href!}
-                  data-tip={name}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-xl opacity-70 hover:opacity-100 hover:text-primary transition-all'
-                >
-                  {icon}
-                </a>
-              );
-            })}
-          </div>
-          <div className='w-full lg:w-fit flex justify-center items-center gap-4 lg:gap-4'>
+        <div className='flex flex-col lg:flex-row lg:justify-between gap-4'>
+          <div className='w-full lg:w-fit flex justify-center items-center gap-4 text-sm xl:text-base'>
+            <span className='opacity-70 flex items-center space-x-1'>
+              <HiOutlineCalendarDays />
+              <span>{getMonthYear(date)}</span>
+            </span>
             <StatusIcon status={status} />
 
             {href && (
@@ -61,6 +47,9 @@ const ProjectHeader = ({ project }: Props) => {
                 <span>Source</span>
               </CardLink>
             )}
+          </div>
+          <div className='w-full lg:w-fit flex justify-center items-center gap-4'>
+            <TechRow tech={tech} />
           </div>
         </div>
       </Heading>

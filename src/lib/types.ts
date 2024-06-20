@@ -24,6 +24,7 @@ export type Project = {
   title: string;
   slug: { current: string };
   featured: boolean;
+  date: string;
   status: ProjectStatus;
   description: string;
   mainImage: string;
@@ -44,6 +45,7 @@ export type Experience = {
     to?: string;
   };
   company: Company;
+  tech?: ProjectTech[];
   description: RichText;
 };
 
@@ -56,7 +58,7 @@ export type Company = {
 
 export type Tool = {
   name: string;
-  icon: JSX.Element;
+  icon: JSX.Element | string;
   href: string;
 };
 

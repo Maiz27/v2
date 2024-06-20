@@ -28,7 +28,7 @@ const fetchProjects = async (
   }
 
   query +=
-    ']{ title, slug, featured, status, description, href, source, tech[]->{ name }, "images": images[].image.asset->url } | order(featured desc)';
+    ']{ title, slug, featured, date, status, description, href, source, tech[]->{ name }, "images": images[].image.asset->url } | order(featured desc)';
 
   const projects: Project[] = await fetchSanityData(query, params);
 

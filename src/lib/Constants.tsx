@@ -46,6 +46,9 @@ import {
   SiFacebook,
   SiTelegram,
   SiWhatsapp,
+  SiPocketbase,
+  SiDocker,
+  SiSst,
 } from 'react-icons/si';
 
 import { ProjectStatus, Tool } from './types';
@@ -145,11 +148,16 @@ export const TOOLS: Tool[] = [
   { icon: <SiGraphql />, name: 'GraphQL', href: 'https://graphql.org' },
   { icon: <SiHasura />, name: 'Hasura', href: 'https://hasura.io' },
 
-  // Firebase
+  // PaaS
   {
     icon: <SiFirebase />,
     name: 'Firebase',
     href: 'https://firebase.google.com',
+  },
+  {
+    icon: <SiPocketbase />,
+    name: 'Pocketbase',
+    href: 'https://pocketbase.io/',
   },
 
   // Dart ecosystem
@@ -158,10 +166,17 @@ export const TOOLS: Tool[] = [
 
   // Other tools
   { icon: <SiGithub />, name: 'Github', href: 'https://github.com' },
+  { icon: <SiDocker />, name: 'Docker', href: 'https://docker.com' },
+  { icon: <SiSst />, name: 'SST', href: 'https://sst.dev' },
   {
     icon: <SiFramer />,
     name: 'Framer Motion',
     href: 'https://www.framer.com/motion/',
+  },
+  {
+    icon: '@/assets/tools/gsap.svg',
+    name: 'GSAP',
+    href: 'https://gsap.com',
   },
   { icon: <SiSanity />, name: 'Sanity', href: 'https://sanity.io' },
   { icon: <SiYarn />, name: 'Yarn', href: 'https://yarnpkg.com' },

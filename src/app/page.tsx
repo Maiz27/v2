@@ -10,11 +10,11 @@ export default function Home() {
     <main>
       <AboutCard />
 
+      <FeaturedProjects />
+
       <Experience />
 
       <Services />
-
-      <FeaturedProjects />
     </main>
   );
 }

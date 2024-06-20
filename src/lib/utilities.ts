@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { TOOLS } from './Constants';
 
 export const getDomain = (url: string) => {
@@ -22,4 +23,11 @@ export const roundYear = (dateString: string): number => {
   // If the month is less than 6 (January to May), round down
   // Otherwise, round up
   return month < 6 ? year : year + 1;
+};
+
+export const getMonthYear = (StringDate: string) => {
+  const date = new Date(StringDate);
+  return date
+    .toLocaleString(undefined, { month: 'short', year: 'numeric' })
+    .replace(' ', ', ');
 };

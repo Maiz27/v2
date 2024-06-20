@@ -1,11 +1,15 @@
 import Image from 'next/image';
 import BaseCard from '@/components/ui/BaseCard';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
+import AnimateInView from '@/components/animationWrappers/AnimateInView';
 import { Experience } from '@/lib/types';
 import { urlFor } from '@/lib/sanity/client';
-import { getDomain, roundYear } from '@/lib/utilities';
-import { HiLink, HiOutlineMapPin } from 'react-icons/hi2';
-import AnimateInView from '../animationWrappers/AnimateInView';
+import { getDomain, getToolDetails, roundYear } from '@/lib/utilities';
+import {
+  HiLink,
+  HiOutlineMapPin,
+  HiOutlineQuestionMarkCircle,
+} from 'react-icons/hi2';
 
 type Props = {
   experience: Experience;
@@ -13,7 +17,8 @@ type Props = {
 };
 
 const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
-  const { title, company, location, duration, description, partTime } = item;
+  const { title, company, location, duration, description, partTime, tech } =
+    item;
   const logo = urlFor(company.logo).url();
 
   return (
@@ -70,7 +75,7 @@ const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
         </div>
       </div>
 
-      <div className='border border-border rounded-lg p-6 space-y-2 z-10 relative mt-6'>
+      <div className='border border-border rounded-lg p-6 space-y-2 z-10 relative mt-6 flex flex-col gap-2'>
         <h4 className='text-lg xl:text-xl w-full flex items-center space-x-2'>
           <span className='opacity-100'>{title}</span>
           {partTime && (
@@ -86,6 +91,29 @@ const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
         <div className='text-sm'>
           <RichTextParser content={description} />
         </div>
+
+        {tech && tech.length > 0 && (
+          <AnimateInView className='flex items-center gap-4 pl-6'>
+            {tech?.map(({ name }, idx) => {
+              const { icon, href } = getToolDetails(name) ?? {
+                icon: <HiOutlineQuestionMarkCircle />,
+                href: null,
+              };
+              return (
+                <a
+                  key={name}
+                  href={href!}
+                  data-tip={name}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='text-xl opacity-70 hover:opacity-100 hover:text-primary transition-all'
+                >
+                  {icon}
+                </a>
+              );
+            })}
+          </AnimateInView>
+        )}
       </div>
     </BaseCard>
   );

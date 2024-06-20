@@ -3,6 +3,7 @@ import BaseCard from '@/components/ui/BaseCard';
 import { BENEFITS, SERVICES } from '@/lib/Constants';
 import { HiOutlineBolt, HiOutlineCheckCircle } from 'react-icons/hi2';
 import AnimateInView from '../animationWrappers/AnimateInView';
+import TranslateWrapper from '../animationWrappers/TranslateWrapper';
 
 const Services = () => {
   return (
@@ -44,16 +45,26 @@ const Services = () => {
               'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',
           }}
         >
-          <div className='w-full flex h-full animate-[slide-2_90s_linear_infinite] py-4'>
-            <ul className='w-full flex space-x-8 opacity-70 '>
+          <TranslateWrapper className='opacity-70 py-4'>
+            <>
               {BENEFITS.map((name) => (
                 <li key={name} className='flex items-center space-x-2 text-3xl'>
                   <HiOutlineCheckCircle className='text-primary' />
                   <span className='text-base w-max opacity-100'>{name}</span>
                 </li>
               ))}
-            </ul>
-          </div>
+            </>
+          </TranslateWrapper>
+          <TranslateWrapper className='opacity-70 py-4'>
+            <>
+              {BENEFITS.map((name) => (
+                <li key={name} className='flex items-center space-x-2 text-3xl'>
+                  <HiOutlineCheckCircle className='text-primary' />
+                  <span className='text-base w-max opacity-100'>{name}</span>
+                </li>
+              ))}
+            </>
+          </TranslateWrapper>
         </div>
       </AnimateInView>
     </section>
