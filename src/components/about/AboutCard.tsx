@@ -53,7 +53,7 @@ const AboutCard = async () => {
             <AnimateInView delay={1.2} className='w-full'>
               <CTA
                 text='Email Me'
-                href={EMAIL}
+                href={`mailto:${EMAIL}`}
                 external={true}
                 icon={<HiOutlineEnvelope />}
               />

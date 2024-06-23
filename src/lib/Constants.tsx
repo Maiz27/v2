@@ -64,7 +64,11 @@ import {
 
 export const LOGO = logo;
 
-export const EMAIL = 'mailto:email@me.com';
+export const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN;
+
+export const EMAIL = process.env.NEXT_PUBLIC_EMAIL;
+
+export const EMAIL_PATTERN = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 export const ROUTES = [
   {
@@ -294,6 +298,23 @@ export const SHARE_PLATFORMS = [
     ShareButton: WhatsappShareButton,
   },
 ];
+
+export const FORMS = {
+  contact: {
+    fields: { name: '', email: '', message: '' },
+    rules: {
+      name: (value: string) =>
+        value.length > 2 ? '' : 'Name must be longer than 2 characters!',
+      email: (value: string) => {
+        return value.match(EMAIL_PATTERN)
+          ? ''
+          : 'Please enter a valid email address';
+      },
+      message: (value: string) =>
+        value.length > 10 ? '' : 'Message must be longer than 10 characters!',
+    },
+  },
+};
 
 // Framer Motion Animation Variants
 export const SLIDE_RIGHT = {

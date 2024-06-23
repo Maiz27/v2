@@ -21,7 +21,7 @@ const page = () => {
           <AnimateInView delay={1.4} className='w-full'>
             <CTA
               text='Email Me'
-              href={EMAIL}
+              href={`mailto:${EMAIL}`}
               external={true}
               icon={<HiOutlineEnvelope />}
             />
