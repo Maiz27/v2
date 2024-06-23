@@ -1,4 +1,6 @@
-import { NON_STACK_TOOLS, TOOLS } from './Constants';
+import { Metadata } from 'next';
+import { BASEURL, NON_STACK_TOOLS, TOOLS, METADATA } from './Constants';
+import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
 
 export const getDomain = (url: string) => {
   const { hostname } = new URL(url);
@@ -37,4 +39,48 @@ export const getMonthYear = (StringDate: string) => {
   return date
     .toLocaleString(undefined, { month: 'short', year: 'numeric' })
     .replace(' ', ', ');
+};
+
+export const getPageMetadata = (name: string): Metadata => {
+  const pageMetaData = METADATA.get(name);
+
+  return {
+    metadataBase: new URL(BASEURL),
+    keywords: [],
+    title: pageMetaData.title,
+    description: pageMetaData.description,
+    alternates: {
+      canonical: pageMetaData.url,
+    },
+    icons: {
+      icon: pageMetaData.icon,
+      shortcut: pageMetaData.icon,
+      apple: pageMetaData.icon,
+      other: {
+        rel: 'apple-touch-icon-precomposed',
+        url: pageMetaData.icon,
+      },
+    },
+    openGraph: {
+      type: pageMetaData.type,
+      url: pageMetaData.url,
+      title: pageMetaData.title,
+      description: pageMetaData.description,
+      siteName: pageMetaData.title,
+      images: [
+        {
+          url: pageMetaData.image,
+        },
+      ],
+    } as OpenGraph,
+    twitter: {
+      card: 'summary_large_image',
+      site: pageMetaData.url,
+      images: [
+        {
+          url: pageMetaData.image,
+        },
+      ],
+    },
+  };
 };

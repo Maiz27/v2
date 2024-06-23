@@ -55,7 +55,8 @@ const Images = ({ imgs }: { imgs: string[] }) => {
           <motion.div key={idx} className='w-full h-full shrink-0'>
             <Image
               src={imgSrc}
-              alt='avatar'
+              alt={`Carousel image (${idx + 1})`}
+              title={`Carousel image (${idx + 1})`}
               width={720}
               height={480}
               className={`w-full h-full object-cover`}

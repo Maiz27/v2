@@ -16,6 +16,17 @@ const AboutCard = async () => {
 
   const { name, bio, imageUrl, stats } = about;
 
+  const Intro = () => {
+    return (
+      <>
+        <span className='opacity-100 font-semibold text-primary'>
+          Hello I Am
+        </span>
+        <h1 className='font-bold text-3xl'>{name}</h1>
+      </>
+    );
+  };
+
   return (
     <section className='flex flex-col gap-8 items-center'>
       <div className='flex flex-col lg:flex-row justify-center items-start lg:items-center gap-4'>
@@ -26,25 +37,19 @@ const AboutCard = async () => {
           >
             <Image
               src={imageUrl}
-              alt='avatar'
-              width={500}
-              height={500}
-              className='h-full object-cover'
+              width={240}
+              height={240}
+              alt='Avatar'
+              className='h-full w-full object-scale-down'
             />
           </BoxesReveal>
           <AnimateInView className='lg:hidden'>
-            <span className='opacity-100 font-semibold text-primary'>
-              Hello I Am
-            </span>
-            <h1 className='font-bold text-3xl'>{name}</h1>
+            <Intro />
           </AnimateInView>
         </div>
         <div className='space-y-4'>
           <AnimateInView className='hidden lg:block'>
-            <span className='opacity-100 font-semibold text-primary'>
-              Hello I Am
-            </span>
-            <h1 className='font-bold text-4xl'>{name}</h1>
+            <Intro />
           </AnimateInView>
           <AnimateInView tag='p' delay={0.8} className='lg:text-balance'>
             {bio}

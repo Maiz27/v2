@@ -66,6 +66,8 @@ export const LOGO = logo;
 
 export const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN;
 
+export const BASEURL = `https://${DOMAIN}`;
+
 export const EMAIL = process.env.NEXT_PUBLIC_EMAIL;
 
 export const EMAIL_PATTERN = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -374,6 +376,75 @@ export const FORMS = {
     },
   },
 };
+
+export const METADATA: Map<string, any> = new Map([
+  [
+    'home',
+    {
+      title: 'Maged Faiz | Full Stack Developer',
+      description:
+        'Explore the portfolio of Maged Faiz, a fullstack developer based in Juba, South Sudan. Discover innovative projects, professional journey, and expertise',
+      type: 'website',
+      keywords: [
+        'Maged Faiz',
+        'Fullstack developer',
+        'web developer',
+        'portfolio',
+        'Juba',
+        'South Sudan',
+        'projects',
+        'web development',
+        'mobile development',
+      ],
+      url: `${BASEURL}`,
+      image: `${BASEURL}/imgs/avatar.webp`,
+      icon: '/imgs/logo/favicon.ico',
+    },
+  ],
+  [
+    'projects',
+    {
+      title: 'Maged Faiz | My Projects',
+      description:
+        "Explore the landscape of innovation and technology through Maged Faiz's projects. Each project is a testament to creative solutions and technical prowess.",
+      type: 'website',
+      keywords: [
+        'Maged Faiz',
+        'projects',
+        'portfolio',
+        'web development',
+        'mobile development',
+        'Juba',
+        'South Sudan',
+      ],
+      url: `${BASEURL}/projects`,
+      image: `${BASEURL}/imgs/avatar.webp`,
+      icon: '/imgs/logo/favicon.ico',
+    },
+  ],
+  [
+    'contact',
+    {
+      title: 'Maged Faiz | Contact',
+      description:
+        "Interested in collaborating with Maged Faiz? Reach out and let's turn your vision into digital reality. Get in touch for web and mobile development projects.",
+      type: 'website',
+      keywords: [
+        'Maged Faiz',
+        'contact',
+        'Fullstack developer',
+        'web developer',
+        'collaboration',
+        'projects',
+        'web development',
+        'mobile development',
+      ],
+      url: `${BASEURL}/contact`,
+      image: `${BASEURL}/imgs/avatar.webp`,
+      icon: '/imgs/logo/favicon.ico',
+    },
+  ],
+]);
 
 // Framer Motion Animation Variants
 export const SLIDE_RIGHT = {

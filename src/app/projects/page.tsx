@@ -5,8 +5,11 @@ import AnimatedProjectsGrid from '@/components/projects/AnimatedProjectsGrid';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { Project } from '@/lib/types';
 import { HiOutlineLightBulb } from 'react-icons/hi2';
+import { getPageMetadata } from '@/lib/utilities';
 
 export const revalidate = 60;
+
+export const metadata = getPageMetadata('projects');
 
 const fetchProjects = async (
   searchParams: { [key: string]: string | string[] | undefined } = {}

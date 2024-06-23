@@ -64,6 +64,13 @@ export const getProjectBySlug = `*[_type == "project" && slug.current == $slug]{
   content,
 }[0]`;
 
+export const getProjectForSEO = `*[_type == "project" && slug.current == $slug]{
+  slug,
+  description,
+  "images": images[0].image.asset->url,
+  contentTitle,
+}[0]`;
+
 export const getFaqs = `*[_type == "faq"]{
   index,
   question,

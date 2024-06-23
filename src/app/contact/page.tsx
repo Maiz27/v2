@@ -5,8 +5,11 @@ import ContactForm from '@/components/forms/ContactForm';
 import { HiOutlineEnvelope, HiOutlineSquare3Stack3D } from 'react-icons/hi2';
 import { EMAIL } from '@/lib/Constants';
 import AnimateInView from '@/components/animationWrappers/AnimateInView';
+import { getPageMetadata } from '@/lib/utilities';
 
 export const revalidate = 60;
+
+export const metadata = getPageMetadata('contact');
 
 const page = () => {
   return (
