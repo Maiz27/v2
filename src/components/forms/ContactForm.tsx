@@ -1,13 +1,16 @@
 'use client';
 import CTA from '../CTA/CTA';
-import AnimateInView from '../animationWrappers/AnimateInView';
+import AnimateInView from '@/components/animationWrappers/AnimateInView';
+import Input from '@/components/ui/form/Input';
+import Textarea from '@/components/ui/form/Textarea';
 import useForm from '@/lib/hooks/useForm';
 import { FORMS } from '@/lib/Constants';
+import { useToast } from '@/lib/context/ToastContext';
 import { HiOutlineArrowUpRight } from 'react-icons/hi2';
-import Input from '../ui/form/Input';
-import Textarea from '../ui/form/Textarea';
 
 const ContactForm = () => {
+  const { show } = useToast();
+
   const { fields, rules } = FORMS.contact;
   const { state, errors, loading, handleChange, reset, onSubmit } = useForm(
     fields,
@@ -24,7 +27,15 @@ const ContactForm = () => {
     });
     console.log('response', response);
 
-    reset();
+    if (response.status === 200) {
+      show('Your Message was delivered successfully!', {
+        status: 'success',
+      });
+    } else {
+      show('An error occurred while delivering your Message!', {
+        status: 'error',
+      });
+    }
   };
 
   return (

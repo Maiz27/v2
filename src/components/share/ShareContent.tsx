@@ -1,13 +1,11 @@
 'use client';
-import Toast from '@/components/ui/Toast';
-import { HiClipboard } from 'react-icons/hi2';
 import { useShare } from '@/lib/hooks/useShare';
 import { SHARE_PLATFORMS } from '@/lib/Constants';
 import AnimateInView from '../animationWrappers/AnimateInView';
+import { HiClipboard } from 'react-icons/hi2';
 
 const ShareContent = () => {
-  const { currentURL, status, showToast, copyToClipboard, closeToast } =
-    useShare();
+  const { currentURL, copyToClipboard } = useShare();
 
   return (
     <section className='w-full my-16'>
@@ -35,19 +33,6 @@ const ShareContent = () => {
           );
         })}
       </div>
-
-      {status && (
-        <Toast
-          message={
-            status === 'success'
-              ? 'URL copied to clipboard'
-              : 'Error copying to clipboard'
-          }
-          status={status}
-          show={showToast}
-          onClose={closeToast}
-        />
-      )}
     </section>
   );
 };

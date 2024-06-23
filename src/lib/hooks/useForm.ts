@@ -45,6 +45,7 @@ const useForm = <T extends object>(initialState: T, rules: ValidationRules) => {
     } catch (error) {
       console.log('error', error);
     } finally {
+      reset();
       setLoading(false);
     }
   };
