@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Heading from '../heading/Heading';
 import BaseModal from '../ui/BaseModal';
-import { TOOLS, NON_STACK_TOOLS } from '@/lib/Constants';
+import { getStackToolsArray } from '@/lib/utilities';
 import { HiOutlineAdjustmentsVertical } from 'react-icons/hi2';
 
 type Props = {
@@ -43,21 +43,19 @@ const ToolsModal = ({ selectedTech, handleConfirm }: Props) => {
         icon={<HiOutlineAdjustmentsVertical />}
       />
       <div className='bg-background p-4 rounded-lg flex flex-wrap items-center gap-2'>
-        {TOOLS.filter((tool) => !NON_STACK_TOOLS.includes(tool.name)).map(
-          ({ name }) => (
-            <button
-              key={name}
-              onClick={() => handleSelect(name)}
-              className={`text-sm p-2 rounded-lg transition-colors ${
-                selection.includes(name)
-                  ? 'bg-primary text-background'
-                  : 'bg-foreground'
-              }`}
-            >
-              {name}
-            </button>
-          )
-        )}
+        {getStackToolsArray().map(([name]) => (
+          <button
+            key={name}
+            onClick={() => handleSelect(name)}
+            className={`text-sm p-2 rounded-lg transition-colors ${
+              selection.includes(name)
+                ? 'bg-primary text-background'
+                : 'bg-foreground'
+            }`}
+          >
+            {name}
+          </button>
+        ))}
       </div>
     </BaseModal>
   );

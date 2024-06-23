@@ -110,89 +110,148 @@ export const SOCIALS = [
   },
 ];
 
-export const TOOLS: Tool[] = [
+export const TOOLS: Map<string, Tool> = new Map([
   // JavaScript ecosystem
-  {
-    icon: <SiJavascript />,
-    name: 'JavaScript',
-    href: 'https://javascript.com',
-  },
-  {
-    icon: <SiTypescript />,
-    name: 'TypeScript',
-    href: 'https://typescriptlang.org',
-  },
-  { icon: <SiReact />, name: 'React', href: 'https://react.dev' },
-  { icon: <SiNextdotjs />, name: 'Next.js', href: 'https://nextjs.org' },
-  { icon: <SiSvelte />, name: 'Svelte', href: 'https://svelte.dev' },
-  { icon: <SiRedux />, name: 'Redux', href: 'https://redux.js.org' },
-  { icon: <SiNodedotjs />, name: 'Node.js', href: 'https://nodejs.org' },
-  { icon: <SiVite />, name: 'Vite', href: 'https://vitejs.dev' },
-  { icon: <SiTurborepo />, name: 'Turborepo', href: 'https://turbo.build' },
-  { icon: <SiExpress />, name: 'Express.js', href: 'https://expressjs.com' },
+  [
+    'JavaScript',
+    {
+      icon: <SiJavascript />,
+      name: 'JavaScript',
+      href: 'https://javascript.com',
+    },
+  ],
+  [
+    'TypeScript',
+    {
+      icon: <SiTypescript />,
+      name: 'TypeScript',
+      href: 'https://typescriptlang.org',
+    },
+  ],
+  ['React', { icon: <SiReact />, name: 'React', href: 'https://react.dev' }],
+  [
+    'Next.js',
+    { icon: <SiNextdotjs />, name: 'Next.js', href: 'https://nextjs.org' },
+  ],
+  [
+    'Svelte',
+    { icon: <SiSvelte />, name: 'Svelte', href: 'https://svelte.dev' },
+  ],
+  ['Redux', { icon: <SiRedux />, name: 'Redux', href: 'https://redux.js.org' }],
+  [
+    'Node.js',
+    { icon: <SiNodedotjs />, name: 'Node.js', href: 'https://nodejs.org' },
+  ],
+  ['Vite', { icon: <SiVite />, name: 'Vite', href: 'https://vitejs.dev' }],
+  [
+    'Turborepo',
+    { icon: <SiTurborepo />, name: 'Turborepo', href: 'https://turbo.build' },
+  ],
+  [
+    'Express.js',
+    { icon: <SiExpress />, name: 'Express.js', href: 'https://expressjs.com' },
+  ],
 
   // CSS
-  {
-    icon: <SiTailwindcss />,
-    name: 'Tailwind CSS',
-    href: 'https://tailwindcss.com',
-  },
-  { icon: <SiSass />, name: 'Sass', href: 'https://sass-lang.com' },
+  [
+    'Tailwind CSS',
+    {
+      icon: <SiTailwindcss />,
+      name: 'Tailwind CSS',
+      href: 'https://tailwindcss.com',
+    },
+  ],
+  ['Sass', { icon: <SiSass />, name: 'Sass', href: 'https://sass-lang.com' }],
 
-  //Deployment
-  { icon: <SiNetlify />, name: 'Netlify', href: 'https://netlify.com' },
-  { icon: <SiVercel />, name: 'Vercel', href: 'https://vercel.com' },
+  // Deployment
+  [
+    'Netlify',
+    { icon: <SiNetlify />, name: 'Netlify', href: 'https://netlify.com' },
+  ],
+  [
+    'Vercel',
+    { icon: <SiVercel />, name: 'Vercel', href: 'https://vercel.com' },
+  ],
 
   // Database
-  {
-    icon: <SiPostgresql />,
-    name: 'PostgreSQL',
-    href: 'https://postgresql.org',
-  },
-  { icon: <SiGraphql />, name: 'GraphQL', href: 'https://graphql.org' },
-  { icon: <SiHasura />, name: 'Hasura', href: 'https://hasura.io' },
+  [
+    'PostgreSQL',
+    {
+      icon: <SiPostgresql />,
+      name: 'PostgreSQL',
+      href: 'https://postgresql.org',
+    },
+  ],
+  [
+    'GraphQL',
+    { icon: <SiGraphql />, name: 'GraphQL', href: 'https://graphql.org' },
+  ],
+  ['Hasura', { icon: <SiHasura />, name: 'Hasura', href: 'https://hasura.io' }],
 
   // PaaS
-  {
-    icon: <SiFirebase />,
-    name: 'Firebase',
-    href: 'https://firebase.google.com',
-  },
-  {
-    icon: <SiPocketbase />,
-    name: 'Pocketbase',
-    href: 'https://pocketbase.io/',
-  },
+  [
+    'Firebase',
+    {
+      icon: <SiFirebase />,
+      name: 'Firebase',
+      href: 'https://firebase.google.com',
+    },
+  ],
+  [
+    'Pocketbase',
+    {
+      icon: <SiPocketbase />,
+      name: 'Pocketbase',
+      href: 'https://pocketbase.io/',
+    },
+  ],
 
   // Dart ecosystem
-  { icon: <SiDart />, name: 'Dart', href: 'https://dart.dev' },
-  { icon: <SiFlutter />, name: 'Flutter', href: 'https://flutter.dev' },
+  ['Dart', { icon: <SiDart />, name: 'Dart', href: 'https://dart.dev' }],
+  [
+    'Flutter',
+    { icon: <SiFlutter />, name: 'Flutter', href: 'https://flutter.dev' },
+  ],
 
   // Other tools
-  { icon: <SiGithub />, name: 'Github', href: 'https://github.com' },
-  { icon: <SiDocker />, name: 'Docker', href: 'https://docker.com' },
-  { icon: <SiSst />, name: 'SST', href: 'https://sst.dev' },
-  {
-    icon: <SiFramer />,
-    name: 'Framer Motion',
-    href: 'https://www.framer.com/motion/',
-  },
-  {
-    icon: '@/assets/tools/gsap.svg',
-    name: 'GSAP',
-    href: 'https://gsap.com',
-  },
-  { icon: <SiSanity />, name: 'Sanity', href: 'https://sanity.io' },
-  { icon: <SiYarn />, name: 'Yarn', href: 'https://yarnpkg.com' },
-  {
-    icon: <SiVisualstudiocode />,
-    name: 'VS Code',
-    href: 'https://code.visualstudio.com',
-  },
+  [
+    'Github',
+    { icon: <SiGithub />, name: 'Github', href: 'https://github.com' },
+  ],
+  [
+    'Docker',
+    { icon: <SiDocker />, name: 'Docker', href: 'https://docker.com' },
+  ],
+  ['SST', { icon: <SiSst />, name: 'SST', href: 'https://sst.dev' }],
+  [
+    'Framer Motion',
+    {
+      icon: <SiFramer />,
+      name: 'Framer Motion',
+      href: 'https://www.framer.com/motion/',
+    },
+  ],
+  [
+    'GSAP',
+    { icon: '@/assets/tools/gsap.svg', name: 'GSAP', href: 'https://gsap.com' },
+  ],
+  ['Sanity', { icon: <SiSanity />, name: 'Sanity', href: 'https://sanity.io' }],
+  ['Yarn', { icon: <SiYarn />, name: 'Yarn', href: 'https://yarnpkg.com' }],
+  [
+    'VS Code',
+    {
+      icon: <SiVisualstudiocode />,
+      name: 'VS Code',
+      href: 'https://code.visualstudio.com',
+    },
+  ],
 
-  //Languages
-  { icon: <SiKotlin />, name: 'Kotlin', href: 'https://kotlinlang.org' },
-];
+  // Languages
+  [
+    'Kotlin',
+    { icon: <SiKotlin />, name: 'Kotlin', href: 'https://kotlinlang.org' },
+  ],
+]);
 
 export const NON_STACK_TOOLS = [
   'Github',

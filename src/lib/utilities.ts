@@ -1,5 +1,4 @@
-import { lazy } from 'react';
-import { TOOLS } from './Constants';
+import { NON_STACK_TOOLS, TOOLS } from './Constants';
 
 export const getDomain = (url: string) => {
   const { hostname } = new URL(url);
@@ -11,8 +10,16 @@ export const getDomain = (url: string) => {
 };
 
 export const getToolDetails = (toolName: string) => {
-  const tool = TOOLS.find((tool) => tool.name === toolName);
+  const tool = TOOLS.get(toolName);
   return tool ? { icon: tool.icon, href: tool.href } : null;
+};
+
+export const getStackToolsArray = () => {
+  const filteredTOOLS = new Map(
+    Array.from(TOOLS).filter(([name]) => !NON_STACK_TOOLS.includes(name))
+  );
+
+  return Array.from(filteredTOOLS);
 };
 
 export const roundYear = (dateString: string): number => {
