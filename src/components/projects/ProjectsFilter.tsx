@@ -35,21 +35,24 @@ const Filter = ({ projectsTotal }: { projectsTotal: number }) => {
         </h2>
 
         <div className='flex flex-col lg:flex-row lg:items-center gap-2'>
-          <select
-            className='lg:max-w-xs'
-            name='status'
-            value={state.status}
-            onChange={handleChange}
-          >
-            <option disabled value=''>
-              Status
-            </option>
-            {PROJECT_STATUS.map((status) => (
-              <option key={status} value={status}>
-                {status}
+          <label htmlFor='status'>
+            <span className='sr-only'>Status</span>
+            <select
+              className='lg:max-w-xs'
+              name='status'
+              value={state.status}
+              onChange={handleChange}
+            >
+              <option disabled value=''>
+                Status
               </option>
-            ))}
-          </select>
+              {PROJECT_STATUS.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+          </label>
           <div className='w-full lg:w-40'>
             <ToolsModal
               selectedTech={state.selectedTech}

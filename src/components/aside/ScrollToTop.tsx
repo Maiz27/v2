@@ -48,6 +48,7 @@ export const MobileScrollToTop = () => {
     return (
       <AnimateInView
         tag='button'
+        title='Scroll to top'
         onClick={scrollToTop}
         className='z-30 fixed xl:hidden bottom-6 right-6 p-2 shadow-xl rounded-2xl btn btn-secondary border-2 border-primary text-2xl'
       >

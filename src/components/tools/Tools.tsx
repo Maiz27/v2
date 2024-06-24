@@ -41,6 +41,7 @@ const Tool = ({ tool: { name, href, icon } }: { tool: ToolType }) => {
     <a
       href={href}
       data-tip={name}
+      title={name}
       target='_blank'
       rel='noopener noreferrer'
       className='flex justify-center items-center space-x-1 group'

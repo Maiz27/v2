@@ -67,7 +67,11 @@ const AnimatedIconCTA = (props: Props) => {
     return <button onClick={props.onClick}>{content}</button>;
   }
 
-  return <Link href={props.href}>{content}</Link>;
+  return (
+    <Link title={name} href={props.href}>
+      {content}
+    </Link>
+  );
 };
 
 export default AnimatedIconCTA;
