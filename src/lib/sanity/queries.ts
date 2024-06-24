@@ -35,7 +35,7 @@ export const getFeaturedProjects = `*[_type == "project" && featured == true]{
     name,
   },
   "mainImage": images[0].image.asset->url
-} | order(title asc)`;
+} | order(date desc)`;
 
 export const getProjects = `*[_type == "project"]{
   title,
@@ -75,7 +75,7 @@ export const getProjectMetadata = `*[_type == "project" && slug.current == $slug
   contentTitle,
 }[0]`;
 
-export const getProjectsForSEO = `*[_type == "project" && slug.current == $slug]{
+export const getProjectsForSEO = `*[_type == "project"]{
   slug,
   date,
 }`;

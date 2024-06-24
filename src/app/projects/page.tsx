@@ -11,33 +11,6 @@ export const revalidate = 60;
 
 export const metadata = getPageMetadata('projects');
 
-const fetchProjects = async (
-  searchParams: { [key: string]: string | string[] | undefined } = {}
-) => {
-  const { status, tech } = searchParams;
-  const techArray = tech?.toString().split(',') ?? [];
-
-  let query = '*[_type == "project"';
-  let params: { [key: string]: string | string[] } = {};
-
-  if (techArray.length > 0) {
-    query += ' && tech[]->name match coalesce($tech, ".*")';
-    params.tech = techArray;
-  }
-
-  if (status) {
-    query += ' && status == $status';
-    params.status = status;
-  }
-
-  query +=
-    ']{ title, slug, featured, date, status, description, href, source, tech[]->{ name }, "images": images[].image.asset->url } | order(featured desc)';
-
-  const projects: Project[] = await fetchSanityData(query, params);
-
-  return projects;
-};
-
 const page = async ({
   searchParams,
 }: {
@@ -72,3 +45,30 @@ const page = async ({
 };
 
 export default page;
+
+const fetchProjects = async (
+  searchParams: { [key: string]: string | string[] | undefined } = {}
+) => {
+  const { status, tech } = searchParams;
+  const techArray = tech?.toString().split(',') ?? [];
+
+  let query = '*[_type == "project"';
+  let params: { [key: string]: string | string[] } = {};
+
+  if (techArray.length > 0) {
+    query += ' && tech[]->name match coalesce($tech, ".*")';
+    params.tech = techArray;
+  }
+
+  if (status) {
+    query += ' && status == $status';
+    params.status = status;
+  }
+
+  query +=
+    ']{ title, slug, featured, date, status, description, href, source, tech[]->{ name }, "images": images[].image.asset->url } | order(featured desc, date desc)';
+
+  const projects: Project[] = await fetchSanityData(query, params);
+
+  return projects;
+};

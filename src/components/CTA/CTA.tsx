@@ -94,21 +94,11 @@ const CTA = (props: CTAProps) => {
   }
 
   if ('href' in props) {
-    if (props.external) {
-      return (
-        <a
-          href={props.href}
-          target='_blank'
-          rel='noopener noreferrer'
-          {...commonProps}
-        >
-          <div className='text-xl text-primary'>{icon}</div>
-          <span className='group-hover:opacity-100'>{_text}</span>
-        </a>
-      );
-    }
+    const external = props.external
+      ? { target: '_blank', rel: 'noopener noreferrer' }
+      : {};
     return (
-      <Link href={props.href} {...commonProps}>
+      <Link href={props.href} {...commonProps} {...external}>
         <div className='text-xl text-primary'>{icon}</div>
         <span className='group-hover:opacity-100'>{_text}</span>
       </Link>
