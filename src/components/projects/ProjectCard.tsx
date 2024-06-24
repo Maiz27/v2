@@ -157,6 +157,7 @@ export const TechRow = ({ tech }: { tech: ProjectTech[] }) => {
         key={name}
         href={href!}
         data-tip={name}
+        title={name}
         target='_blank'
         rel='noopener noreferrer'
         className='text-xl opacity-70 hover:opacity-100 hover:text-primary transition-all'

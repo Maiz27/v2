@@ -45,7 +45,7 @@ const Services = () => {
               'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',
           }}
         >
-          <TranslateWrapper className='opacity-70 py-4'>
+          <TranslateWrapper tag='ul' className='opacity-70 py-4'>
             <>
               {BENEFITS.map((name) => (
                 <li key={name} className='flex items-center space-x-2 text-3xl'>
@@ -55,7 +55,7 @@ const Services = () => {
               ))}
             </>
           </TranslateWrapper>
-          <TranslateWrapper className='opacity-70 py-4'>
+          <TranslateWrapper tag='ul' className='opacity-70 py-4'>
             <>
               {BENEFITS.map((name) => (
                 <li key={name} className='flex items-center space-x-2 text-3xl'>

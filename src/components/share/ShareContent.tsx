@@ -25,6 +25,7 @@ const ShareContent = () => {
             <AnimateInView key={id} delay={0.4 * ++idx}>
               <ShareButton
                 url={currentURL}
+                title={id}
                 className='size-10 grid place-items-center group shadow'
               >
                 {icon}
