@@ -1,12 +1,11 @@
 import Heading from '../heading/Heading';
 import ImageCarousel from './ImageCarousel';
 import { StatusIcon, CardLink, TechRow } from './ProjectCard';
-import { getToolDetails, getDomain, getMonthYear } from '@/lib/utilities';
+import { getDomain, getMonthYear } from '@/lib/utilities';
 import { Project } from '@/lib/types';
 import { SiGithub } from 'react-icons/si';
 import {
   HiOutlineLightBulb,
-  HiOutlineQuestionMarkCircle,
   HiLink,
   HiOutlineCalendarDays,
 } from 'react-icons/hi2';

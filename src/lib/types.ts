@@ -96,6 +96,8 @@ export type BaseAnimationWrapperProps = {
   [x: string]: any;
 };
 
+export type TOAST_STATUS = 'success' | 'error' | 'info' | 'warning';
+
 export type MotionTag =
   | 'main'
   | 'div'

@@ -5,6 +5,10 @@ export const getAboutMe = `*[_type == "aboutMe"]{
   stats
 }[0]`;
 
+export const getMainImage = `*[_type == "aboutMe"]{
+  "imageUrl": image.asset->url,
+}[0]`;
+
 export const getExperiences = `*[_type == "experience"]{
   title,
   location,
@@ -31,7 +35,7 @@ export const getFeaturedProjects = `*[_type == "project" && featured == true]{
     name,
   },
   "mainImage": images[0].image.asset->url
-} | order(title asc)`;
+} | order(date desc)`;
 
 export const getProjects = `*[_type == "project"]{
   title,
@@ -63,6 +67,18 @@ export const getProjectBySlug = `*[_type == "project" && slug.current == $slug]{
   contentTitle,
   content,
 }[0]`;
+
+export const getProjectMetadata = `*[_type == "project" && slug.current == $slug]{
+  slug,
+  description,
+  "images": images[0].image.asset->url,
+  contentTitle,
+}[0]`;
+
+export const getProjectsForSEO = `*[_type == "project"]{
+  slug,
+  date,
+}`;
 
 export const getFaqs = `*[_type == "faq"]{
   index,

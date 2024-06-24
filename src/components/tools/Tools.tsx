@@ -16,15 +16,15 @@ const Tools = () => {
     >
       <TranslateWrapper>
         <>
-          {TOOLS.map((tool) => (
-            <Tool key={tool.name} tool={tool} />
+          {Array.from(TOOLS).map(([key, tool]) => (
+            <Tool key={key} tool={tool} />
           ))}
         </>
       </TranslateWrapper>
       <TranslateWrapper>
         <>
-          {TOOLS.map((tool) => (
-            <Tool key={tool.name} tool={tool} />
+          {Array.from(TOOLS).map(([key, tool]) => (
+            <Tool key={key} tool={tool} />
           ))}
         </>
       </TranslateWrapper>

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useIsClient } from '@/lib/context/IsClientContext';
+import { useToast } from '../context/ToastContext';
 
 export const useShare = () => {
   const isClient = useIsClient();
-  const [status, setStatus] = useState<'success' | 'error' | undefined>();
-  const [showToast, setShowToast] = useState(false);
+  const { show } = useToast();
   const [currentURL, setCurrentURL] = useState(
     isClient ? window.location.href : ''
   );
@@ -20,19 +20,17 @@ export const useShare = () => {
       .writeText(currentURL)
       .then(() => {
         console.log('URL copied to clipboard:', currentURL);
-        setStatus('success');
-        setShowToast(true);
+        show('URL copied to clipboard!', {
+          status: 'success',
+        });
       })
       .catch((error) => {
         console.error('Error copying to clipboard:', error);
-        setStatus('error');
-        setShowToast(true);
+        show('Error copying to clipboard!', {
+          status: 'error',
+        });
       });
-  }, [currentURL]);
+  }, [currentURL, show]);
 
-  const closeToast = useCallback(() => {
-    setShowToast(false);
-  }, []);
-
-  return { currentURL, status, showToast, copyToClipboard, closeToast };
+  return { currentURL, copyToClipboard };
 };
