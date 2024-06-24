@@ -1,5 +1,3 @@
-import logo from '/public/imgs/logo/logo.png';
-
 import {
   HiOutlineUser,
   HiOutlineSquare3Stack3D,
@@ -61,8 +59,6 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
 } from 'react-share';
-
-export const LOGO = logo;
 
 export const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN;
 
@@ -397,7 +393,7 @@ export const METADATA: Map<string, any> = new Map([
         'mobile development',
       ],
       url: `${BASEURL}`,
-      image: `${BASEURL}/imgs/avatar.webp`,
+      image: `${BASEURL}/imgs/logo/logo.png`,
       icon: '/imgs/logo/favicon.ico',
     },
   ],
@@ -418,7 +414,7 @@ export const METADATA: Map<string, any> = new Map([
         'South Sudan',
       ],
       url: `${BASEURL}/projects`,
-      image: `${BASEURL}/imgs/avatar.webp`,
+      image: `${BASEURL}/imgs/logo/logo.png`,
       icon: '/imgs/logo/favicon.ico',
     },
   ],
@@ -440,7 +436,7 @@ export const METADATA: Map<string, any> = new Map([
         'mobile development',
       ],
       url: `${BASEURL}/contact`,
-      image: `${BASEURL}/imgs/avatar.webp`,
+      image: `${BASEURL}/imgs/logo/logo.png`,
       icon: '/imgs/logo/favicon.ico',
     },
   ],

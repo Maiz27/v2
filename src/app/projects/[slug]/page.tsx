@@ -1,8 +1,9 @@
+import { notFound } from 'next/navigation';
 import ShareContent from '@/components/share/ShareContent';
 import ProjectHeader from '@/components/projects/ProjectHeader';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import { fetchSanityData } from '@/lib/sanity/client';
-import { getProjectBySlug, getProjectForSEO } from '@/lib/sanity/queries';
+import { getProjectBySlug, getProjectMetadata } from '@/lib/sanity/queries';
 import { Project } from '@/lib/types';
 import { BASEURL } from '@/lib/Constants';
 
@@ -10,6 +11,10 @@ export const revalidate = 60;
 
 const page = async ({ params: { slug } }: { params: { slug: string } }) => {
   const project: Project = await fetchSanityData(getProjectBySlug, { slug });
+
+  if (!project) {
+    return notFound();
+  }
 
   return (
     <main>
@@ -29,7 +34,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }) {
-  const project: Project = await fetchSanityData(getProjectForSEO, { slug });
+  const project: Project = await fetchSanityData(getProjectMetadata, { slug });
   if (project) {
     const { slug, contentTitle, description, images } = project;
     const url = `${BASEURL}/projects/${slug.current}`;
