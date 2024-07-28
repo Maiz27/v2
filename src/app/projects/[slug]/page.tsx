@@ -6,6 +6,9 @@ import { fetchSanityData } from '@/lib/sanity/client';
 import { getProjectBySlug, getProjectMetadata } from '@/lib/sanity/queries';
 import { Project } from '@/lib/types';
 import { BASEURL } from '@/lib/Constants';
+import { CreativeWork } from 'schema-dts';
+import { PersonSchema } from '@/app/page';
+import JsonLd from '@/components/jsonLd/JsonLd';
 
 export const revalidate = 60;
 
@@ -16,8 +19,19 @@ const page = async ({ params: { slug } }: { params: { slug: string } }) => {
     return notFound();
   }
 
+  const projectJsonLd: CreativeWork = {
+    '@type': 'CreativeWork',
+    name: project.title,
+    description: project.description,
+    url: `https://magedfaiz.xyz/projects/${slug}`,
+    datePublished: project.date,
+    author: PersonSchema,
+  };
+
   return (
     <main>
+      <JsonLd schema={projectJsonLd} />
+
       <ProjectHeader project={project} />
 
       <RichTextParser content={project.content} />

@@ -11,23 +11,23 @@ export const revalidate = 60;
 
 export const metadata = getPageMetadata('home');
 
-export default function Home() {
-  const schema: Person = {
-    '@type': 'Person',
-    name: 'Maged Faiz Ismail',
-    gender: 'Male',
-    jobTitle: 'Full Stack Developer',
-    birthDate: '1998-11-22',
-    email: EMAIL,
-    disambiguatingDescription:
-      'Maged Faiz is An Innovative Full Stack Developer. Skilled in leading end-to-end projects, crafting intuitive interfaces, and delivering scalable solutions that drive business growth.',
-    alumniOf: 'Future University Khartoum',
-    url: metadata.openGraph!.url?.toString() || '',
-  };
+export const PersonSchema: Person = {
+  '@type': 'Person',
+  name: 'Maged Faiz Ismail',
+  gender: 'Male',
+  jobTitle: 'Full Stack Developer',
+  birthDate: '1998-11-22',
+  email: EMAIL,
+  disambiguatingDescription:
+    'Maged Faiz is An Innovative Full Stack Developer. Skilled in leading end-to-end projects, crafting intuitive interfaces, and delivering scalable solutions that drive business growth.',
+  alumniOf: 'Future University Khartoum',
+  url: metadata.openGraph!.url?.toString() || '',
+};
 
+export default function Home() {
   return (
     <main>
-      <JsonLd schema={schema} />
+      <JsonLd schema={PersonSchema} />
 
       <AboutCard />
 

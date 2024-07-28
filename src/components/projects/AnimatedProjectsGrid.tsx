@@ -5,6 +5,7 @@ import { Project } from '@/lib/types';
 import AnimateInView from '../animationWrappers/AnimateInView';
 import { ItemList } from 'schema-dts';
 import JsonLd from '../jsonLd/JsonLd';
+import { BASEURL } from '@/lib/Constants';
 
 type Props = {
   projects: Project[];
@@ -14,18 +15,18 @@ const AnimatedProjectsGrid = ({ projects }: Props) => {
   const projectsJsonLd: ItemList = {
     '@type': 'ItemList',
     itemListElement: projects.map(
-      ({ title, href, source, description, date }, idx) => ({
+      ({ title, href, source, description, date, slug }, idx) => ({
         '@type': 'ListItem',
         name: title,
         description: description,
         position: idx + 1,
-        url: href || source || '',
+        url: href || source || `${BASEURL}/projects/${slug.current}`,
         subjectOf: {
           '@type': 'CreativeWork',
           name: title,
           description: description,
           datePublished: date,
-          url: href || source || '',
+          url: href || source || `${BASEURL}/projects/${slug.current}`,
         },
       })
     ),
