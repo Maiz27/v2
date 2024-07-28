@@ -46,7 +46,7 @@ const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
                 tag='span'
                 className='px-4 py-1 rounded-xl bg-foreground text-sm xl:text-lg font-normal opacity-100 group-hover:text-primary transition-colors'
               >
-                {company.label}
+                &nbsp;{company.label}
               </AnimateInView>
             </h3>
             <AnimateInView
@@ -83,7 +83,7 @@ const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
               delay={1}
               className='px-4 py-1 rounded-xl bg-foreground text-sm xl:text-base font-normal group-hover:text-primary transition-colors'
             >
-              Part Time
+              &nbsp;Part Time
             </AnimateInView>
           )}
         </h4>

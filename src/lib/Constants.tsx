@@ -379,7 +379,7 @@ export const METADATA: Map<string, any> = new Map([
     {
       title: 'Maged Faiz | Full Stack Developer',
       description:
-        'Explore the portfolio of Maged Faiz, a fullstack developer based in Juba, South Sudan. Discover innovative projects, professional journey, and expertise',
+        'Explore the portfolio of Maged Faiz, an innovative fullstack developer based in Juba, South Sudan. Discover innovative projects, professional journey, and expertise',
       type: 'website',
       url: `${BASEURL}`,
       image: `${BASEURL}/imgs/logo/logo.png`,
