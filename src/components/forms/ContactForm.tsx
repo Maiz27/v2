@@ -12,7 +12,7 @@ const ContactForm = () => {
   const { show } = useToast();
 
   const { fields, rules } = FORMS.contact;
-  const { state, errors, loading, handleChange, reset, onSubmit } = useForm(
+  const { state, errors, loading, handleChange, onSubmit } = useForm(
     fields,
     rules
   );
