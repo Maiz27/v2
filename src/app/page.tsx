@@ -5,7 +5,7 @@ import FeaturedProjects from '@/components/projects/FeaturedProjects';
 import { getPageMetadata } from '@/lib/utilities';
 import { Person } from 'schema-dts';
 import JsonLd from '@/components/jsonLd/JsonLd';
-import { EMAIL } from '@/lib/Constants';
+import { BASEURL, EMAIL } from '@/lib/Constants';
 
 export const revalidate = 60;
 
@@ -21,7 +21,7 @@ export const PersonSchema: Person = {
   disambiguatingDescription:
     'Maged Faiz is An Innovative Full Stack Developer. Skilled in leading end-to-end projects, crafting intuitive interfaces, and delivering scalable solutions that drive business growth.',
   alumniOf: 'Future University Khartoum',
-  url: metadata.openGraph!.url?.toString() || '',
+  url: BASEURL,
 };
 
 export default function Home() {

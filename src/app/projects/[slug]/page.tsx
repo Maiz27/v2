@@ -19,12 +19,14 @@ const page = async ({ params: { slug } }: { params: { slug: string } }) => {
     return notFound();
   }
 
+  const { title, href, source, description, date, content } = project;
+
   const projectJsonLd: CreativeWork = {
     '@type': 'CreativeWork',
-    name: project.title,
-    description: project.description,
-    url: `https://magedfaiz.xyz/projects/${slug}`,
-    datePublished: project.date,
+    name: title,
+    description: description,
+    url: href || source || `${BASEURL}/projects/${slug}`,
+    datePublished: date,
     author: PersonSchema,
   };
 
@@ -34,7 +36,7 @@ const page = async ({ params: { slug } }: { params: { slug: string } }) => {
 
       <ProjectHeader project={project} />
 
-      <RichTextParser content={project.content} />
+      <RichTextParser content={content} />
 
       <ShareContent />
     </main>
