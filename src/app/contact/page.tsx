@@ -6,14 +6,29 @@ import { HiOutlineEnvelope, HiOutlineSquare3Stack3D } from 'react-icons/hi2';
 import { EMAIL } from '@/lib/Constants';
 import AnimateInView from '@/components/animationWrappers/AnimateInView';
 import { getPageMetadata } from '@/lib/utilities';
+import { ContactPage, ContactPoint } from 'schema-dts';
+import JsonLd from '@/components/jsonLd/JsonLd';
 
 export const revalidate = 60;
 
 export const metadata = getPageMetadata('contact');
 
-const page = () => {
+const Contact = () => {
+  const pageJsonLd: ContactPage = {
+    '@type': 'ContactPage',
+    url: metadata.openGraph?.url?.toString() || '',
+  };
+  const optionsJsonLd: ContactPoint = {
+    '@type': 'ContactPoint',
+    email: EMAIL,
+    contactType: 'Customer Support',
+  };
+
   return (
     <main>
+      <JsonLd schema={pageJsonLd} />
+      <JsonLd schema={optionsJsonLd} />
+
       <Heading
         Tag='h1'
         icon={<HiOutlineEnvelope />}
@@ -46,4 +61,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Contact;

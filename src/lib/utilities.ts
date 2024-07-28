@@ -46,7 +46,6 @@ export const getPageMetadata = (name: string): Metadata => {
 
   return {
     metadataBase: new URL(BASEURL),
-    keywords: [],
     title: pageMetaData.title,
     description: pageMetaData.description,
     alternates: {

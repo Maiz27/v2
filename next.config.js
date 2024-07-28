@@ -76,4 +76,8 @@ module.exports = withSentryConfig(module.exports, {
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
   automaticVercelMonitors: true,
+
+  experimental: {
+    instrumentationHook: process.env.NODE_ENV === 'production',
+  },
 });

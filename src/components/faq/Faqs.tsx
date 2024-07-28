@@ -6,12 +6,26 @@ import { getFaqs } from '@/lib/sanity/queries';
 import { Faq } from '@/lib/types';
 import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
 import AnimateInView from '../animationWrappers/AnimateInView';
+import { FAQPage } from 'schema-dts';
+import JsonLd from '../jsonLd/JsonLd';
 
 export const revalidate = 60;
 
 const Faqs = async () => {
   const faqs: Faq[] = await fetchSanityData(getFaqs);
   const isEmpty = faqs.length <= 0;
+
+  const faqJsonLd: FAQPage = {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ question, answer }) => ({
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: answer,
+      },
+    })),
+  };
 
   const content = () => {
     const midIndex = Math.ceil(faqs.length / 2);
@@ -40,6 +54,7 @@ const Faqs = async () => {
 
   return (
     <section className='my-20'>
+      <JsonLd schema={faqJsonLd} />
       <Heading
         icon={<HiOutlineQuestionMarkCircle />}
         heading='Common Queries'
