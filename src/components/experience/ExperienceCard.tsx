@@ -35,6 +35,7 @@ const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
               height={50}
               src={logo}
               alt={company.name}
+              title={company.name}
               className='w-2/3 object-contain'
             />
           </div>

@@ -27,11 +27,14 @@ const TimeZone = ({ timeZone }: Props) => {
   return (
     <>
       <span>Local Time ({timeZone})</span>
-      <div className='rounded-lg bg-foreground px-4 py-3 text-xl xl:text-2xl'>
-        {isClient
-          ? date.toLocaleTimeString('en-US', { hour12: false, timeZone })
-          : ''}
-      </div>
+
+      {isClient ? (
+        <div className='rounded-lg bg-foreground px-4 py-3 text-xl xl:text-2xl'>
+          {date.toLocaleTimeString('en-US', { hour12: false, timeZone })}
+        </div>
+      ) : (
+        <div className='h-14 w-28 animate-pulse bg-foreground rounded-lg'></div>
+      )}
     </>
   );
 };

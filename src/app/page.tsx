@@ -2,14 +2,11 @@ import AboutCard from '@/components/about/AboutCard';
 import Experience from '@/components/experience/Experience';
 import Services from '@/components/services/Services';
 import FeaturedProjects from '@/components/projects/FeaturedProjects';
-import { getPageMetadata } from '@/lib/utilities';
 import { Person } from 'schema-dts';
 import JsonLd from '@/components/jsonLd/JsonLd';
 import { BASEURL, EMAIL } from '@/lib/Constants';
 
 export const revalidate = 60;
-
-export const metadata = getPageMetadata('home');
 
 export const PersonSchema: Person = {
   '@type': 'Person',

@@ -47,6 +47,10 @@ import {
   SiPocketbase,
   SiDocker,
   SiSst,
+  SiRedis,
+  SiCloudflare,
+  SiCloudflarepages,
+  SiCloudflareworkers,
 } from 'react-icons/si';
 
 import { ProjectStatus, Tool } from './types';
@@ -181,6 +185,14 @@ export const TOOLS: Map<string, Tool> = new Map([
     },
   ],
   [
+    'Redis',
+    {
+      icon: <SiRedis />,
+      name: 'Redis',
+      href: 'https://redis.io',
+    },
+  ],
+  [
     'GraphQL',
     { icon: <SiGraphql />, name: 'GraphQL', href: 'https://graphql.org' },
   ],
@@ -209,6 +221,32 @@ export const TOOLS: Map<string, Tool> = new Map([
   [
     'Flutter',
     { icon: <SiFlutter />, name: 'Flutter', href: 'https://flutter.dev' },
+  ],
+
+  // CloudFlare
+  [
+    'CloudFlare',
+    {
+      icon: <SiCloudflare />,
+      name: 'CloudFlare',
+      href: 'https://cloudflare.com',
+    },
+  ],
+  [
+    'Cloudflare Pages',
+    {
+      icon: <SiCloudflarepages />,
+      name: 'Cloudflare Pages',
+      href: 'https://pages.cloudflare.com',
+    },
+  ],
+  [
+    'Cloudflare Workers',
+    {
+      icon: <SiCloudflareworkers />,
+      name: 'Cloudflare Workers',
+      href: 'https://workers.cloudflare.com',
+    },
   ],
 
   // Other tools

@@ -11,7 +11,7 @@ export const revalidate = 60;
 
 export const metadata = getPageMetadata('projects');
 
-const page = async ({
+const Projects = async ({
   searchParams,
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
@@ -24,7 +24,7 @@ const page = async ({
       <Heading
         Tag='h1'
         icon={<HiOutlineLightBulb />}
-        heading='My Projects'
+        heading='My Projects Showcase'
         paragraph='Explore the landscape of innovation and technology through my projects, each a testament to creative solutions and technical prowess.'
       >
         <ProjectsFilter projectsTotal={projects.length} />
@@ -44,7 +44,7 @@ const page = async ({
   );
 };
 
-export default page;
+export default Projects;
 
 const fetchProjects = async (
   searchParams: { [key: string]: string | string[] | undefined } = {}
