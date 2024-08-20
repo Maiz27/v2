@@ -62,6 +62,7 @@ const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
             <Image
               src={mainImage}
               alt={title}
+              title={title}
               width={500}
               height={500}
               className='w-full h-full object-cover'

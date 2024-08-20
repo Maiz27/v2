@@ -39,7 +39,8 @@ const AboutCard = async () => {
               src={imageUrl}
               width={240}
               height={240}
-              alt='Avatar'
+              title={name}
+              alt={name}
               className='h-full w-full object-scale-down'
             />
           </BoxesReveal>
