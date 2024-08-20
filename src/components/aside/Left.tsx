@@ -17,7 +17,14 @@ const Left = async () => {
         href='/'
         className='rounded-full aspect-square w-16 overflow-hidden border-primary border-2 box-border'
       >
-        <Image src={imageUrl} alt='Avatar' width={100} height={50} />
+        <Image
+          src={imageUrl}
+          alt='Avatar'
+          title='Maged Faiz'
+          loading='eager'
+          width={100}
+          height={50}
+        />
       </Link>
       <LeftLinks />
       <ScrollToTop />

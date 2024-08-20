@@ -30,7 +30,7 @@ const Filter = ({ projectsTotal }: { projectsTotal: number }) => {
         className='flex flex-col-reverse lg:flex-row justify-between mt-5 gap-2'
       >
         <h2 className='text-xl text-center lg:text-left my-auto'>
-          <span className='text-primary opacity-100 pr-2'>{projectsTotal}</span>
+          <span className='text-primary opacity-100'>{projectsTotal} </span>
           Projects
         </h2>
 
