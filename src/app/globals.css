@@ -28,8 +28,16 @@ h6 {
   @apply duration-500;
 }
 
+.shared-styles {
+  @apply px-4 pt-6 lg:pt-16 mx-auto lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl xl:w-4/5 2xl:w-[75%];
+}
+
 main {
-  @apply px-4 pt-6 mx-auto lg:py-16 lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl xl:w-4/5 2xl:w-[75%];
+  @apply shared-styles;
+}
+
+#github-calendar {
+  @apply shared-styles flex flex-col justify-center;
 }
 
 p,

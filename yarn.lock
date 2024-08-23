@@ -1014,6 +1014,13 @@
   resolved "https://registry.yarnpkg.com/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
+"@babel/runtime@^7.12.5":
+  version "7.25.4"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.25.4.tgz#6ef37d678428306e7d75f054d5b1bdb8cf8aa8ee"
+  integrity sha512-DSgLeL/FNcpXuzav5wfYvHCGvynXkJbn3Zvc3823AEe9nPwW9IK4UoCSS5yGymmQzN0pCPvivtgS6/8U2kkm1w==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/runtime@^7.23.2":
   version "7.23.7"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.7.tgz#dd7c88deeb218a0f8bd34d5db1aa242e0f203193"
@@ -2026,6 +2033,11 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/chroma-js@^2.4.3":
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/@types/chroma-js/-/chroma-js-2.4.4.tgz#254dddff54568ff8e5d0dcdb071871a458fdfd31"
+  integrity sha512-/DTccpHTaKomqussrn+ciEvfW4k6NAHzNzs/sts1TCqg333qNxOhy8TNIoQCmbGG3Tl8KdEhkGAssb1n3mTXiQ==
+
 "@types/connect@*":
   version "3.4.38"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.38.tgz#5ba7f3bc4fbbdeaff8dded952e5ff2cc53f8d858"
@@ -2741,6 +2753,11 @@ chokidar@^3.5.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
+chroma-js@^2.4.2:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/chroma-js/-/chroma-js-2.6.0.tgz#578743dd359698a75067a19fa5571dec54d0b70b"
+  integrity sha512-BLHvCB9s8Z1EV4ethr6xnkl/P2YRFOGqfgvuMG/MyCbZPrTA+NeiByY6XvgF0zP4/2deU2CXnWyMa3zu1LqQ3A==
+
 cjs-module-lexer@^1.2.2:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-1.3.1.tgz#c485341ae8fd999ca4ee5af2d7a1c9ae01e0099c"
@@ -2907,6 +2924,11 @@ damerau-levenshtein@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz#b43d286ccbd36bc5b2f7ed41caf2d0aba1f8a6e7"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
+
+date-fns@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.6.0.tgz#f20ca4fe94f8b754951b24240676e8618c0206bf"
+  integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
 
 debug@4, debug@^4.1.0, debug@^4.3.1:
   version "4.3.5"
@@ -5056,6 +5078,15 @@ queue-microtask@^1.2.2:
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+react-activity-calendar@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/react-activity-calendar/-/react-activity-calendar-2.3.5.tgz#dba85877696edf9a2dd2c6ecbe1cfea071a4f401"
+  integrity sha512-ky4L2kbfjCzbY/e2yfsX8jhCsgLKZW70OL1lYR8XsEihYGucYnYimgJUUKiwj3GBTNfgFuZYSZUBxEnc4M0brA==
+  dependencies:
+    "@types/chroma-js" "^2.4.3"
+    chroma-js "^2.4.2"
+    date-fns "^3.6.0"
+
 react-dom@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
@@ -5063,6 +5094,21 @@ react-dom@^18.2.0:
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
+
+react-error-boundary@^4.0.12:
+  version "4.0.13"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-4.0.13.tgz#80386b7b27b1131c5fbb7368b8c0d983354c7947"
+  integrity sha512-b6PwbdSv8XeOSYvjt8LpgpKrZ0yGdtZokYwkwV2wlcZbxgopHX/hgPl5VgpnoVOWd868n1hktM8Qm4b+02MiLQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+
+react-github-calendar@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/react-github-calendar/-/react-github-calendar-4.2.2.tgz#c03852dfa4fb621ec46a2cae02e88863d8ce9597"
+  integrity sha512-Fy8KrOq9H3CpHxWYTTDxx3GQgBLywu8t+OuBQR/X/KtyXGCxAhH+gTCtedSiZZUDXDVzncfetZCyKLxsHRWErw==
+  dependencies:
+    react-activity-calendar "^2.3.5"
+    react-error-boundary "^4.0.12"
 
 react-icons@^5.3.0:
   version "5.3.0"
