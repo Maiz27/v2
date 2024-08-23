@@ -35,7 +35,7 @@ const AnimatedProjectsGrid = ({ projects }: Props) => {
   return (
     <AnimateInView
       tag='section'
-      className='mb-10 mt-10 grid place-items-center grid-cols-1 lg:grid-cols-2 gap-4'
+      className='mt-10 grid place-items-center grid-cols-1 lg:grid-cols-2 gap-4'
     >
       <JsonLd schema={projectsJsonLd} />
 
