@@ -1,13 +1,11 @@
 import Image from 'next/image';
 import CTA from '@/components/CTA/CTA';
-import Tools from '@/components/tools/Tools';
 import BoxesReveal from '../animationWrappers/BoxesReveal';
+import AnimateInView from '../animationWrappers/AnimateInView';
 import { getAboutMe } from '@/lib/sanity/queries';
 import { fetchSanityData } from '@/lib/sanity/client';
-import { AboutMe, AboutMeStats } from '@/lib/types';
 import { HiOutlineSquare3Stack3D, HiOutlineEnvelope } from 'react-icons/hi2';
-import { EMAIL } from '@/lib/Constants';
-import AnimateInView from '../animationWrappers/AnimateInView';
+import { AboutMe, AboutMeStats } from '@/lib/types';
 
 export const revalidate = 60;
 
@@ -58,26 +56,22 @@ const AboutCard = async () => {
           <div className='flex flex-col lg:flex-row justify-center items-center gap-2 lg:gap-4'>
             <AnimateInView delay={1.2} className='w-full'>
               <CTA
-                text='Email Me'
-                href={`mailto:${EMAIL}`}
-                external={true}
-                icon={<HiOutlineEnvelope />}
-              />
-            </AnimateInView>
-            <AnimateInView delay={1.6} className='w-full'>
-              <CTA
                 text='My Projects'
                 href='/projects'
                 icon={<HiOutlineSquare3Stack3D />}
               />
             </AnimateInView>
+            <AnimateInView delay={1.6} className='w-full'>
+              <CTA
+                text='Get In Touch'
+                href='/contact'
+                icon={<HiOutlineEnvelope />}
+              />
+            </AnimateInView>
           </div>
         </div>
       </div>
-      <div className='w-full space-y-8'>
-        <Tools />
-        <Stats stats={stats} />
-      </div>
+      <Stats stats={stats} />
     </section>
   );
 };
@@ -108,7 +102,7 @@ const Stats = ({ stats }: { stats: AboutMeStats }) => {
   return (
     <AnimateInView
       delay={2.4}
-      className='grid place-items-center grid-cols-2 lg:grid-cols-4 gap-5 py-5 border-b border-border'
+      className='w-full grid place-items-center grid-cols-2 lg:grid-cols-4 gap-5 py-5 border-b border-border'
     >
       {list.map(({ count, label }, idx) => (
         <AnimateInView

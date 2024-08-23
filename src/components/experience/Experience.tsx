@@ -28,7 +28,7 @@ const Experience = async () => {
           }
         />
       ) : (
-        <div className='flex flex-col space-y-6 py-12'>
+        <div className='flex flex-col space-y-6 pt-12'>
           {experience.map((e, idx) => (
             <ExperienceCard key={idx} experience={e} index={idx} />
           ))}

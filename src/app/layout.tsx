@@ -1,9 +1,10 @@
-import type { Metadata, Viewport } from 'next';
+import type { Viewport } from 'next';
 import Left from '@/components/aside/Left';
 import Right from '@/components/aside/Right';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import { MobileScrollToTop } from '@/components/aside/ScrollToTop';
+import ActivityCalendar from '@/components/github/ActivityCalendar';
 import { IsClientCtxProvider } from '@/lib/context/IsClientContext';
 import { ToastProvider } from '@/lib/context/ToastContext';
 import { getPageMetadata } from '@/lib/utilities';
@@ -28,6 +29,7 @@ export default function RootLayout({
             <div className='w-full mx-auto md:max-w-2xl lg:max-w-4xl xl:max-w-full xl:border-x xl:border-border'>
               <Header />
               {children}
+              <ActivityCalendar />
               <Footer />
               <MobileScrollToTop />
             </div>

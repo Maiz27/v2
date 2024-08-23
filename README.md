@@ -2,7 +2,7 @@
 
 Welcome to the second iteration of my portfolio website, now enhanced with Next.js 14, Tailwind CSS, and Sanity CMS. This project is designed to be open source, allowing you to clone, customize, and deploy your own version with ease.
 
-![Portfolio Website Overview](https://drive.google.com/thumbnail?id=11gOxjCwwOWx1T-aRRooUmTKppBxYPPFU&sz=w1024&t=1681358800&mime=image/png)
+![Portfolio Website Overview](https://drive.google.com/thumbnail?id=10k4FZT--EPVmaNBH3qrKFnKANOsSp930&sz=w1024&t=1681358800&mime=image/png)
 
 ## Table of Contents
 
