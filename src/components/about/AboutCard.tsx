@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import CTA from '@/components/CTA/CTA';
-import Tools from '@/components/tools/Tools';
 import BoxesReveal from '../animationWrappers/BoxesReveal';
 import { getAboutMe } from '@/lib/sanity/queries';
 import { fetchSanityData } from '@/lib/sanity/client';
@@ -74,10 +73,7 @@ const AboutCard = async () => {
           </div>
         </div>
       </div>
-      <div className='w-full space-y-8'>
-        <Tools />
-        <Stats stats={stats} />
-      </div>
+      <Stats stats={stats} />
     </section>
   );
 };
