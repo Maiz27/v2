@@ -1,5 +1,5 @@
 'use client';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard';
 import { Project } from '@/lib/types';
 import AnimateInView from '../animationWrappers/AnimateInView';
@@ -41,19 +41,14 @@ const AnimatedProjectsGrid = ({ projects }: Props) => {
 
       <AnimatePresence mode='popLayout'>
         {projects.map((project, idx) => (
-          <motion.div
+          <ProjectCard
             key={project.href}
+            project={project}
+            hasImage={false}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0, transition: { delay: idx * 0.6 } }}
             exit={{ opacity: 0, y: 15, transition: { delay: idx * 0.1 } }}
-            className='h-full w-full'
-          >
-            <ProjectCard
-              key={project.href}
-              project={project}
-              hasImage={false}
-            />
-          </motion.div>
+          />
         ))}
       </AnimatePresence>
     </AnimateInView>

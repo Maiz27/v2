@@ -21,6 +21,7 @@ type Props = {
   project: Project;
   hasImage?: boolean;
   index?: number;
+  [x: string]: any;
 };
 
 const STATUS = {
@@ -38,7 +39,12 @@ const STATUS = {
   },
 };
 
-const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
+const ProjectCard = ({
+  project,
+  hasImage = true,
+  index = 0,
+  ...rest
+}: Props) => {
   const {
     mainImage,
     title,
@@ -52,9 +58,10 @@ const ProjectCard = ({ project, hasImage = true, index = 0 }: Props) => {
   } = project;
   return (
     <BaseCard
-      delay={0.6 * index}
+      delay={0.3 * index}
       hoverStripsBottom='-bottom-40'
-      className='w-full h-full'
+      className='w-full h-full max-w-md'
+      {...rest}
     >
       <div className='w-full h-full flex flex-col gap-5'>
         {hasImage && (
