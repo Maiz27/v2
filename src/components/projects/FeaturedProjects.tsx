@@ -32,7 +32,12 @@ const FeaturedProjects = async () => {
       ) : (
         <div className='py-12 grid place-items-center grid-cols-1 lg:grid-cols-2 gap-6'>
           {projects.map((project, idx) => (
-            <ProjectCard key={project.href} project={project} index={idx} />
+            <ProjectCard
+              key={project.href}
+              project={project}
+              index={idx}
+              featured={true}
+            />
           ))}
         </div>
       )}

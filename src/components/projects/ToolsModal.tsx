@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from 'react';
 import Heading from '../heading/Heading';
 import BaseModal from '../ui/BaseModal';

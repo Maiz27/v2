@@ -19,9 +19,8 @@ import { SiGithub } from 'react-icons/si';
 
 type Props = {
   project: Project;
-  hasImage?: boolean;
+  featured?: boolean;
   index?: number;
-  [x: string]: any;
 };
 
 const STATUS = {
@@ -39,12 +38,7 @@ const STATUS = {
   },
 };
 
-const ProjectCard = ({
-  project,
-  hasImage = true,
-  index = 0,
-  ...rest
-}: Props) => {
+const ProjectCard = ({ project, featured = false, index = 0 }: Props) => {
   const {
     mainImage,
     title,
@@ -61,10 +55,9 @@ const ProjectCard = ({
       delay={0.3 * index}
       hoverStripsBottom='-bottom-40'
       className='w-full h-full max-w-md'
-      {...rest}
     >
       <div className='w-full h-full flex flex-col gap-5'>
-        {hasImage && (
+        {featured && (
           <BoxesReveal className='w-full h-full overflow-hidden rounded-lg border border-border'>
             <Image
               src={mainImage}

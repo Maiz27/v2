@@ -21,13 +21,13 @@ const ActivityCalendar = () => {
     });
 
   return (
-    <section id='github-calendar'>
+    <section className='mt-16 flex flex-col justify-center'>
       <Heading
         icon={<SiGithub />}
         heading='Code Contributions'
         paragraph='Each square represents a day of coding, showcasing my consistent commitment to crafting digital solutions.'
       />
-      <AnimateInView className='py-8 lg:pb-12'>
+      <AnimateInView className='mt-8'>
         <GitHubCalendar
           username={username}
           theme={theme}

@@ -1,6 +1,7 @@
 import AboutCard from '@/components/about/AboutCard';
-import Experience from '@/components/experience/Experience';
 import Services from '@/components/services/Services';
+import Experience from '@/components/experience/Experience';
+import ActivityCalendar from '@/components/github/ActivityCalendar';
 import FeaturedProjects from '@/components/projects/FeaturedProjects';
 import { Person } from 'schema-dts';
 import JsonLd from '@/components/jsonLd/JsonLd';
@@ -33,6 +34,8 @@ export default function Home() {
       <Experience />
 
       <Services />
+
+      <ActivityCalendar />
     </main>
   );
 }

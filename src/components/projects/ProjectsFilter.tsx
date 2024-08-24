@@ -2,23 +2,12 @@
 import ToolsModal from './ToolsModal';
 import CTA from '@/components/CTA/CTA';
 import IconCTA from '@/components/CTA/IconCTA';
-import { PROJECT_STATUS } from '@/lib/Constants';
-import useProjectFilters from '@/lib/hooks/useProjectFilters';
-import { Suspense } from 'react';
-import { HiOutlineMinusCircle } from 'react-icons/hi2';
 import AnimateInView from '../animationWrappers/AnimateInView';
+import useProjectFilters from '@/lib/hooks/useProjectFilters';
+import { HiOutlineMinusCircle } from 'react-icons/hi2';
+import { PROJECT_STATUS } from '@/lib/Constants';
 
 const ProjectsFilter = ({ projectsTotal }: { projectsTotal: number }) => {
-  return (
-    <Suspense>
-      <Filter projectsTotal={projectsTotal} />
-    </Suspense>
-  );
-};
-
-export default ProjectsFilter;
-
-const Filter = ({ projectsTotal }: { projectsTotal: number }) => {
   const { state, handleChange, handleTechSelection, resetFilters } =
     useProjectFilters();
 
@@ -84,6 +73,8 @@ const Filter = ({ projectsTotal }: { projectsTotal: number }) => {
     </>
   );
 };
+
+export default ProjectsFilter;
 
 const FilterInfo = ({
   label,

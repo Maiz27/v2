@@ -29,11 +29,12 @@ const useProjectFilters = () => {
         query.set('status', newState.status);
       }
 
-      if (newState.selectedTech?.length > 0) {
+      if (!!newState.selectedTech.length) {
         query.set('tech', newState.selectedTech.join(','));
       }
 
-      router.push(`${pathname}?${query.toString()}`);
+      const url = `${pathname}?${query.toString()}`;
+      router.push(url);
     },
     [pathname, router]
   );
@@ -41,7 +42,6 @@ const useProjectFilters = () => {
   const handleTechSelection = useCallback((tools: string[]) => {
     setState((prevState) => {
       const newState = { ...prevState, selectedTech: tools };
-
       return newState;
     });
   }, []);

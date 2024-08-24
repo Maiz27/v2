@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 
 type ButtonProps = {
   icon: ReactElement;
@@ -35,14 +35,14 @@ const IconCTA = (props: Props) => {
   }
 
   return (
-    <a
+    <Link
       title={name}
       href={props.href}
       target='_blank'
       className={` ${className}`}
     >
       {content}
-    </a>
+    </Link>
   );
 };
 

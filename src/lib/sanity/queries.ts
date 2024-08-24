@@ -34,23 +34,8 @@ export const getFeaturedProjects = `*[_type == "project" && featured == true]{
   tech[]->{
     name,
   },
-  "mainImage": images[0].image.asset->url
-} | order(date desc)`;
-
-export const getProjects = `*[_type == "project"]{
-  title,
-  slug,
-  featured,
-  date,
-  status,
-  description,
-  href,
-  source,
-  tech[]->{
-    name,
-  },
-  "images": images[].image.asset->url
-} | order(featured desc)`;
+   "mainImage": images[0].image.asset->url
+}[0..1] | order(date desc)`;
 
 export const getProjectBySlug = `*[_type == "project" && slug.current == $slug]{
   title,

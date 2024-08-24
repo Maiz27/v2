@@ -3,9 +3,9 @@ import EmptyState from '@/components/ui/EmptyState';
 import ProjectsFilter from '@/components/projects/ProjectsFilter';
 import AnimatedProjectsGrid from '@/components/projects/AnimatedProjectsGrid';
 import { fetchSanityData } from '@/lib/sanity/client';
-import { Project } from '@/lib/types';
-import { HiOutlineLightBulb } from 'react-icons/hi2';
 import { getPageMetadata } from '@/lib/utilities';
+import { HiOutlineLightBulb } from 'react-icons/hi2';
+import { Project } from '@/lib/types';
 
 export const revalidate = 60;
 
@@ -20,7 +20,7 @@ const Projects = async ({
   const isEmpty = projects.length <= 0;
 
   return (
-    <main className='min-h-screen'>
+    <main>
       <Heading
         Tag='h1'
         icon={<HiOutlineLightBulb />}
@@ -38,7 +38,9 @@ const Projects = async ({
           }
         />
       ) : (
-        <AnimatedProjectsGrid projects={projects} />
+        <div className='min-h-[75dvh]'>
+          <AnimatedProjectsGrid projects={[...projects]} />
+        </div>
       )}
     </main>
   );
@@ -50,13 +52,13 @@ const fetchProjects = async (
   searchParams: { [key: string]: string | string[] | undefined } = {}
 ) => {
   const { status, tech } = searchParams;
-  const techArray = tech?.toString().split(',') ?? [];
+  const techArray = tech?.toString().split(',').filter(Boolean) ?? [];
 
   let query = '*[_type == "project"';
-  let params: { [key: string]: string | string[] } = {};
+  let params: { [key: string]: string | string[] | number } = {};
 
-  if (techArray.length > 0) {
-    query += ' && tech[]->name match coalesce($tech, ".*")';
+  if (!!techArray.length) {
+    query += ' && count((tech[]->name)[@ in $tech]) > 0';
     params.tech = techArray;
   }
 
@@ -65,8 +67,17 @@ const fetchProjects = async (
     params.status = status;
   }
 
-  query +=
-    ']{ title, slug, featured, date, status, description, href, source, tech[]->{ name }, "images": images[].image.asset->url } | order(featured desc, date desc)';
+  query += `]{
+    title,
+    slug,
+    featured,
+    date,
+    status,
+    description,
+    href,
+    source,
+    tech[]->{ name },
+  } | order(featured desc, date desc)`;
 
   const projects: Project[] = await fetchSanityData(query, params);
 
