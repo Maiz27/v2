@@ -1,17 +1,16 @@
-import FaqCard from './FaqCard';
+import { FAQPage } from 'schema-dts';
+import JsonLd from '../jsonLd/JsonLd';
 import Heading from '@/components/heading/Heading';
 import EmptyState from '@/components/ui/EmptyState';
 import { fetchSanityData } from '@/lib/sanity/client';
+import FaqContent from './FaqContent';
 import { getFaqs } from '@/lib/sanity/queries';
-import { Faq } from '@/lib/types';
 import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
-import AnimateInView from '../animationWrappers/AnimateInView';
-import { FAQPage } from 'schema-dts';
-import JsonLd from '../jsonLd/JsonLd';
+import { Faq } from '@/lib/types';
 
 export const revalidate = 60;
 
-const Faqs = async () => {
+const FAQs = async () => {
   const faqs: Faq[] = await fetchSanityData(getFaqs);
   const isEmpty = faqs.length <= 0;
 
@@ -25,31 +24,6 @@ const Faqs = async () => {
         text: answer,
       },
     })),
-  };
-
-  const content = () => {
-    const midIndex = Math.ceil(faqs.length / 2);
-    const firstHalf = faqs.slice(0, midIndex);
-    const secondHalf = faqs.slice(midIndex);
-
-    return (
-      <AnimateInView
-        delay={1}
-        threshold={0.15}
-        className='w-full flex basis-auto mt-10 flex-wrap lg:flex-nowrap gap-4'
-      >
-        <div className='h-min flex flex-col place-content-center items-center gap-4'>
-          {firstHalf.map(({ question, answer }, index) => (
-            <FaqCard key={index} question={question} answer={answer} />
-          ))}
-        </div>
-        <div className='h-min flex flex-col place-content-center items-center gap-4'>
-          {secondHalf.map(({ question, answer }, index) => (
-            <FaqCard key={index} question={question} answer={answer} />
-          ))}
-        </div>
-      </AnimateInView>
-    );
   };
 
   return (
@@ -68,10 +42,10 @@ const Faqs = async () => {
           }
         />
       ) : (
-        content()
+        <FaqContent faqs={faqs} />
       )}
     </section>
   );
 };
 
-export default Faqs;
+export default FAQs;

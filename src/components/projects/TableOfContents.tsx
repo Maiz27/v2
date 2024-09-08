@@ -1,6 +1,6 @@
 'use client';
-import Heading from './heading/Heading';
-import AnimateInView from './animationWrappers/AnimateInView';
+import Heading from '../heading/Heading';
+import AnimateInView from '../animationWrappers/AnimateInView';
 import { extractFilename, smoothScrollToElement } from '@/lib/utilities';
 import { RichText } from '@/lib/types';
 import {

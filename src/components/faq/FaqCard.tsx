@@ -17,13 +17,13 @@ const FaqCard = ({ question, answer }: Props) => {
   };
 
   return (
-    <motion.div animate={isOpen ? 'open' : 'closed'}>
-      <BaseCard hoverStripsBottom='-bottom-40'>
+    <motion.div animate={isOpen ? 'open' : 'closed'} className=''>
+      <BaseCard hoverStripsBottom='-bottom-48 md:-bottom-40'>
         <button
           onClick={handleToggle}
           className='flex flex-row-reverse w-full items-center justify-between gap-4 group'
         >
-          <span className='text-sm lg:text-base text-left'>{question}</span>
+          <span className='w-full text-left text-base'>{question}</span>
 
           <motion.span
             variants={{
@@ -55,7 +55,7 @@ const FaqCard = ({ question, answer }: Props) => {
           }}
           className='overflow-hidden'
         >
-          <p className='text-sm xl:text-base'>{answer}</p>
+          <p className='text-base'>{answer}</p>
         </motion.div>
       </BaseCard>
     </motion.div>
