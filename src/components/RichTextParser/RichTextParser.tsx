@@ -13,6 +13,8 @@ type props = {
 };
 
 const RichTextParser = memo(({ content }: props) => {
+  let codeBlockCounter = 0;
+
   const myPortableTextComponents: PortableTextReactComponents = {
     types: {
       image: ({ value }) => (
@@ -35,8 +37,10 @@ const RichTextParser = memo(({ content }: props) => {
           <div className='callToAction'>{value.text}</div>
         ),
       code: ({ value }: PortableTextTypeComponentProps<Code>) => {
+        const id = `code-${++codeBlockCounter}`;
         return (
           <CodeParser
+            id={id}
             code={value.code}
             language={value.language}
             filename={value.filename}
@@ -66,13 +70,28 @@ const RichTextParser = memo(({ content }: props) => {
     },
     block: {
       h1: ({ children }) => (
-        <h1 className='text-4xl px-2 mt-10 mb-8 '>{children}</h1>
+        <h1
+          id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
+          className='text-4xl px-2 mt-10 mb-8 '
+        >
+          {children}
+        </h1>
       ),
       h2: ({ children }) => (
-        <h2 className='text-3xl px-2 mt-8 mb-6 '>{children}</h2>
+        <h2
+          id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
+          className='text-3xl px-2 mt-8 mb-6 '
+        >
+          {children}
+        </h2>
       ),
       h3: ({ children }) => (
-        <h3 className='text-2xl px-2 mt-6 mb-4 '>{children}</h3>
+        <h3
+          id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
+          className='text-2xl px-2 mt-6 mb-4 '
+        >
+          {children}
+        </h3>
       ),
       h4: ({ children }) => (
         <h4 className='text-xl px-2 mt-5 mb-3 '>{children}</h4>

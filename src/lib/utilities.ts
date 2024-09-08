@@ -41,6 +41,11 @@ export const getMonthYear = (StringDate: string) => {
     .replace(' ', ', ');
 };
 
+export const extractFilename = (name: string) => {
+  const split = name.split(' ');
+  return { name: split[0], link: split[1] };
+};
+
 export const getPageMetadata = (name: string): Metadata => {
   const pageMetaData = METADATA.get(name);
 

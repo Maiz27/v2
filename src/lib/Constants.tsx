@@ -353,11 +353,16 @@ export const TOAST_STATUS = {
 
 export const SHARE_PLATFORMS = [
   {
-    id: 'email',
+    id: 'twitter',
+    icon: <SiX className='text-xl xl:text-2xl group-hover:text-primary' />,
+    ShareButton: TwitterShareButton,
+  },
+  {
+    id: 'whatsapp',
     icon: (
-      <HiEnvelope className='text-xl xl:text-2xl group-hover:text-primary' />
+      <SiWhatsapp className='text-xl xl:text-2xl group-hover:text-primary' />
     ),
-    ShareButton: EmailShareButton,
+    ShareButton: WhatsappShareButton,
   },
   {
     id: 'facebook',
@@ -381,16 +386,11 @@ export const SHARE_PLATFORMS = [
     ShareButton: TelegramShareButton,
   },
   {
-    id: 'twitter',
-    icon: <SiX className='text-xl xl:text-2xl group-hover:text-primary' />,
-    ShareButton: TwitterShareButton,
-  },
-  {
-    id: 'whatsapp',
+    id: 'email',
     icon: (
-      <SiWhatsapp className='text-xl xl:text-2xl group-hover:text-primary' />
+      <HiEnvelope className='text-xl xl:text-2xl group-hover:text-primary' />
     ),
-    ShareButton: WhatsappShareButton,
+    ShareButton: EmailShareButton,
   },
 ];
 
