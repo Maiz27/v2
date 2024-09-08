@@ -1,6 +1,7 @@
+'use client';
 import Heading from './heading/Heading';
 import AnimateInView from './animationWrappers/AnimateInView';
-import { extractFilename } from '@/lib/utilities';
+import { extractFilename, smoothScrollToElement } from '@/lib/utilities';
 import { RichText } from '@/lib/types';
 import {
   HiMinusSmall,
@@ -27,6 +28,11 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
     h2: <HiMinusSmall />,
     h3: <HiMinusSmall />,
     code: <HiOutlineCodeBracketSquare />,
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    smoothScrollToElement(id);
   };
 
   content.forEach((block) => {
@@ -68,7 +74,12 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
                 } flex gap-2 items-center hover:text-primary transition-colors`}
               >
                 <span className='text-lg'>{icons[item.type]}</span>
-                <a href={`#${item.id}`}>{item.text}</a>
+                <a
+                  href={`#${item.id}`}
+                  onClick={(e) => handleClick(e, item.id)}
+                >
+                  {item.text}
+                </a>
               </li>
             ))}
           </ul>

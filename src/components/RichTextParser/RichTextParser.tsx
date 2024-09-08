@@ -72,7 +72,7 @@ const RichTextParser = memo(({ content }: props) => {
       h1: ({ children }) => (
         <h1
           id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
-          className='text-4xl px-2 mt-10 mb-8 '
+          className='text-4xl px-2 mt-10 mb-8'
         >
           {children}
         </h1>
@@ -80,7 +80,7 @@ const RichTextParser = memo(({ content }: props) => {
       h2: ({ children }) => (
         <h2
           id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
-          className='text-3xl px-2 mt-8 mb-6 '
+          className='text-3xl px-2 mt-8 mb-6'
         >
           {children}
         </h2>
@@ -88,7 +88,7 @@ const RichTextParser = memo(({ content }: props) => {
       h3: ({ children }) => (
         <h3
           id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
-          className='text-2xl px-2 mt-6 mb-4 '
+          className='text-2xl px-2 mt-6 mb-4'
         >
           {children}
         </h3>
