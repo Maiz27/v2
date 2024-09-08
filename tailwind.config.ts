@@ -20,6 +20,19 @@ const config: Config = {
         'copy-light': '#cdd7e5',
         'copy-lighter': '#cdd7e5',
       },
+      animation: {
+        'scroll-progress': 'scroll-progress linear',
+      },
+      keyframes: {
+        'scroll-progress': {
+          from: {
+            width: '0%',
+          },
+          to: {
+            width: '100%',
+          },
+        },
+      },
     },
   },
   plugins: [],

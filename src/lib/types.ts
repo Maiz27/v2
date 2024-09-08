@@ -65,6 +65,7 @@ export type Tool = {
 export type RichText = Array<{
   _type: string;
   style: string;
+  filename?: string;
   children: Array<{
     _type: string;
     text: string;
@@ -72,6 +73,7 @@ export type RichText = Array<{
 }>;
 
 export type Code = {
+  id: string;
   code: string;
   language: string;
   filename: string;
@@ -100,6 +102,7 @@ export type TOAST_STATUS = 'success' | 'error' | 'info' | 'warning';
 
 export type MotionTag =
   | 'main'
+  | 'nav'
   | 'div'
   | 'section'
   | 'article'

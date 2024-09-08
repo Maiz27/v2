@@ -1,4 +1,5 @@
 import { Refractor, registerLanguage } from 'react-refractor';
+import { extractFilename } from '@/lib/utilities';
 import { Code } from '@/lib/types';
 import { HiOutlineArrowTopRightOnSquare } from 'react-icons/hi2';
 
@@ -26,15 +27,10 @@ registerLanguage(tsx);
 registerLanguage(groq);
 registerLanguage(yaml);
 
-const CodeParser = ({ language, code, filename }: Code) => {
-  const splitFilename = (name: string) => {
-    const split = name.split(' ');
-    return { name: split[0], link: split[1] };
-  };
-
-  const { name, link } = splitFilename(filename);
+const CodeParser = ({ id, language, code, filename }: Code) => {
+  const { name, link } = extractFilename(filename);
   return (
-    <>
+    <div id={id}>
       <h3 className='bg-foreground flex w-full -mb-[7px] p-1 rounded-t-lg border-b border-border'>
         File:
         <a
@@ -50,7 +46,7 @@ const CodeParser = ({ language, code, filename }: Code) => {
         </a>
       </h3>
       <Refractor language={language} value={code} />
-    </>
+    </div>
   );
 };
 

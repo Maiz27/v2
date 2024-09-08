@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import ShareContent from '@/components/share/ShareContent';
 import ProjectHeader from '@/components/projects/ProjectHeader';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
+import TableOfContents from '@/components/TableOfContents';
+import ScrollProgress from '@/components/ui/ScrollProgress';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { getProjectBySlug, getProjectMetadata } from '@/lib/sanity/queries';
 import { Project } from '@/lib/types';
@@ -32,9 +34,13 @@ const page = async ({ params: { slug } }: { params: { slug: string } }) => {
 
   return (
     <main>
+      <ScrollProgress />
+
       <JsonLd schema={projectJsonLd} />
 
       <ProjectHeader project={project} />
+
+      <TableOfContents content={content} />
 
       <RichTextParser content={content} />
 

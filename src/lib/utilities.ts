@@ -41,6 +41,27 @@ export const getMonthYear = (StringDate: string) => {
     .replace(' ', ', ');
 };
 
+export const extractFilename = (name: string) => {
+  const split = name.split(' ');
+  return { name: split[0], link: split[1] };
+};
+
+export const smoothScrollToElement = (
+  elementId: string,
+  offset: number = 80
+) => {
+  const element = document.getElementById(elementId);
+  if (element) {
+    const elementPosition = element.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth',
+    });
+  }
+};
+
 export const getPageMetadata = (name: string): Metadata => {
   const pageMetaData = METADATA.get(name);
 
