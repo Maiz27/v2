@@ -69,4 +69,4 @@ export const getFaqs = `*[_type == "faq"]{
   index,
   question,
   answer,
-} | order(featured asc)`;
+} | order(index asc)`;

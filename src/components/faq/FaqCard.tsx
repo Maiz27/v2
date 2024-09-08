@@ -23,7 +23,9 @@ const FaqCard = ({ question, answer }: Props) => {
           onClick={handleToggle}
           className='flex flex-row-reverse w-full items-center justify-between gap-4 group'
         >
-          <span className='text-sm lg:text-base text-left'>{question}</span>
+          <span className='w-full text-left text-sm lg:text-base'>
+            {question}
+          </span>
 
           <motion.span
             variants={{
