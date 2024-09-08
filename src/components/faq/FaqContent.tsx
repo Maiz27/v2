@@ -1,36 +1,37 @@
 'use client';
 import FaqCard from './FaqCard';
 import AnimateInView from '../animationWrappers/AnimateInView';
+import useWindowWidth from '@/lib/hooks/useWindowWidth';
 import { Faq } from '@/lib/types';
 
 const FaqContent = ({ faqs }: { faqs: Faq[] }) => {
-  const firstHalf: Faq[] = [];
-  const secondHalf: Faq[] = [];
+  const width = useWindowWidth();
+  const isDesktop = width >= 768;
 
-  faqs.forEach((faq, index) => {
-    if (index % 2 === 0) {
-      firstHalf.push(faq);
-    } else {
-      secondHalf.push(faq);
-    }
-  });
+  const renderFaqCards = (faqList: Faq[]) => (
+    <div className='flex-1 h-min flex flex-col place-content-center items-center gap-4'>
+      {faqList.map(({ question, answer }, index) => (
+        <FaqCard key={index} question={question} answer={answer} />
+      ))}
+    </div>
+  );
+
+  const desktopLayout = (
+    <>
+      {renderFaqCards(faqs.filter((_, index) => index % 2 === 0))}
+      {renderFaqCards(faqs.filter((_, index) => index % 2 !== 0))}
+    </>
+  );
+
+  const mobileLayout = renderFaqCards(faqs);
 
   return (
     <AnimateInView
       delay={1}
       threshold={0.15}
-      className='w-full flex basis-auto mt-10 flex-wrap lg:flex-nowrap gap-4'
+      className='w-full flex basis-auto mt-10 flex-col md:flex-row gap-4'
     >
-      <div className='flex-1 h-min flex flex-col place-content-center items-center gap-4'>
-        {firstHalf.map(({ question, answer }, index) => (
-          <FaqCard key={index} question={question} answer={answer} />
-        ))}
-      </div>
-      <div className='flex-1 h-min flex flex-col place-content-center items-center gap-4'>
-        {secondHalf.map(({ question, answer }, index) => (
-          <FaqCard key={index} question={question} answer={answer} />
-        ))}
-      </div>
+      {isDesktop ? desktopLayout : mobileLayout}
     </AnimateInView>
   );
 };

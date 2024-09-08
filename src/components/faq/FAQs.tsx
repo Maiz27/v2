@@ -1,9 +1,9 @@
 import { FAQPage } from 'schema-dts';
-import JsonLd from './jsonLd/JsonLd';
+import JsonLd from '../jsonLd/JsonLd';
 import Heading from '@/components/heading/Heading';
 import EmptyState from '@/components/ui/EmptyState';
 import { fetchSanityData } from '@/lib/sanity/client';
-import FaqContent from './faq/FaqContent';
+import FaqContent from './FaqContent';
 import { getFaqs } from '@/lib/sanity/queries';
 import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
 import { Faq } from '@/lib/types';

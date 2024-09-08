@@ -1,5 +1,5 @@
 import CTA from '@/components/CTA/CTA';
-import FAQs from '@/components/FAQs';
+import FAQs from '@/components/faq/FAQs';
 import Heading from '@/components/heading/Heading';
 import ContactForm from '@/components/forms/ContactForm';
 import { HiOutlineEnvelope, HiOutlineSquare3Stack3D } from 'react-icons/hi2';
