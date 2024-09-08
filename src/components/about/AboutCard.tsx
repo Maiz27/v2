@@ -10,73 +10,95 @@ import { AboutMe, AboutMeStats } from '@/lib/types';
 export const revalidate = 60;
 
 const AboutCard = async () => {
-  const about: AboutMe = await fetchSanityData(getAboutMe);
-
-  const { name, bio, imageUrl, stats } = about;
-
-  const Intro = () => {
-    return (
-      <>
-        <span className='opacity-100 font-semibold text-primary'>
-          Hello I Am
-        </span>
-        <h1 className='font-bold text-3xl'>{name}</h1>
-      </>
-    );
-  };
+  const { name, bio, imageUrl, stats } = (await fetchSanityData(
+    getAboutMe
+  )) as AboutMe;
 
   return (
     <section className='flex flex-col gap-8 items-center'>
-      <div className='flex flex-col lg:flex-row justify-center items-start lg:items-center gap-4'>
-        <div className='flex justify-center items-center gap-4'>
-          <BoxesReveal
-            once={false}
-            className='size-32 lg:size-60 xl:size-72 2xl:size-80 overflow-hidden rounded-lg'
-          >
-            <Image
-              src={imageUrl}
-              width={240}
-              height={240}
-              title={name}
-              alt={name}
-              className='h-full w-full object-scale-down'
-            />
-          </BoxesReveal>
-          <AnimateInView className='lg:hidden'>
-            <Intro />
-          </AnimateInView>
-        </div>
-        <div className='space-y-4'>
-          <AnimateInView className='hidden lg:block'>
-            <Intro />
-          </AnimateInView>
-          <AnimateInView tag='p' delay={0.8} className='lg:text-balance'>
-            {bio}
-          </AnimateInView>
-          <div className='flex flex-col lg:flex-row justify-center items-center gap-2 lg:gap-4'>
-            <AnimateInView delay={1.2} className='w-full'>
-              <CTA
-                text='My Projects'
-                href='/projects'
-                icon={<HiOutlineSquare3Stack3D />}
-              />
-            </AnimateInView>
-            <AnimateInView delay={1.6} className='w-full'>
-              <CTA
-                text='Get In Touch'
-                href='/contact'
-                icon={<HiOutlineEnvelope />}
-              />
-            </AnimateInView>
-          </div>
-        </div>
-      </div>
+      <ProfileSection name={name} bio={bio} imageUrl={imageUrl} />
       <Stats stats={stats} />
     </section>
   );
 };
 
 export default AboutCard;
+
+const ProfileSection = ({
+  name,
+  bio,
+  imageUrl,
+}: {
+  name: string;
+  bio: string;
+  imageUrl: string;
+}) => (
+  <div className='flex flex-col lg:flex-row justify-center items-start lg:items-center gap-4'>
+    <ProfileImage name={name} imageUrl={imageUrl} />
+    <ProfileInfo name={name} bio={bio} />
+  </div>
+);
+
+const ProfileImage = ({
+  name,
+  imageUrl,
+}: {
+  name: string;
+  imageUrl: string;
+}) => (
+  <div className='flex justify-center items-center gap-4'>
+    <BoxesReveal
+      once={false}
+      className='size-32 lg:size-60 xl:size-72 2xl:size-80 overflow-hidden rounded-lg'
+    >
+      <Image
+        src={imageUrl}
+        width={240}
+        height={240}
+        title={name}
+        alt={name}
+        className='h-full w-full object-scale-down'
+      />
+    </BoxesReveal>
+    <AnimateInView className='lg:hidden'>
+      <Intro name={name} />
+    </AnimateInView>
+  </div>
+);
+
+const ProfileInfo = ({ name, bio }: { name: string; bio: string }) => (
+  <div className='space-y-4'>
+    <AnimateInView className='hidden lg:block'>
+      <Intro name={name} />
+    </AnimateInView>
+    <AnimateInView tag='p' delay={0.8} className='lg:text-balance'>
+      {bio}
+    </AnimateInView>
+    <CTAButtons />
+  </div>
+);
+
+const Intro = ({ name }: { name: string }) => (
+  <>
+    <span className='opacity-100 font-semibold text-primary'>Hello I Am</span>
+    <h1 className='font-bold text-3xl'>{name}</h1>
+  </>
+);
+
+const CTAButtons = () => (
+  <div className='flex flex-col lg:flex-row justify-center items-center gap-2 lg:gap-4'>
+    <AnimateInView delay={1.2} className='w-full'>
+      <CTA
+        text='My Projects'
+        href='/projects'
+        icon={<HiOutlineSquare3Stack3D />}
+      />
+    </AnimateInView>
+    <AnimateInView delay={1.6} className='w-full'>
+      <CTA text='Get In Touch' href='/contact' icon={<HiOutlineEnvelope />} />
+    </AnimateInView>
+  </div>
+);
 
 const Stats = ({ stats }: { stats: AboutMeStats }) => {
   const { clients, experience, projects, contributions } = stats;
