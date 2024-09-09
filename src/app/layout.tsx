@@ -4,6 +4,7 @@ import Right from '@/components/aside/Right';
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
 import { MobileScrollToTop } from '@/components/aside/ScrollToTop';
+import PageTransition from '@/components/animationWrappers/PageTransition';
 import { IsClientCtxProvider } from '@/lib/context/IsClientContext';
 import { ToastProvider } from '@/lib/context/ToastContext';
 import { getPageMetadata } from '@/lib/utilities';
@@ -27,7 +28,7 @@ export default function RootLayout({
             <Left />
             <div className='w-full mx-auto md:max-w-2xl lg:max-w-4xl xl:max-w-full xl:border-x xl:border-border'>
               <Header />
-              {children}
+              <PageTransition>{children}</PageTransition>
               <Footer />
               <MobileScrollToTop />
             </div>
