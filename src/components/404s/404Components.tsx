@@ -6,8 +6,8 @@ import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
 
 export const Default404 = () => {
   return (
-    <main className='min-h-[75dvh] grid place-items-center'>
-      <div>
+    <>
+      <div className='min-h-[75dvh]'>
         <Heading
           Tag='h1'
           icon={<HiOutlineQuestionMarkCircle />}
@@ -23,6 +23,6 @@ export const Default404 = () => {
           ))}
         </div>
       </div>
-    </main>
+    </>
   );
 };

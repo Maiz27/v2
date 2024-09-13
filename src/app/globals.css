@@ -29,7 +29,7 @@ h6 {
 }
 
 main {
-  @apply mt-6 mb-8 lg:my-16 px-4 mx-auto lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl xl:w-4/5 2xl:w-[75%];
+  @apply mt-6 mb-8 lg:my-16 px-4 md:px-0 mx-auto xl:max-w-4xl 2xl:max-w-5xl xl:w-4/5 2xl:w-[75%];
 }
 
 p,
@@ -52,6 +52,24 @@ body::-webkit-scrollbar {
 }
 
 body::-webkit-scrollbar-thumb {
+  @apply bg-primary; /*color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 0.1rem solid white; /* creates padding around scroll thumb */
+}
+
+.shiki {
+  @apply p-4 overflow-auto max-h-[75dvh];
+}
+.shiki code span,
+.shiki code span span {
+  @apply opacity-100;
+}
+
+.shiki::-webkit-scrollbar {
+  @apply size-2 rounded-lg;
+}
+
+.shiki::-webkit-scrollbar-thumb {
   @apply bg-primary; /*color of the scroll thumb */
   border-radius: 20px; /* roundness of the scroll thumb */
   border: 0.1rem solid white; /* creates padding around scroll thumb */
