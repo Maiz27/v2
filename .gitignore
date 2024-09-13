@@ -38,6 +38,3 @@ next-env.d.ts
 # vscode
 .vscode/launch.json
 .env
-
-# Sentry Config File
-.env.sentry-build-plugin
