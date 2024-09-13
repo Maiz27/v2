@@ -8,6 +8,7 @@ import PageTransition from '@/components/animationWrappers/PageTransition';
 import { IsClientCtxProvider } from '@/lib/context/IsClientContext';
 import { ToastProvider } from '@/lib/context/ToastContext';
 import { getPageMetadata } from '@/lib/utilities';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
 export const metadata = getPageMetadata('home');
@@ -35,6 +36,7 @@ export default function RootLayout({
             <Right />
           </ToastProvider>
         </IsClientCtxProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
