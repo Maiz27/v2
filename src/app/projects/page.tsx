@@ -30,18 +30,18 @@ const Projects = async ({
         <ProjectsFilter projectsTotal={projects.length} />
       </Heading>
 
-      {isEmpty ? (
-        <EmptyState
-          heading='No Projects Found'
-          paragraph={
-            "We couldn't find any projects matching your filters. Adjust your selections or reset the filters to explore all projects."
-          }
-        />
-      ) : (
-        <div className='min-h-[75dvh]'>
+      <div className='min-h-[75dvh]'>
+        {isEmpty ? (
+          <EmptyState
+            heading='No Projects Found'
+            paragraph={
+              "We couldn't find any projects matching your filters. Adjust your selections or reset the filters to explore all projects."
+            }
+          />
+        ) : (
           <AnimatedProjectsGrid projects={[...projects]} />
-        </div>
-      )}
+        )}
+      </div>
     </main>
   );
 };

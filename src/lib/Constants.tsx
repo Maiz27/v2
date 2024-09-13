@@ -1,5 +1,4 @@
 import {
-  HiOutlineUser,
   HiOutlineSquare3Stack3D,
   HiOutlineEnvelope,
   HiOutlineGlobeAlt,
@@ -10,6 +9,7 @@ import {
   HiOutlineXMark,
   HiOutlineExclamationCircle,
   HiEnvelope,
+  HiOutlineHome,
 } from 'react-icons/hi2';
 
 import {
@@ -75,7 +75,7 @@ export const EMAIL_PATTERN = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 export const ROUTES = [
   {
     icon: (
-      <HiOutlineUser className='group-hover:text-primary transition-colors' />
+      <HiOutlineHome className='group-hover:text-primary transition-colors' />
     ),
     name: 'Home',
     href: '/',

@@ -1,5 +1,5 @@
 'use client';
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PropsWithChildren, useContext, useRef } from 'react';
 import { LayoutRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
@@ -21,7 +21,11 @@ const FrozenRouter = (props: PropsWithChildren<{}>) => {
 
 const PageTransition = ({ children }: PropsWithChildren<{}>) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const isClient = useIsClient();
+
+  // Create a key that includes both pathname and search params
+  const pageKey = `${pathname}?${searchParams.toString()}`;
 
   // Render without animation on the server to avoid the "Detected multiple renderers
   // concurrently rendering the same context provider" error caused by FrozenRouter
@@ -32,7 +36,7 @@ const PageTransition = ({ children }: PropsWithChildren<{}>) => {
   return (
     <AnimatePresence mode='wait'>
       <motion.div
-        key={pathname}
+        key={pageKey}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -50 }}

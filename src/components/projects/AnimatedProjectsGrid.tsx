@@ -1,7 +1,6 @@
 import JsonLd from '../jsonLd/JsonLd';
 import ProjectCard from './ProjectCard';
 import AnimateInView from '../animationWrappers/AnimateInView';
-import AnimatePresenceWrapper from '../animationWrappers/AnimatePresence';
 import { ItemList } from 'schema-dts';
 import { BASEURL } from '@/lib/Constants';
 import { Project } from '@/lib/types';
@@ -38,23 +37,13 @@ const AnimatedProjectsGrid = ({ projects }: Props) => {
     >
       <JsonLd schema={projectsJsonLd} />
 
-      {/* 
-        The key prop on AnimatePresenceWrapper forces a complete re-render when the project list changes.
-        This ensures proper animation for all state changes, including when projects are filtered or reordered.
-        Without this, updates to projects with the same slugs (e.g., changing from all projects to only TypeScript projects) might not trigger animations.
-      */}
-      <AnimatePresenceWrapper
-        key={projects.map((p) => p.slug.current).join(',')}
-        mode='popLayout'
-      >
-        {projects.map((project, idx) => (
-          <ProjectCard
-            key={`${idx}-${project.slug.current}`}
-            project={project}
-            index={idx}
-          />
-        ))}
-      </AnimatePresenceWrapper>
+      {projects.map((project, idx) => (
+        <ProjectCard
+          key={`${idx}-${project.slug.current}`}
+          project={project}
+          index={idx}
+        />
+      ))}
     </AnimateInView>
   );
 };
