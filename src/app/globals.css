@@ -56,3 +56,21 @@ body::-webkit-scrollbar-thumb {
   border-radius: 20px; /* roundness of the scroll thumb */
   border: 0.1rem solid white; /* creates padding around scroll thumb */
 }
+
+.shiki {
+  @apply p-4 overflow-auto max-h-[75dvh];
+}
+.shiki code span,
+.shiki code span span {
+  @apply opacity-100;
+}
+
+.shiki::-webkit-scrollbar {
+  @apply size-2 rounded-lg;
+}
+
+.shiki::-webkit-scrollbar-thumb {
+  @apply bg-primary; /*color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 0.1rem solid white; /* creates padding around scroll thumb */
+}
