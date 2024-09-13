@@ -6,7 +6,7 @@ import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
 
 export const Default404 = () => {
   return (
-    <main className='min-h-[75dvh] grid place-items-center'>
+    <main className='min-h-[75dvh]'>
       <div>
         <Heading
           Tag='h1'
