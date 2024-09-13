@@ -24,7 +24,7 @@ export const PersonSchema: Person = {
 
 export default function Home() {
   return (
-    <main>
+    <>
       <JsonLd schema={PersonSchema} />
 
       <AboutCard />
@@ -36,6 +36,6 @@ export default function Home() {
       <Services />
 
       <ActivityCalendar />
-    </main>
+    </>
   );
 }

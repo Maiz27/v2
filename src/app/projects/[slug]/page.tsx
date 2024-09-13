@@ -33,19 +33,20 @@ const page = async ({ params: { slug } }: { params: { slug: string } }) => {
   };
 
   return (
-    <main>
+    <>
       <ScrollProgress />
+      <>
+        <JsonLd schema={projectJsonLd} />
 
-      <JsonLd schema={projectJsonLd} />
+        <ProjectHeader project={project} />
 
-      <ProjectHeader project={project} />
+        <TableOfContents content={content} />
 
-      <TableOfContents content={content} />
+        <RichTextParser content={content} />
 
-      <RichTextParser content={content} />
-
-      <ShareContent />
-    </main>
+        <ShareContent />
+      </>
+    </>
   );
 };
 

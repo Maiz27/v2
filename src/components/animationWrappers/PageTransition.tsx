@@ -35,7 +35,7 @@ const PageTransition = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <AnimatePresence mode='wait'>
-      <motion.div
+      <motion.main
         key={pageKey}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -43,7 +43,7 @@ const PageTransition = ({ children }: PropsWithChildren<{}>) => {
         transition={{ duration: 0.5 }}
       >
         <FrozenRouter>{children}</FrozenRouter>
-      </motion.div>
+      </motion.main>
     </AnimatePresence>
   );
 };

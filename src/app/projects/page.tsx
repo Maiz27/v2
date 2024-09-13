@@ -20,7 +20,7 @@ const Projects = async ({
   const isEmpty = projects.length <= 0;
 
   return (
-    <main>
+    <>
       <Heading
         Tag='h1'
         icon={<HiOutlineLightBulb />}
@@ -42,7 +42,7 @@ const Projects = async ({
           <AnimatedProjectsGrid projects={[...projects]} />
         )}
       </div>
-    </main>
+    </>
   );
 };
 

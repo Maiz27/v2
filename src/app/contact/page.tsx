@@ -25,7 +25,7 @@ const Contact = () => {
   };
 
   return (
-    <main>
+    <>
       <JsonLd schema={pageJsonLd} />
       <JsonLd schema={optionsJsonLd} />
 
@@ -57,7 +57,7 @@ const Contact = () => {
       <ContactForm />
 
       <FAQs />
-    </main>
+    </>
   );
 };
 
