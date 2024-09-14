@@ -11,7 +11,7 @@ const Header = () => {
         <PingIcon />
         <span>Available For Work</span>
       </div>
-      <nav className='flex-grow lg:flex-grow-0 xl:hidden flex justify-center items-center gap-2 px-4'>
+      <nav className='flex-grow lg:flex-grow-0 xl:hidden flex justify-center items-center gap-2 px-2 md:px-4'>
         {ROUTES.map(({ icon, name, href }) => (
           <NavLink key={href} Icon={icon} href={href} name={name} />
         ))}
@@ -38,7 +38,7 @@ const NavLink = ({ href, name, Icon }: NavLinkProps) => {
       className='w-full flex justify-center items-center gap-2 px-4 py-3 rounded-lg text-lg transition-colors opacity-70 hover:opacity-100 bg-foreground border border-copy/5'
     >
       {Icon}
-      <span className='text-base uppercase'>{name}</span>
+      <span className='text-sm lg:text-base uppercase'>{name}</span>
     </Link>
   );
 };

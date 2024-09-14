@@ -1,8 +1,9 @@
 'use client';
-import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { usePathname, useSearchParams } from 'next/navigation';
 import React, { PropsWithChildren, useContext, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { LayoutRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useIsClient } from '@/lib/context/IsClientContext';
 
 // Client-side component to use useSearchParams() for optimal AnimatePresence keying
 // Ensures transitions occur on both pathname and search param changes but requires
@@ -10,9 +11,14 @@ import React, { PropsWithChildren, useContext, useRef } from 'react';
 const ClientSideTransition = ({ children }: PropsWithChildren<{}>) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isClient = useIsClient();
 
   // Create a key that includes both pathname and search params
   const pageKey = `${pathname}?${searchParams.toString()}`;
+
+  // Avoid "Detected multiple renderers concurrently rendering the same context provider" error
+  // by only rendering the animation wrapper on the client side
+  if (!isClient) return <>{children}</>;
 
   return (
     <AnimatePresence mode='wait'>

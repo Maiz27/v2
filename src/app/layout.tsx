@@ -27,7 +27,7 @@ export default function RootLayout({
         <IsClientCtxProvider>
           <ToastProvider>
             <Left />
-            <div className='w-full mx-auto md:max-w-2xl lg:max-w-4xl xl:max-w-full xl:border-x xl:border-border'>
+            <div className='w-full mx-auto md:max-w-2xl lg:max-w-4xl xl:max-w-full xl:border-x xl:border-border overflow-hidden'>
               <Header />
               <PageTransition>{children}</PageTransition>
               <Footer />
