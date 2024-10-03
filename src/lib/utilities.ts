@@ -102,5 +102,12 @@ export const getPageMetadata = (name: string): Metadata => {
         },
       ],
     },
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': 50,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
   };
 };

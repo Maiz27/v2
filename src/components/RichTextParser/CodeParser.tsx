@@ -26,7 +26,7 @@ const CodeParser = async ({ id, language, code, filename }: Code) => {
           {link && <HiOutlineArrowTopRightOnSquare />}
         </a>
       </h3>
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+      <div data-nosnippet dangerouslySetInnerHTML={{ __html: html }} />
     </div>
   );
 };
