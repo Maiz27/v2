@@ -11,12 +11,14 @@ export async function POST(req: NextRequest) {
     const { name, email } = body;
 
     const { data, error } = await resend.emails.send({
-      from: `Website <contact@${DOMAIN}>`,
-      reply_to: email,
+      from: `Message | Portfolio <contact@${DOMAIN}>`,
+      replyTo: email,
       to: [EMAIL!],
       subject: `Website Message from ${name}`,
       react: Contact({ ...body }),
     });
+
+    console.log(data, error);
 
     if (error) {
       return NextResponse.json({ error }, { status: 500 });
