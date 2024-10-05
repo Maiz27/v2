@@ -68,3 +68,37 @@ const ProjectHeader = ({ project }: Props) => {
 };
 
 export default ProjectHeader;
+
+export const ProjectHeaderSkeleton = () => {
+  return (
+    <>
+      <div className='space-y-4 animate-pulse'>
+        {/* Title and description */}
+        <div className='space-y-2'>
+          <div className='h-8 bg-copy/70 rounded w-3/4'></div>
+          <div className='h-4 bg-copy/70 rounded w-full'></div>
+          <div className='h-4 bg-copy/70 rounded w-5/6'></div>
+        </div>
+
+        {/* Meta information */}
+        <div className='flex flex-col lg:flex-row lg:justify-between gap-4'>
+          <div className='w-full lg:w-fit flex justify-center items-center gap-4'>
+            {/* Date, status, links */}
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className='h-6 bg-copy/70 rounded w-20'></div>
+            ))}
+          </div>
+          <div className='w-full lg:w-fit flex justify-center items-center gap-4'>
+            {/* Tech stack */}
+            {[1, 2, 3].map((i) => (
+              <div key={i} className='h-6 bg-copy/70 rounded w-16'></div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Image carousel skeleton */}
+      <div className='mt-4 w-full h-[30rem] bg-copy/70 rounded animate-pulse'></div>
+    </>
+  );
+};
