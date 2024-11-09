@@ -4,6 +4,7 @@
     "Cloudflareworkers",
     "gsap",
     "Hasura",
+    "lastmod",
     "Nextdotjs",
     "nextjs",
     "Nodedotjs",
@@ -16,6 +17,7 @@
     "svgr",
     "tailwindcss",
     "Turborepo",
+    "urlset",
     "Visualstudiocode"
   ]
 }

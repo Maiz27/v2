@@ -61,8 +61,8 @@ export const getProjectMetadata = `*[_type == "project" && slug.current == $slug
 }[0]`;
 
 export const getProjectsForSEO = `*[_type == "project"]{
-  slug,
-  date,
+  "slug": slug.current,
+  "publishedAt": date,
 }`;
 
 export const getFaqs = `*[_type == "faq"]{
