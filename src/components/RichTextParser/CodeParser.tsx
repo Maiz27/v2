@@ -11,7 +11,7 @@ const CodeParser = async ({ id, language, code, filename }: Code) => {
   });
 
   return (
-    <div id={id}>
+    <div id={id} className='scroll-m-16'>
       <h3 className='bg-foreground flex w-full -mb-[7px] p-1 rounded-t-lg border-b border-border'>
         File:
         <a

@@ -62,6 +62,14 @@ export const smoothScrollToElement = (
   }
 };
 
+export const createSlug = (text: string) => {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '') // Remove all non-word characters except spaces and hyphens
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
+};
+
 export const getPageMetadata = (name: string): Metadata => {
   const pageMetaData = METADATA.get(name);
 

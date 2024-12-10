@@ -7,6 +7,7 @@ import {
 } from '@portabletext/react';
 import { Code, RichText } from '@/lib/types';
 import CodeParser from './CodeParser';
+import { createSlug } from '@/lib/utilities';
 
 type props = {
   content: RichText;
@@ -71,36 +72,51 @@ const RichTextParser = memo(({ content }: props) => {
     block: {
       h1: ({ children }) => (
         <h1
-          id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
-          className='text-4xl px-2 mt-10 mb-8'
+          id={createSlug(children?.toString() || '')}
+          className='text-4xl scroll-m-16 px-2 mt-10 mb-8'
         >
           {children}
         </h1>
       ),
       h2: ({ children }) => (
         <h2
-          id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
-          className='text-3xl px-2 mt-8 mb-6'
+          id={createSlug(children?.toString() || '')}
+          className='text-3xl scroll-m-16 px-2 mt-8 mb-6'
         >
           {children}
         </h2>
       ),
       h3: ({ children }) => (
         <h3
-          id={children?.toString().toLowerCase().replace(/\s+/g, '-')}
-          className='text-2xl px-2 mt-6 mb-4'
+          id={createSlug(children?.toString() || '')}
+          className='text-2xl scroll-m-16 px-2 mt-6 mb-4'
         >
           {children}
         </h3>
       ),
       h4: ({ children }) => (
-        <h4 className='text-xl px-2 mt-5 mb-3 '>{children}</h4>
+        <h4
+          id={createSlug(children?.toString() || '')}
+          className='text-xl scroll-m-16 px-2 mt-5 mb-3 '
+        >
+          {children}
+        </h4>
       ),
       h5: ({ children }) => (
-        <h5 className='text-lg px-2 mt-4 mb-2 '>{children}</h5>
+        <h5
+          id={createSlug(children?.toString() || '')}
+          className='text-lg scroll-m-16 px-2 mt-4 mb-2 '
+        >
+          {children}
+        </h5>
       ),
       h6: ({ children }) => (
-        <h6 className='text-base px-2 mt-3 mb-1 '>{children}</h6>
+        <h6
+          id={createSlug(children?.toString() || '')}
+          className='text-base scroll-m-16 px-2 mt-3 mb-1 '
+        >
+          {children}
+        </h6>
       ),
       normal: ({ children }) => (
         <p className='text-base mb-2 p-2 opacity-80'>{children}</p>
