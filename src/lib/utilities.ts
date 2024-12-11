@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
-import { BASEURL, NON_STACK_TOOLS, TOOLS, METADATA } from './Constants';
+import { BASEURL, NON_STACK_TOOLS, TOOLS } from './Constants';
 import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
+import { fetchSanityData } from './sanity/client';
+import { getMetadata } from './sanity/queries';
+import { SanityMetadata } from './types';
 
 export const getDomain = (url: string) => {
   const { hostname } = new URL(url);
@@ -70,43 +73,47 @@ export const createSlug = (text: string) => {
     .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
 };
 
-export const getPageMetadata = (name: string): Metadata => {
-  const pageMetaData = METADATA.get(name);
+export const getDynamicMetaData = async (slug: string) => {
+  const data: SanityMetadata = await fetchSanityData(getMetadata, { slug });
+
+  if (!data.title) {
+    return {};
+  }
 
   return {
     metadataBase: new URL(BASEURL),
-    title: pageMetaData.title,
-    description: pageMetaData.description,
+    title: data.title,
+    description: data.description,
     alternates: {
-      canonical: pageMetaData.url,
+      canonical: `${BASEURL}${slug}`,
     },
     icons: {
-      icon: pageMetaData.icon,
-      shortcut: pageMetaData.icon,
+      icon: '/imgs/logo/favicon.ico',
+      shortcut: '/imgs/logo/favicon.ico',
       apple: '/imgs/logo/apple-touch-icon.png',
       other: {
         rel: 'apple-touch-icon-precomposed',
-        url: pageMetaData.icon,
+        url: '/imgs/logo/apple-touch-icon.png',
       },
     },
     openGraph: {
-      type: pageMetaData.type,
-      url: pageMetaData.url,
-      title: pageMetaData.title,
-      description: pageMetaData.description,
-      siteName: pageMetaData.title,
+      type: 'website',
+      url: `${BASEURL}${slug}`,
+      title: data.title,
+      description: data.description,
+      siteName: data.title,
       images: [
         {
-          url: pageMetaData.image,
+          url: `${BASEURL}/imgs/logo/logo.png`,
         },
       ],
     } as OpenGraph,
     twitter: {
       card: 'summary_large_image',
-      site: pageMetaData.url,
+      site: `${BASEURL}${slug}`,
       images: [
         {
-          url: pageMetaData.image,
+          url: `${BASEURL}/imgs/logo/logo.png`,
         },
       ],
     },
@@ -117,5 +124,5 @@ export const getPageMetadata = (name: string): Metadata => {
       'max-image-preview': 'large',
       'max-video-preview': -1,
     },
-  };
+  } as Metadata;
 };

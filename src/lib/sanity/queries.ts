@@ -70,3 +70,9 @@ export const getFaqs = `*[_type == "faq"]{
   question,
   answer,
 } | order(index asc)`;
+
+export const getMetadata = `*[_type == "metadata" && slug.current == $slug]{
+  "slug": slug.current,
+  title,
+  description,
+}[0]`;
