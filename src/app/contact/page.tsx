@@ -3,20 +3,23 @@ import FAQs from '@/components/faq/FAQs';
 import Heading from '@/components/heading/Heading';
 import ContactForm from '@/components/forms/ContactForm';
 import { HiOutlineEnvelope, HiOutlineSquare3Stack3D } from 'react-icons/hi2';
-import { EMAIL } from '@/lib/Constants';
+import { BASEURL, EMAIL } from '@/lib/Constants';
 import AnimateInView from '@/components/animationWrappers/AnimateInView';
-import { getPageMetadata } from '@/lib/utilities';
+import { getDynamicMetaData } from '@/lib/utilities';
 import { ContactPage, ContactPoint } from 'schema-dts';
 import JsonLd from '@/components/jsonLd/JsonLd';
 
 export const revalidate = 60;
 
-export const metadata = getPageMetadata('contact');
+export async function generateMetadata() {
+  const data = await getDynamicMetaData('/contact');
+  return data;
+}
 
 const Contact = () => {
   const pageJsonLd: ContactPage = {
     '@type': 'ContactPage',
-    url: metadata.openGraph?.url?.toString() || '',
+    url: `${BASEURL}/contact`,
   };
   const optionsJsonLd: ContactPoint = {
     '@type': 'ContactPoint',

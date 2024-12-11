@@ -3,13 +3,16 @@ import EmptyState from '@/components/ui/EmptyState';
 import ProjectsFilter from '@/components/projects/ProjectsFilter';
 import AnimatedProjectsGrid from '@/components/projects/AnimatedProjectsGrid';
 import { fetchSanityData } from '@/lib/sanity/client';
-import { getPageMetadata } from '@/lib/utilities';
+import { getDynamicMetaData } from '@/lib/utilities';
 import { HiOutlineLightBulb } from 'react-icons/hi2';
 import { Project } from '@/lib/types';
 
 export const revalidate = 60;
 
-export const metadata = getPageMetadata('projects');
+export async function generateMetadata() {
+  const data = await getDynamicMetaData('/projects');
+  return data;
+}
 
 const Projects = async ({
   searchParams,

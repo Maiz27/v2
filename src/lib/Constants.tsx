@@ -411,45 +411,6 @@ export const FORMS = {
   },
 };
 
-export const METADATA: Map<string, any> = new Map([
-  [
-    'home',
-    {
-      title: 'Maged Faiz | Full Stack Developer',
-      description:
-        'Explore the portfolio of Maged Faiz, an innovative fullstack developer based in Juba, South Sudan. Discover innovative projects, professional journey, and expertise',
-      type: 'website',
-      url: `${BASEURL}`,
-      image: `${BASEURL}/imgs/logo/logo.png`,
-      icon: '/imgs/logo/favicon.ico',
-    },
-  ],
-  [
-    'projects',
-    {
-      title: 'Maged Faiz | My Projects',
-      description:
-        "Explore the landscape of innovation and technology through Maged Faiz's projects. Each project is a testament to creative solutions and technical prowess.",
-      type: 'website',
-      url: `${BASEURL}/projects`,
-      image: `${BASEURL}/imgs/logo/logo.png`,
-      icon: '/imgs/logo/favicon.ico',
-    },
-  ],
-  [
-    'contact',
-    {
-      title: 'Maged Faiz | Contact',
-      description:
-        "Interested in collaborating with Maged Faiz? Reach out and let's turn your vision into digital reality. Get in touch for web and mobile development projects.",
-      type: 'website',
-      url: `${BASEURL}/contact`,
-      image: `${BASEURL}/imgs/logo/logo.png`,
-      icon: '/imgs/logo/favicon.ico',
-    },
-  ],
-]);
-
 // Framer Motion Animation Variants
 export const SLIDE_RIGHT = {
   initial: { opacity: 0, x: -30 },

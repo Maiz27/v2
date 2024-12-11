@@ -62,6 +62,12 @@ export type Tool = {
   href: string;
 };
 
+export type SanityMetadata = {
+  slug: string;
+  title: string;
+  description: string;
+};
+
 export type RichText = Array<{
   _type: string;
   style: string;

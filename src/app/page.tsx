@@ -6,8 +6,14 @@ import FeaturedProjects from '@/components/projects/FeaturedProjects';
 import { Person } from 'schema-dts';
 import JsonLd from '@/components/jsonLd/JsonLd';
 import { BASEURL, EMAIL } from '@/lib/Constants';
+import { getDynamicMetaData } from '@/lib/utilities';
 
 export const revalidate = 60;
+
+export async function generateMetadata() {
+  const data = await getDynamicMetaData('/');
+  return data;
+}
 
 export const PersonSchema: Person = {
   '@type': 'Person',
