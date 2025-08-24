@@ -51,6 +51,7 @@ import {
   SiCloudflare,
   SiCloudflarepages,
   SiCloudflareworkers,
+  SiReactquery,
 } from 'react-icons/si';
 
 import { ProjectStatus, Tool } from './types';
@@ -141,6 +142,14 @@ export const TOOLS: Map<string, Tool> = new Map([
   ],
   ['Redux', { icon: <SiRedux />, name: 'Redux', href: 'https://redux.js.org' }],
   [
+    'Zustand',
+    {
+      icon: '@/assets/tools/Zustand.svg',
+      name: 'Zustand',
+      href: 'https://zustand-demo.pmnd.rs',
+    },
+  ],
+  [
     'Node.js',
     { icon: <SiNodedotjs />, name: 'Node.js', href: 'https://nodejs.org' },
   ],
@@ -152,6 +161,14 @@ export const TOOLS: Map<string, Tool> = new Map([
   [
     'Express.js',
     { icon: <SiExpress />, name: 'Express.js', href: 'https://expressjs.com' },
+  ],
+  [
+    'React Query',
+    {
+      icon: <SiReactquery />,
+      name: 'React Query',
+      href: 'https://tanstack.com/query/latest',
+    },
   ],
 
   // CSS
@@ -269,7 +286,7 @@ export const TOOLS: Map<string, Tool> = new Map([
   ],
   [
     'GSAP',
-    { icon: '@/assets/tools/gsap.svg', name: 'GSAP', href: 'https://gsap.com' },
+    { icon: '@/assets/tools/GSAP.svg', name: 'GSAP', href: 'https://gsap.com' },
   ],
   ['Sanity', { icon: <SiSanity />, name: 'Sanity', href: 'https://sanity.io' }],
   ['Yarn', { icon: <SiYarn />, name: 'Yarn', href: 'https://yarnpkg.com' }],

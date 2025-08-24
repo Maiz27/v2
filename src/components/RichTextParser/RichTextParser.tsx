@@ -8,6 +8,7 @@ import {
 import { Code, RichText } from '@/lib/types';
 import CodeParser from './CodeParser';
 import { createSlug } from '@/lib/utilities';
+import { urlFor } from '@/lib/sanity/client';
 
 type props = {
   content: RichText;
@@ -15,17 +16,26 @@ type props = {
 
 const RichTextParser = memo(({ content }: props) => {
   let codeBlockCounter = 0;
+  let imageIndex = 0;
 
   const myPortableTextComponents: PortableTextReactComponents = {
     types: {
-      image: ({ value }) => (
-        <Image
-          loading='lazy'
-          src={value.imageUrl}
-          alt=''
-          className='w-4/5 mx-auto'
-        />
-      ),
+      image: ({ value }) => {
+        const imgUrl = urlFor(value).url();
+        imageIndex++;
+
+        return (
+          <figure className='border-4 border-primary rounded-lg'>
+            <Image
+              width={1080}
+              height={1080}
+              src={imgUrl}
+              loading='lazy'
+              alt={`Image(${imageIndex})`}
+            />
+          </figure>
+        );
+      },
       callToAction: ({ value, isInline }) =>
         isInline ? (
           <a

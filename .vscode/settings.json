@@ -14,10 +14,13 @@
     "Pocketbase",
     "portabletext",
     "precomposed",
+    "Reactquery",
     "shiki",
+    "shikijs",
     "svgr",
     "tailwindcss",
     "Turborepo",
+    "twoslash",
     "urlset",
     "Visualstudiocode"
   ]
