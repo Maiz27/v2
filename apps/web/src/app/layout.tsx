@@ -27,7 +27,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const tools: GetToolsResult[] = await fetchSanityData(getTools);
+  const tools: GetToolsResult = await fetchSanityData(getTools);
 
   return (
     <html lang='en' data-scroll-behavior='smooth'>
