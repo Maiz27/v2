@@ -1,6 +1,7 @@
 'use client';
-import { MotionTag } from '@/lib/types';
+import { JSX } from 'react';
 import { motion } from 'framer-motion';
+import { MotionTag } from '@/lib/types';
 
 const TranslateWrapper = ({
   tag = 'div',

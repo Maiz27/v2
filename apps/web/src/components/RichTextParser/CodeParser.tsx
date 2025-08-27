@@ -1,12 +1,20 @@
 import { codeToHtml } from 'shiki';
 import { extractFilename } from '@/lib/utilities';
-import { Code } from '@/lib/types';
 import { HiOutlineArrowTopRightOnSquare } from 'react-icons/hi2';
+import { Code } from '@/lib/sanity/types';
 
-const CodeParser = async ({ id, language, code, filename }: Code) => {
-  const { name, link } = extractFilename(filename);
-  const html = await codeToHtml(code, {
-    lang: language,
+type Props = {
+  id: string;
+  snippet: Code;
+};
+
+const CodeParser = async ({
+  id,
+  snippet: { language, code, filename },
+}: Props) => {
+  const { name, link } = extractFilename(filename!);
+  const html = await codeToHtml(code!, {
+    lang: language!,
     theme: 'material-theme-ocean',
   });
 

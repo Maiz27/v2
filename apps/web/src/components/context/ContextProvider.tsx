@@ -2,11 +2,11 @@ import React from 'react';
 import { IsClientCtxProvider } from '@/lib/context/IsClientContext';
 import { ToolProvider } from '@/lib/context/ToolProvider';
 import { ToastProvider } from '@/lib/context/ToastContext';
-import { Tool } from '@/lib/types';
+import { GetToolsResult } from '@/lib/sanity/types';
 
 type Props = {
   children: React.ReactNode;
-  tools: Tool[];
+  tools: GetToolsResult;
 };
 
 const ContextProvider = ({ children, tools }: Props) => {

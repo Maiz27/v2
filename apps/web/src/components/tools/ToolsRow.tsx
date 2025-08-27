@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import DynamicToolIcon from './DynamicToolIcon';
 import { useTools } from '@/lib/context/ToolProvider';
-import { Tool } from '@/lib/types';
+import { GetToolsResult } from '@/lib/sanity/types';
 
-const ToolsRow = ({ tools }: { tools: Tool[] }) => {
+const ToolsRow = ({ tools }: { tools: GetToolsResult }) => {
   const tools_ctx = useTools();
 
   if (!tools_ctx || !tools) return null;

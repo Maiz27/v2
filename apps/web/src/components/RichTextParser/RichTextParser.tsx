@@ -5,13 +5,13 @@ import {
   PortableTextReactComponents,
   PortableTextTypeComponentProps,
 } from '@portabletext/react';
-import { Code, RichText } from '@/lib/types';
 import CodeParser from './CodeParser';
 import { createSlug } from '@/lib/utilities';
 import { urlFor } from '@/lib/sanity/client';
+import { BlockContent, Code } from '@/lib/sanity/types';
 
 type props = {
-  content: RichText;
+  content: BlockContent;
 };
 
 const RichTextParser = memo(({ content }: props) => {
@@ -49,14 +49,7 @@ const RichTextParser = memo(({ content }: props) => {
         ),
       code: ({ value }: PortableTextTypeComponentProps<Code>) => {
         const id = `code-${++codeBlockCounter}`;
-        return (
-          <CodeParser
-            id={id}
-            code={value.code}
-            language={value.language}
-            filename={value.filename}
-          />
-        );
+        return <CodeParser id={id} snippet={value} />;
       },
     },
     marks: {

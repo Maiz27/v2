@@ -7,10 +7,10 @@ import {
   HiOutlineCodeBracketSquare,
   HiOutlineListBullet,
 } from 'react-icons/hi2';
-import { RichText } from '@/lib/types';
+import { BlockContent } from '@/lib/sanity/types';
 
 type TableOfContentsProps = {
-  content: RichText;
+  content: BlockContent;
 };
 
 type TOCItem = {
@@ -50,7 +50,7 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
         tocItems.push({
           id: createSlug(text),
           text,
-          level: getHeadingLevel(block.style),
+          level: getHeadingLevel(block.style!),
           type: block.style as Tags,
         });
       }

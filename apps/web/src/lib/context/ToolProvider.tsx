@@ -1,11 +1,17 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import { Tool } from '@/lib/types';
+import { GetToolsResult } from '../sanity/types';
 
-export const ToolContext = createContext<Tool[] | null>(null);
+export const ToolContext = createContext<GetToolsResult | null>(null);
 
-export const ToolProvider = ({ children, tools }: { children: React.ReactNode, tools: Tool[] }) => {
+export const ToolProvider = ({
+  children,
+  tools,
+}: {
+  children: React.ReactNode;
+  tools: GetToolsResult;
+}) => {
   return <ToolContext.Provider value={tools}>{children}</ToolContext.Provider>;
 };
 

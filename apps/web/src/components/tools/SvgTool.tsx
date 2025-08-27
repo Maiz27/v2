@@ -1,9 +1,13 @@
 'use client';
 
-import { Tool } from '@/lib/types';
 import { useEffect, useState } from 'react';
+import { GetToolsResult } from '@/lib/sanity/types';
 
-const SvgTool = ({ tool: { iconSource, iconSvg } }: { tool: Tool }) => {
+const SvgTool = ({
+  tool: { iconSource, iconSvg },
+}: {
+  tool: GetToolsResult[number];
+}) => {
   const [svgContent, setSvgContent] = useState<string | null>(null);
 
   useEffect(() => {

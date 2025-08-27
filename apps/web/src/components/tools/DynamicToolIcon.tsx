@@ -1,6 +1,6 @@
-import { Tool } from '@/lib/types';
 import * as SiIcons from 'react-icons/si';
 import SvgTool from './SvgTool';
+import { GetToolsResult } from '@/lib/sanity/types';
 
 type IconMap = { [key: string]: React.ComponentType<any> };
 
@@ -10,7 +10,7 @@ const DynamicToolIcon = ({
   tool,
   className,
 }: {
-  tool: Tool;
+  tool: GetToolsResult[number];
   className?: string;
 }) => {
   const { iconSource, iconName, iconSvg } = tool;
