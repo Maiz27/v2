@@ -21,8 +21,6 @@ import {
   SiWhatsapp,
 } from 'react-icons/si';
 
-import { ProjectStatus } from './types';
-
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -31,6 +29,7 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
 } from 'react-share';
+import { Project } from './sanity/types';
 
 export const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN;
 
@@ -121,7 +120,7 @@ export const BENEFITS = [
   'Technical Expertise',
 ];
 
-export const PROJECT_STATUS: ProjectStatus[] = [
+export const PROJECT_STATUS: Project['status'][] = [
   'completed',
   'ongoing',
   'paused',

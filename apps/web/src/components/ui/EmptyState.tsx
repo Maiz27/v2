@@ -1,3 +1,4 @@
+import { JSX } from 'react';
 import BaseCard from './BaseCard';
 import { HiOutlineExclamationCircle } from 'react-icons/hi2';
 

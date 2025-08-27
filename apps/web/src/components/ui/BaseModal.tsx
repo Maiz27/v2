@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { JSX, ReactNode, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import CTA from '../CTA/CTA';
 import useLockBodyScroll from '@/lib/hooks/useLockBodyScroll';

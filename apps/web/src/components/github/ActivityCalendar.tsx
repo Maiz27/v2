@@ -1,14 +1,14 @@
 'use client';
 import { cloneElement } from 'react';
 import { Tooltip } from 'react-tooltip';
-import GitHubCalendar, { ThemeInput } from 'react-github-calendar';
+import GitHubCalendar from 'react-github-calendar';
 import Heading from '../heading/Heading';
 import AnimateInView from '../animationWrappers/AnimateInView';
 import { SiGithub } from 'react-icons/si';
 
 const ActivityCalendar = () => {
   const username = process.env.NEXT_PUBLIC_GITHUB_USERNAME || '';
-  const theme: ThemeInput = {
+  const theme = {
     dark: ['#1a1a1a', '#2a3f5f', '#4a679d', '#7390c3', '#96b7e3'],
   };
 

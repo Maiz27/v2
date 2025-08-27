@@ -50,9 +50,9 @@ const page = async ({ params }: { params: Promise<Params> }) => {
 
         <ProjectHeader project={project} />
 
-        <TableOfContents content={content} />
+        <TableOfContents content={content!} />
 
-        <RichTextParser content={content} />
+        <RichTextParser content={content!} />
 
         <ShareContent />
       </>

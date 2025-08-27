@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { JSX, ReactNode } from 'react';
 import AnimateInView from '../animationWrappers/AnimateInView';
 import { SLIDE_LEFT } from '@/lib/Constants';
 
