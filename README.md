@@ -56,7 +56,7 @@ This monorepo is organized using Yarn Workspaces and Turborepo. The workspaces a
 
 3. **Set up environment variables:**
    - For the web app, copy `.env.example` to `.env` in `apps/web` and provide your Sanity project details.
-   - For the Sanity studio, copy `.env.example` to `.env` in `apps/studio` and configure your Sanity project ID.
+   - For the Sanity studio, please refer to the detailed instructions in the [studio README](apps/studio/README.md).
 
 ## Usage
 
