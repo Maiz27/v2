@@ -12,6 +12,12 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "dev:web": "yarn workspace web dev",
+    "dev:studio": "yarn workspace studio dev",
+    "build:web": "yarn workspace web build",
+    "build:studio": "yarn workspace studio build",
+    "lint:web": "yarn workspace web lint",
+    "lint:studio": "yarn workspace studio lint"
   }
 }
