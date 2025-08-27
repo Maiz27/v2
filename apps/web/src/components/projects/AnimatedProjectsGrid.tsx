@@ -3,10 +3,10 @@ import ProjectCard from './ProjectCard';
 import AnimateInView from '../animationWrappers/AnimateInView';
 import { ItemList } from 'schema-dts';
 import { BASEURL } from '@/lib/Constants';
-import { Project } from '@/lib/types';
+import { GetProjectsResult } from '@/lib/sanity/types';
 
 type Props = {
-  projects: Project[];
+  projects: GetProjectsResult;
 };
 
 const AnimatedProjectsGrid = ({ projects }: Props) => {
@@ -18,13 +18,13 @@ const AnimatedProjectsGrid = ({ projects }: Props) => {
         name: title,
         description: description,
         position: idx + 1,
-        url: href || source || `${BASEURL}/projects/${slug.current}`,
+        url: href || source || `${BASEURL}/projects/${slug?.current}`,
         subjectOf: {
           '@type': 'CreativeWork',
           name: title,
           description: description,
           datePublished: date,
-          url: href || source || `${BASEURL}/projects/${slug.current}`,
+          url: href || source || `${BASEURL}/projects/${slug?.current}`,
         },
       })
     ),
@@ -39,7 +39,7 @@ const AnimatedProjectsGrid = ({ projects }: Props) => {
 
       {projects.map((project, idx) => (
         <ProjectCard
-          key={`${idx}-${project.slug.current}`}
+          key={`${idx}-${project.slug?.current}`}
           project={project}
           index={idx}
         />

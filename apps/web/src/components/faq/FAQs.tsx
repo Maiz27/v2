@@ -6,12 +6,12 @@ import { fetchSanityData } from '@/lib/sanity/client';
 import FaqContent from './FaqContent';
 import { getFaqs } from '@/lib/sanity/queries';
 import { HiOutlineQuestionMarkCircle } from 'react-icons/hi2';
-import { Faq } from '@/lib/types';
+import { GetFaqsResult } from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
 const FAQs = async () => {
-  const faqs: Faq[] = await fetchSanityData(getFaqs);
+  const faqs: GetFaqsResult = await fetchSanityData(getFaqs);
   const isEmpty = faqs.length <= 0;
 
   const faqJsonLd: FAQPage = {

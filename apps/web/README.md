@@ -13,8 +13,27 @@ This project was inspired by [Praha's Framer template](https://darkmate.framer.w
 - **Next.js 14**: The latest features and optimizations.
 - **Tailwind CSS**: Rapidly build modern websites without ever leaving your HTML.
 - **Sanity CMS**: A headless CMS to manage content with ease.
+- **Sanity Type-Safe Content**: Utilizes the `@v2/sanity-schemas` package for end-to-end type safety with Sanity content.
 - **TypeScript**: Static type checking for better code quality.
 - **Framer Motion**: An open-source motion library to power animations.
+
+## Type Generation
+
+This project leverages Sanity TypeGen to provide end-to-end type safety for your Sanity content. This means your frontend code will have accurate TypeScript types for all data fetched from Sanity, reducing runtime errors and improving developer experience.
+
+To generate or update the types, run the following command from the root of the monorepo:
+
+```bash
+yarn generate:types
+```
+
+This command will:
+
+1. Extract your Sanity schema.
+2. Generate TypeScript types based on your schemas and GROQ queries.
+3. Output the generated types to `src/lib/sanity.types.ts`.
+
+Ensure you run this command whenever your Sanity schemas or GROQ queries change to keep your types up-to-date.
 
 ## Getting Started
 

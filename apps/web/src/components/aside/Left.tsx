@@ -4,12 +4,12 @@ import LeftLinks from './LeftLinks';
 import ScrollToTop from './ScrollToTop';
 import { getMainImage } from '@/lib/sanity/queries';
 import { fetchSanityData } from '@/lib/sanity/client';
-import { AboutMe } from '@/lib/types';
+import { GetMainImageResult } from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
 const Left = async () => {
-  const { imageUrl }: AboutMe = await fetchSanityData(getMainImage);
+  const result: GetMainImageResult = await fetchSanityData(getMainImage);
 
   return (
     <aside className='hidden xl:flex xl:flex-col justify-between items-end pr-8 py-10 sticky top-0 h-screen w-1/6 2xl:w-1/5'>
@@ -18,7 +18,7 @@ const Left = async () => {
         className='rounded-full aspect-square w-16 overflow-hidden border-primary border-2 box-border'
       >
         <Image
-          src={imageUrl}
+          src={result && result.imageUrl ? result.imageUrl : ''}
           alt='Avatar'
           title='Maged Faiz'
           loading='eager'

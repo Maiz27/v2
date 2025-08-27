@@ -5,7 +5,7 @@ import AnimatedProjectsGrid from '@/components/projects/AnimatedProjectsGrid';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { getDynamicMetaData } from '@/lib/utilities';
 import { HiOutlineLightBulb } from 'react-icons/hi2';
-import { Project } from '@/lib/types';
+import { GetProjectsResult } from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
@@ -22,7 +22,7 @@ const Projects = async ({
   searchParams?: Promise<SearchParams>;
 }) => {
   const _searchParams = await searchParams;
-  const projects: Project[] = await fetchProjects(_searchParams);
+  const projects = await fetchProjects(_searchParams);
   const isEmpty = projects.length <= 0;
 
   return (
@@ -89,7 +89,7 @@ const fetchProjects = async (searchParams: SearchParams = {}) => {
     },
   } | order(featured desc, date desc)`;
 
-  const projects: Project[] = await fetchSanityData(query, params);
+  const projects: GetProjectsResult = await fetchSanityData(query, params);
 
   return projects;
 };

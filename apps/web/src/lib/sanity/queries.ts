@@ -1,15 +1,17 @@
-export const getAboutMe = `*[_type == "aboutMe"]{
+import groq from 'groq';
+
+export const getAboutMe = groq`*[_type == "aboutMe"]{
   name,
   bio,
   "imageUrl": image.asset->url,
   stats
 }[0]`;
 
-export const getMainImage = `*[_type == "aboutMe"]{
+export const getMainImage = groq`*[_type == "aboutMe"]{
   "imageUrl": image.asset->url,
 }[0]`;
 
-export const getExperiences = `*[_type == "experience"]{
+export const getExperiences = groq`*[_type == "experience"]{
   title,
   location,
   partTime,
@@ -26,7 +28,7 @@ export const getExperiences = `*[_type == "experience"]{
   },
 } | order(duration.from desc)`;
 
-export const getFeaturedProjects = `*[_type == "project" && featured == true]{
+export const getFeaturedProjects = groq`*[_type == "project" && featured == true]{
   title,
   slug,
   featured,
@@ -45,7 +47,7 @@ export const getFeaturedProjects = `*[_type == "project" && featured == true]{
    "mainImage": images[0].image.asset->url
 }[0..1] | order(date desc)`;
 
-export const getProjectBySlug = `*[_type == "project" && slug.current == $slug]{
+export const getProjectBySlug = groq`*[_type == "project" && slug.current == $slug]{
   title,
   slug,
   date,
@@ -65,31 +67,31 @@ export const getProjectBySlug = `*[_type == "project" && slug.current == $slug]{
   content,
 }[0]`;
 
-export const getProjectMetadata = `*[_type == "project" && slug.current == $slug]{
+export const getProjectMetadata = groq`*[_type == "project" && slug.current == $slug]{
   slug,
   description,
   "images": images[0].image.asset->url,
   contentTitle,
 }[0]`;
 
-export const getProjectsForSEO = `*[_type == "project"]{
+export const getProjectsForSEO = groq`*[_type == "project"]{
   "slug": slug.current,
   "publishedAt": date,
 }`;
 
-export const getFaqs = `*[_type == "faq"]{
+export const getFaqs = groq`*[_type == "faq"]{
   index,
   question,
   answer,
 } | order(index asc)`;
 
-export const getMetadata = `*[_type == "metadata" && slug.current == $slug]{
+export const getMetadata = groq`*[_type == "metadata" && slug.current == $slug]{
   "slug": slug.current,
   title,
   description,
 }[0]`;
 
-export const getProjects = `*[_type == "project"]{
+export const getProjects = groq`*[_type == "project"]{
   title,
   slug,
   featured,
@@ -108,7 +110,7 @@ export const getProjects = `*[_type == "project"]{
    "mainImage": images[0].image.asset->url
 } | order(date desc)`;
 
-export const getTools = `*[_type == "tool"]{
+export const getTools = groq`*[_type == "tool"]{
   name,
   href,
   iconSource,

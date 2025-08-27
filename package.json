@@ -18,6 +18,7 @@
     "build:web": "yarn workspace web build",
     "build:studio": "yarn workspace studio build",
     "lint:web": "yarn workspace web lint",
-    "lint:studio": "yarn workspace studio lint"
+    "lint:studio": "yarn workspace studio lint",
+    "generate:types": "yarn workspace studio sanity schema extract --enforce-required-fields && yarn workspace studio sanity typegen generate"
   }
 }

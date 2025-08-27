@@ -2,13 +2,13 @@
 import FaqCard from './FaqCard';
 import AnimateInView from '../animationWrappers/AnimateInView';
 import useWindowWidth from '@/lib/hooks/useWindowWidth';
-import { Faq } from '@/lib/types';
+import { GetFaqsResult } from '@/lib/sanity/types';
 
-const FaqContent = ({ faqs }: { faqs: Faq[] }) => {
+const FaqContent = ({ faqs }: { faqs: GetFaqsResult }) => {
   const width = useWindowWidth();
   const isDesktop = width >= 768;
 
-  const renderFaqCards = (faqList: Faq[]) => (
+  const renderFaqCards = (faqList: GetFaqsResult) => (
     <div className='flex-1 h-min flex flex-col place-content-center items-center gap-4'>
       {faqList.map(({ question, answer }, index) => (
         <FaqCard key={index} question={question} answer={answer} />

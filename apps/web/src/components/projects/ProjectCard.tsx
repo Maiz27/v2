@@ -14,10 +14,10 @@ import {
   HiOutlinePauseCircle,
 } from 'react-icons/hi2';
 import { SiGithub } from 'react-icons/si';
-import { Project, Tool } from '@/lib/types';
+import { GetFeaturedProjectsResult } from '@/lib/sanity/types';
 
 type Props = {
-  project: Project;
+  project: GetFeaturedProjectsResult[0];
   featured?: boolean;
   index?: number;
 };
@@ -59,7 +59,7 @@ const ProjectCard = ({ project, featured = false, index = 0 }: Props) => {
         {featured && (
           <BoxesReveal className='w-full h-full overflow-hidden rounded-lg border border-border'>
             <Image
-              src={mainImage}
+              src={mainImage || ''}
               alt={title}
               title={title}
               width={500}
@@ -73,7 +73,7 @@ const ProjectCard = ({ project, featured = false, index = 0 }: Props) => {
             <div className='flex justify-between items-center'>
               <h3 className='text-2xl font-bold w-fit flex items-center'>
                 <Link
-                  href={`/projects/${slug.current}`}
+                  href={`/projects/${slug?.current}`}
                   className='px-2 hover:text-primary transition-colors'
                 >
                   {title}
@@ -117,7 +117,11 @@ const ProjectCard = ({ project, featured = false, index = 0 }: Props) => {
 
 export default ProjectCard;
 
-export const StatusIcon = ({ status }: { status: Project['status'] }) => {
+export const StatusIcon = ({
+  status,
+}: {
+  status: GetFeaturedProjectsResult[0]['status'];
+}) => {
   const { icon, text } = STATUS[status];
   return (
     <span className='opacity-70 flex items-center space-x-1'>

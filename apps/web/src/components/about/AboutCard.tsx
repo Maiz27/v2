@@ -5,18 +5,22 @@ import AnimateInView from '../animationWrappers/AnimateInView';
 import { getAboutMe } from '@/lib/sanity/queries';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { HiOutlineSquare3Stack3D, HiOutlineEnvelope } from 'react-icons/hi2';
-import { AboutMe, AboutMeStats } from '@/lib/types';
+import { GetAboutMeResult, Stats as StatsType } from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
 const AboutCard = async () => {
-  const { name, bio, imageUrl, stats } = (await fetchSanityData(
-    getAboutMe
-  )) as AboutMe;
+  const result: GetAboutMeResult = await fetchSanityData(getAboutMe);
+
+  if (!result) {
+    return null;
+  }
+
+  const { name, bio, imageUrl, stats } = result;
 
   return (
     <section className='flex flex-col gap-8 items-center'>
-      <ProfileSection name={name} bio={bio} imageUrl={imageUrl} />
+      <ProfileSection name={name} bio={bio} imageUrl={imageUrl!} />
       <Stats stats={stats} />
     </section>
   );
@@ -100,7 +104,7 @@ const CTAButtons = () => (
   </div>
 );
 
-const Stats = ({ stats }: { stats: AboutMeStats }) => {
+const Stats = ({ stats }: { stats: StatsType }) => {
   const { clients, experience, projects, contributions } = stats;
 
   const list = [

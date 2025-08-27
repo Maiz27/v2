@@ -3,13 +3,14 @@ import EmptyState from '@/components/ui/EmptyState';
 import ExperienceCard from '@/components/experience/ExperienceCard';
 import { getExperiences } from '@/lib/sanity/queries';
 import { fetchSanityData } from '@/lib/sanity/client';
-import { Experience as ExperienceType } from '@/lib/types';
 import { HiOutlineBriefcase } from 'react-icons/hi2';
+import { GetExperiencesResult } from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
 const Experience = async () => {
-  const experience: ExperienceType[] = await fetchSanityData(getExperiences);
+  const experience: GetExperiencesResult =
+    await fetchSanityData(getExperiences);
   const isEmpty = experience.length <= 0;
 
   return (

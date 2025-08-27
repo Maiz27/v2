@@ -10,13 +10,17 @@ import {
   HiOutlineCalendarDays,
 } from 'react-icons/hi2';
 import { SiGithub } from 'react-icons/si';
-import { Project } from '@/lib/types';
+import { GetProjectBySlugResult } from '@/lib/sanity/types';
 
 type Props = {
-  project: Project;
+  project: GetProjectBySlugResult;
 };
 
 const ProjectHeader = ({ project }: Props) => {
+  if (!project) {
+    return null;
+  }
+
   const { contentTitle, description, tools, source, href, status, date } =
     project;
   return (
@@ -24,7 +28,7 @@ const ProjectHeader = ({ project }: Props) => {
       <Heading
         Tag='h1'
         icon={<HiOutlineLightBulb />}
-        heading={contentTitle}
+        heading={contentTitle!}
         paragraph={description}
       >
         <div className='flex flex-col lg:flex-row lg:justify-between gap-4'>
@@ -62,7 +66,7 @@ const ProjectHeader = ({ project }: Props) => {
             'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',
         }}
       >
-        <ImageCarousel imgs={project.images} />
+        <ImageCarousel imgs={project.images as string[]} />
       </AnimateInView>
     </>
   );

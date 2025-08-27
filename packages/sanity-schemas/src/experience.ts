@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export default defineType({
   name: 'experience',
@@ -36,10 +36,10 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'tech',
+      name: 'tools',
       title: 'Tech Stack',
       type: 'array',
-      of: [{type: 'reference', to: {type: 'tool'}}],
+      of: [{ type: 'reference', to: { type: 'tool' } }],
     }),
     defineField({
       name: 'description',
@@ -54,4 +54,4 @@ export default defineType({
       media: 'company.logo',
     },
   },
-})
+});

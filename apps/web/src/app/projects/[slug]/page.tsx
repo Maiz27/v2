@@ -6,11 +6,14 @@ import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { getProjectBySlug, getProjectMetadata } from '@/lib/sanity/queries';
-import { Project } from '@/lib/types';
 import { BASEURL } from '@/lib/Constants';
 import { CreativeWork } from 'schema-dts';
 import { PersonSchema } from '@/app/page';
 import JsonLd from '@/components/jsonLd/JsonLd';
+import {
+  GetProjectBySlugResult,
+  GetProjectMetadataResult,
+} from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
@@ -19,7 +22,10 @@ type Params = { [key: string]: string | undefined };
 const page = async ({ params }: { params: Promise<Params> }) => {
   const _params = await params;
   const { slug } = _params;
-  const project: Project = await fetchSanityData(getProjectBySlug, { slug });
+  const project: GetProjectBySlugResult = await fetchSanityData(
+    getProjectBySlug,
+    { slug }
+  );
 
   if (!project) {
     return notFound();
@@ -63,10 +69,13 @@ export async function generateMetadata({
 }) {
   const _params = await params;
   const { slug } = _params;
-  const project: Project = await fetchSanityData(getProjectMetadata, { slug });
+  const project: GetProjectMetadataResult = await fetchSanityData(
+    getProjectMetadata,
+    { slug }
+  );
   if (project) {
     const { slug, contentTitle, description, images } = project;
-    const url = `${BASEURL}/projects/${slug.current}`;
+    const url = `${BASEURL}/projects/${slug?.current}`;
 
     return {
       title: `${contentTitle}`,

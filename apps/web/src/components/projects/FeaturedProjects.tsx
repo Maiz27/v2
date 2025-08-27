@@ -4,14 +4,15 @@ import EmptyState from '@/components/ui/EmptyState';
 import ProjectCard from '@/components/projects/ProjectCard';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { getFeaturedProjects } from '@/lib/sanity/queries';
-import { Project } from '@/lib/types';
 import { HiOutlineSquare3Stack3D, HiOutlineStar } from 'react-icons/hi2';
 import AnimateInView from '../animationWrappers/AnimateInView';
+import { GetFeaturedProjectsResult } from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
 const FeaturedProjects = async () => {
-  const projects: Project[] = await fetchSanityData(getFeaturedProjects);
+  const projects: GetFeaturedProjectsResult =
+    await fetchSanityData(getFeaturedProjects);
   const isEmpty = projects.length <= 0;
 
   return (

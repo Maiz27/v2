@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
-import { BASEURL, NON_STACK_TOOLS } from './Constants';
+import { BASEURL } from './Constants';
 import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
 import { fetchSanityData } from './sanity/client';
 import { getMetadata } from './sanity/queries';
-import { SanityMetadata } from './types';
+import { GetMetadataResult } from './sanity/types';
 
 export const getDomain = (url: string) => {
   const { hostname } = new URL(url);
@@ -61,9 +61,9 @@ export const createSlug = (text: string) => {
 };
 
 export const getDynamicMetaData = async (slug: string) => {
-  const data: SanityMetadata = await fetchSanityData(getMetadata, { slug });
+  const data: GetMetadataResult = await fetchSanityData(getMetadata, { slug });
 
-  if (!data.title) {
+  if (!data) {
     return {};
   }
 

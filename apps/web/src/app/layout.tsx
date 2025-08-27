@@ -10,7 +10,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { getTools } from '@/lib/sanity/queries';
 import { getDynamicMetaData } from '@/lib/utilities';
-import { Tool } from '@/lib/types';
+import { GetToolsResult } from '@/lib/sanity/types';
 import './globals.css';
 
 export const viewport: Viewport = {
@@ -27,7 +27,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const tools: Tool[] = await fetchSanityData(getTools);
+  const tools: GetToolsResult[] = await fetchSanityData(getTools);
 
   return (
     <html lang='en' data-scroll-behavior='smooth'>

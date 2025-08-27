@@ -29,7 +29,7 @@ This monorepo is organized using Yarn Workspaces and Turborepo. The workspaces a
 
 - `apps/web`: The Next.js 14 frontend application.
 - `apps/studio`: The Sanity CMS studio for content management.
-- `packages/*`: Shared packages and utilities.
+- `packages/*`: Shared packages and utilities, including `@v2/sanity-schemas` for type-safe Sanity content.
 
 ## Getting Started
 

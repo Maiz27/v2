@@ -3,13 +3,13 @@ import BaseCard from '@/components/ui/BaseCard';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import AnimateInView from '@/components/animationWrappers/AnimateInView';
 import ToolsRow from '../tools/ToolsRow';
-import { Experience } from '@/lib/types';
 import { urlFor } from '@/lib/sanity/client';
 import { getDomain, roundYear } from '@/lib/utilities';
 import { HiLink, HiOutlineMapPin } from 'react-icons/hi2';
+import { GetExperiencesResult } from '@/lib/sanity/types';
 
 type Props = {
-  experience: Experience;
+  experience: GetExperiencesResult[0];
   index?: number;
 };
 
