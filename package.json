@@ -1,11 +1,17 @@
 {
   "name": "v2",
   "private": true,
+  "packageManager": "yarn@1.22.22",
   "workspaces": [
     "packages/*",
     "apps/*"
   ],
   "devDependencies": {
     "turbo": "^2.5.6"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint"
   }
 }

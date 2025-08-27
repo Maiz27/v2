@@ -6,7 +6,6 @@ const AnimateInView = ({
   children,
   threshold = 0.4,
   delay = 0.4,
-  className = '',
   tag = 'div',
   initial = { opacity: 0, y: 15 },
   whileInView = { opacity: 1, y: 0 },
@@ -25,7 +24,6 @@ const AnimateInView = ({
         duration,
       }}
       viewport={{ amount: threshold, once: once }}
-      className={` ${className}`}
       {...rest}
     >
       {children}

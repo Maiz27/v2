@@ -30,7 +30,6 @@ import {
   SiYarn,
   SiFramer,
   SiSanity,
-  SiVisualstudiocode,
   SiVite,
   SiSass,
   SiNetlify,
@@ -53,6 +52,8 @@ import {
   SiCloudflareworkers,
   SiReactquery,
 } from 'react-icons/si';
+
+import { VscVscode } from 'react-icons/vsc';
 
 import { ProjectStatus, Tool } from './types';
 
@@ -293,7 +294,7 @@ export const TOOLS: Map<string, Tool> = new Map([
   [
     'VS Code',
     {
-      icon: <SiVisualstudiocode />,
+      icon: <VscVscode />,
       name: 'VS Code',
       href: 'https://code.visualstudio.com',
     },

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { JSX, ReactNode } from 'react';
 import { TargetAndTransition } from 'framer-motion';
 
 export type AboutMe = {
@@ -95,7 +95,6 @@ export type BaseAnimationWrapperProps = {
   children: ReactNode;
   threshold?: number;
   delay?: number;
-  className?: string;
   tag?: MotionTag;
   initial?: TargetAndTransition;
   whileInView?: TargetAndTransition;

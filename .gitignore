@@ -3,13 +3,21 @@
 # dependencies
 node_modules
 .pnp
+node_modules
+.pnp
 .pnp.js
+*.log
 *.log
 
 # testing
 coverage
+coverage
 
 # next.js
+.next/
+out/
+build
+apps/api/src/**/*.js
 .next/
 out/
 build
@@ -25,6 +33,16 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.development
+.env.production
+
+# turbo
+.turbo
 .env
 .env.local
 .env.development.local
