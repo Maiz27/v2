@@ -14,7 +14,11 @@ import JsonLd from '@/components/jsonLd/JsonLd';
 
 export const revalidate = 60;
 
-const page = async ({ params: { slug } }: { params: { slug: string } }) => {
+type Params = { [key: string]: string | undefined };
+
+const page = async ({ params }: { params: Promise<Params> }) => {
+  const _params = await params;
+  const { slug } = _params;
   const project: Project = await fetchSanityData(getProjectBySlug, { slug });
 
   if (!project) {
@@ -53,10 +57,12 @@ const page = async ({ params: { slug } }: { params: { slug: string } }) => {
 export default page;
 
 export async function generateMetadata({
-  params: { slug },
+  params,
 }: {
-  params: { slug: string };
+  params: Promise<Params>;
 }) {
+  const _params = await params;
+  const { slug } = _params;
   const project: Project = await fetchSanityData(getProjectMetadata, { slug });
   if (project) {
     const { slug, contentTitle, description, images } = project;

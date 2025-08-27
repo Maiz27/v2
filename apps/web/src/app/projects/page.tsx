@@ -14,12 +14,15 @@ export async function generateMetadata() {
   return data;
 }
 
+type SearchParams = { [key: string]: string | string[] | undefined };
+
 const Projects = async ({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: Promise<SearchParams>;
 }) => {
-  const projects: Project[] = await fetchProjects(searchParams);
+  const _searchParams = await searchParams;
+  const projects: Project[] = await fetchProjects(_searchParams);
   const isEmpty = projects.length <= 0;
 
   return (
@@ -51,9 +54,7 @@ const Projects = async ({
 
 export default Projects;
 
-const fetchProjects = async (
-  searchParams: { [key: string]: string | string[] | undefined } = {}
-) => {
+const fetchProjects = async (searchParams: SearchParams = {}) => {
   const { status, tech } = searchParams;
   const techArray = tech?.toString().split(',').filter(Boolean) ?? [];
 
