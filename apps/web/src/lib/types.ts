@@ -1,5 +1,5 @@
 import { JSX, ReactNode } from 'react';
-import { TargetAndTransition } from 'framer-motion';
+import { Variants } from 'framer-motion';
 
 export type AboutMe = {
   name: string;
@@ -96,8 +96,7 @@ export type BaseAnimationWrapperProps = {
   threshold?: number;
   delay?: number;
   tag?: MotionTag;
-  initial?: TargetAndTransition;
-  whileInView?: TargetAndTransition;
+  variants?: Variants | undefined;
   once?: boolean;
   duration?: number;
   [x: string]: any;

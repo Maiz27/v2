@@ -1,29 +1,33 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { BaseAnimationWrapperProps } from '@/lib/types';
+import { useRef } from 'react';
+import { FADE_IN_UP } from '@/lib/Constants';
 
 const AnimateInView = ({
   children,
   threshold = 0.4,
   delay = 0.4,
   tag = 'div',
-  initial = { opacity: 0, y: 15 },
-  whileInView = { opacity: 1, y: 0 },
+  variants = FADE_IN_UP,
   once = true,
   duration = 0.5,
   ...rest
 }: BaseAnimationWrapperProps) => {
   const MotionComponent = motion[tag];
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: once, amount: threshold });
 
   return (
     <MotionComponent
-      initial={initial as any}
-      whileInView={whileInView}
+      ref={ref}
+      variants={variants}
+      initial='initial'
+      whileInView={isInView ? 'whileInView' : undefined}
       transition={{
         delay: delay,
         duration,
       }}
-      viewport={{ amount: threshold, once: once }}
       {...rest}
     >
       {children}

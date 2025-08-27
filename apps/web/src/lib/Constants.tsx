@@ -439,3 +439,8 @@ export const SLIDE_LEFT = {
   initial: { opacity: 0, x: 30 },
   whileInView: { opacity: 1, x: 0 },
 };
+
+export const FADE_IN_UP = {
+  initial: { opacity: 0, y: 15 },
+  whileInView: { opacity: 1, y: 0 },
+};

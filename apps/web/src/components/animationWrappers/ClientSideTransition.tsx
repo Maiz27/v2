@@ -22,7 +22,7 @@ const ClientSideTransition = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <AnimatePresence mode='wait'>
-      <motion.main
+      <motion.div
         key={pageKey}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -30,7 +30,7 @@ const ClientSideTransition = ({ children }: PropsWithChildren<{}>) => {
         transition={{ duration: 0.5 }}
       >
         <FrozenRouter>{children}</FrozenRouter>
-      </motion.main>
+      </motion.div>
     </AnimatePresence>
   );
 };
