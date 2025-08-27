@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap')
+layer(base);
+
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-primary: #96b7e3;
+  --color-background: #010001;
+  --color-foreground: #121212;
+  --color-border: #212222;
+  --color-copy: #fafbfc;
+  --color-copy-light: #cdd7e5;
+  --color-copy-lighter: #cdd7e5;
+
+  --animate-scroll-progress: scroll-progress linear;
+
+  @keyframes scroll-progress {
+    from {
+      width: 0%;
+    }
+    to {
+      width: 100%;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  @apply 2xl:text-lg;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-bold;
+}
+
+.transition-all,
+.transition-transform,
+.transition-colors,
+.transition-opacity,
+.transition-shadow {
+  @apply duration-500;
+}
+
+main {
+  @apply mt-6 mb-8 lg:my-16 px-4 md:px-0 mx-auto xl:max-w-4xl 2xl:max-w-5xl xl:w-4/5 2xl:w-[75%];
+}
+
+p,
+span {
+  @apply opacity-70;
+}
+
+input,
+textarea {
+  @apply w-full bg-foreground/70 p-4 rounded-lg opacity-70 focus:opacity-100 focus:outline-primary transition-all tracking-wider;
+}
+
+select {
+  @apply bg-foreground/70 p-4 rounded-lg opacity-70 focus:opacity-100 focus:outline-primary transition-all tracking-wider;
+}
+
+body::-webkit-scrollbar {
+  @apply size-2 rounded-lg;
+  /* background-color: #f4f4f4; */
+}
+
+body::-webkit-scrollbar-thumb {
+  @apply bg-primary; /*color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 0.1rem solid white; /* creates padding around scroll thumb */
+}
+
+.shiki {
+  @apply p-4 overflow-auto max-h-[75dvh];
+}
+.shiki code span,
+.shiki code span span {
+  @apply opacity-100;
+}
+
+.shiki::-webkit-scrollbar {
+  @apply size-2 rounded-lg;
+}
+
+.shiki::-webkit-scrollbar-thumb {
+  @apply bg-primary; /*color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 0.1rem solid white; /* creates padding around scroll thumb */
+}
