@@ -63,7 +63,7 @@ export default defineType({
       type: 'url',
     }),
     defineField({
-      name: 'tech',
+      name: 'tools',
       title: 'Tech Stack',
       type: 'array',
       of: [{type: 'reference', to: {type: 'tool'}}],

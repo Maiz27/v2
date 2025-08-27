@@ -62,7 +62,7 @@ const fetchProjects = async (searchParams: SearchParams = {}) => {
   let params: { [key: string]: string | string[] | number } = {};
 
   if (!!techArray.length) {
-    query += ' && count((tech[]->name)[@ in $tech]) > 0';
+    query += ' && count((tools[]->name)[@ in $tech]) > 0';
     params.tech = techArray;
   }
 
@@ -80,7 +80,13 @@ const fetchProjects = async (searchParams: SearchParams = {}) => {
     description,
     href,
     source,
-    tech[]->{ name },
+    tools[]->{ 
+    name,
+    href,
+    iconSource,
+    iconName,
+    "iconSvg": iconSvg.asset->url 
+    },
   } | order(featured desc, date desc)`;
 
   const projects: Project[] = await fetchSanityData(query, params);

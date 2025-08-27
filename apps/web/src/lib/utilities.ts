@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { BASEURL, NON_STACK_TOOLS, TOOLS } from './Constants';
+import { BASEURL, NON_STACK_TOOLS } from './Constants';
 import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
 import { fetchSanityData } from './sanity/client';
 import { getMetadata } from './sanity/queries';
@@ -12,19 +12,6 @@ export const getDomain = (url: string) => {
     parts.shift();
   }
   return parts.join('.');
-};
-
-export const getToolDetails = (toolName: string) => {
-  const tool = TOOLS.get(toolName);
-  return tool ? { icon: tool.icon, href: tool.href } : null;
-};
-
-export const getStackToolsArray = () => {
-  const filteredTOOLS = new Map(
-    Array.from(TOOLS).filter(([name]) => !NON_STACK_TOOLS.includes(name))
-  );
-
-  return Array.from(filteredTOOLS);
 };
 
 export const roundYear = (dateString: string): number => {

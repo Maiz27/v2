@@ -3,19 +3,18 @@ import Image from 'next/image';
 import { ReactNode } from 'react';
 import BaseCard from '@/components/ui/BaseCard';
 import BoxesReveal from '@/components/animationWrappers/BoxesReveal';
-import SvgTool from '../tools/SvgTool';
 import AnimateInView from '../animationWrappers/AnimateInView';
-import { getDomain, getMonthYear, getToolDetails } from '@/lib/utilities';
-import { Project, ProjectTech } from '@/lib/types';
+import ToolsRow from '../tools/ToolsRow';
+import { getDomain, getMonthYear } from '@/lib/utilities';
 import {
   HiLink,
   HiOutlineCalendarDays,
   HiOutlineCheckCircle,
   HiOutlineClock,
   HiOutlinePauseCircle,
-  HiOutlineQuestionMarkCircle,
 } from 'react-icons/hi2';
 import { SiGithub } from 'react-icons/si';
+import { Project, Tool } from '@/lib/types';
 
 type Props = {
   project: Project;
@@ -46,7 +45,7 @@ const ProjectCard = ({ project, featured = false, index = 0 }: Props) => {
     href,
     source,
     description,
-    tech,
+    tools,
     slug,
     date,
   } = project;
@@ -108,7 +107,7 @@ const ProjectCard = ({ project, featured = false, index = 0 }: Props) => {
           </div>
 
           <AnimateInView className='flex items-center gap-4 py-2 px-4 border-y border-border'>
-            <TechRow tech={tech} />
+            <ToolsRow tools={tools} />
           </AnimateInView>
         </div>
       </div>
@@ -135,40 +134,12 @@ export const CardLink = ({
   href: string;
   children: ReactNode;
 }) => (
-  <a
+  <Link
     href={href}
     target='_blank'
     rel='noopener noreferrer'
     className='opacity-70 hover:opacity-100 hover:text-primary transition-all flex items-center space-x-1'
   >
     {children}
-  </a>
+  </Link>
 );
-
-export const TechRow = ({ tech }: { tech: ProjectTech[] }) => {
-  return tech.map(({ name }) => {
-    const { icon, href } = getToolDetails(name) ?? {
-      icon: <HiOutlineQuestionMarkCircle />,
-      href: null,
-    };
-    const isImage = typeof icon === 'string';
-
-    return (
-      <a
-        key={name}
-        href={href!}
-        data-tip={name}
-        title={name}
-        target='_blank'
-        rel='noopener noreferrer'
-        className='text-xl opacity-70 hover:opacity-100 hover:text-primary transition-all'
-      >
-        {isImage ? (
-          <SvgTool name={name} className='w-5 h-5' fill='currentColor' />
-        ) : (
-          <>{icon}</>
-        )}
-      </a>
-    );
-  });
-};

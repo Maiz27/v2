@@ -1,22 +1,23 @@
 import Heading from '../heading/Heading';
 import ImageCarousel from './ImageCarousel';
-import { StatusIcon, CardLink, TechRow } from './ProjectCard';
+import { StatusIcon, CardLink } from './ProjectCard';
+import AnimateInView from '../animationWrappers/AnimateInView';
+import ToolsRow from '../tools/ToolsRow';
 import { getDomain, getMonthYear } from '@/lib/utilities';
-import { Project } from '@/lib/types';
-import { SiGithub } from 'react-icons/si';
 import {
   HiOutlineLightBulb,
   HiLink,
   HiOutlineCalendarDays,
 } from 'react-icons/hi2';
-import AnimateInView from '../animationWrappers/AnimateInView';
+import { SiGithub } from 'react-icons/si';
+import { Project } from '@/lib/types';
 
 type Props = {
   project: Project;
 };
 
 const ProjectHeader = ({ project }: Props) => {
-  const { contentTitle, description, tech, source, href, status, date } =
+  const { contentTitle, description, tools, source, href, status, date } =
     project;
   return (
     <>
@@ -48,7 +49,7 @@ const ProjectHeader = ({ project }: Props) => {
             )}
           </div>
           <div className='w-full lg:w-fit flex justify-center items-center gap-4'>
-            <TechRow tech={tech} />
+            <ToolsRow tools={tools} />
           </div>
         </div>
       </Heading>

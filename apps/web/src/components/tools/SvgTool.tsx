@@ -1,27 +1,20 @@
 'use client';
 
-import { ComponentProps, lazy, Suspense } from 'react';
+import { Tool } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
-type Props = {
-  name: string;
-} & ComponentProps<'svg'>;
+const SvgTool = ({ tool: { iconSource, iconSvg } }: { tool: Tool }) => {
+  const [svgContent, setSvgContent] = useState<string | null>(null);
 
-const importSvg = (name: string) => {
-  return lazy(() =>
-    import(`@/assets/tools/${name}.svg`).catch(() => ({
-      default: () => <span>{name}</span>,
-    }))
-  );
-};
+  useEffect(() => {
+    if (iconSource === 'custom' && iconSvg) {
+      fetch(iconSvg)
+        .then((res) => res.text())
+        .then(setSvgContent);
+    }
+  }, [iconSource, iconSvg]);
 
-const SvgTool = ({ name, ...props }: Props) => {
-  const SVG = importSvg(name);
-
-  return (
-    <Suspense fallback={<span>{name}</span>}>
-      <SVG {...props} />
-    </Suspense>
-  );
+  return <span dangerouslySetInnerHTML={{ __html: svgContent! }} />;
 };
 
 export default SvgTool;

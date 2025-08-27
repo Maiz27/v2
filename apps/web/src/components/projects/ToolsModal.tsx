@@ -1,9 +1,10 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import Heading from '../heading/Heading';
 import BaseModal from '../ui/BaseModal';
-import { getStackToolsArray } from '@/lib/utilities';
 import { HiOutlineAdjustmentsVertical } from 'react-icons/hi2';
+import { useTools } from '@/lib/context/ToolProvider';
 
 type Props = {
   selectedTech: string[];
@@ -12,6 +13,7 @@ type Props = {
 
 const ToolsModal = ({ selectedTech, handleConfirm }: Props) => {
   const [selection, setSelection] = useState<string[]>(selectedTech);
+  const tools = useTools();
 
   useEffect(() => {
     setSelection(selectedTech);
@@ -44,7 +46,7 @@ const ToolsModal = ({ selectedTech, handleConfirm }: Props) => {
         icon={<HiOutlineAdjustmentsVertical />}
       />
       <div className='bg-background p-4 rounded-lg flex flex-wrap items-center gap-2'>
-        {getStackToolsArray().map(([name]) => (
+        {tools.map(({ name }) => (
           <button
             key={name}
             onClick={() => handleSelect(name)}

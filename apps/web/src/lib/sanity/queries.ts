@@ -17,8 +17,12 @@ export const getExperiences = `*[_type == "experience"]{
   company,
   description,
   "logo": company.logo.asset->url,
-  tech[]->{
+  tools[]->{
     name,
+    href,
+    iconSource,
+    iconName,
+    "iconSvg": iconSvg.asset->url
   },
 } | order(duration.from desc)`;
 
@@ -31,8 +35,12 @@ export const getFeaturedProjects = `*[_type == "project" && featured == true]{
   description,
   href,
   source,
-  tech[]->{
-    name,
+  tools[]->{
+   name,
+    href,
+    iconSource,
+    iconName,
+    "iconSvg": iconSvg.asset->url
   },
    "mainImage": images[0].image.asset->url
 }[0..1] | order(date desc)`;
@@ -45,8 +53,12 @@ export const getProjectBySlug = `*[_type == "project" && slug.current == $slug]{
   description,
   href,
   source,
-  tech[]->{
+  tools[]->{
     name,
+    href,
+    iconSource,
+    iconName,
+    "iconSvg": iconSvg.asset->url
   },
   "images": images[].image.asset->url,
   contentTitle,
@@ -76,3 +88,30 @@ export const getMetadata = `*[_type == "metadata" && slug.current == $slug]{
   title,
   description,
 }[0]`;
+
+export const getProjects = `*[_type == "project"]{
+  title,
+  slug,
+  featured,
+  date,
+  status,
+  description,
+  href,
+  source,
+  tools[]->{
+    name,
+    href,
+    iconSource,
+    iconName,
+    "iconSvg": iconSvg.asset->url
+  },
+   "mainImage": images[0].image.asset->url
+} | order(date desc)`;
+
+export const getTools = `*[_type == "tool"]{
+  name,
+  href,
+  iconSource,
+  iconName,
+  "iconSvg": iconSvg.asset->url
+}`;

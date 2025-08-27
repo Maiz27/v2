@@ -2,14 +2,11 @@ import Image from 'next/image';
 import BaseCard from '@/components/ui/BaseCard';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import AnimateInView from '@/components/animationWrappers/AnimateInView';
+import ToolsRow from '../tools/ToolsRow';
 import { Experience } from '@/lib/types';
 import { urlFor } from '@/lib/sanity/client';
-import { getDomain, getToolDetails, roundYear } from '@/lib/utilities';
-import {
-  HiLink,
-  HiOutlineMapPin,
-  HiOutlineQuestionMarkCircle,
-} from 'react-icons/hi2';
+import { getDomain, roundYear } from '@/lib/utilities';
+import { HiLink, HiOutlineMapPin } from 'react-icons/hi2';
 
 type Props = {
   experience: Experience;
@@ -17,7 +14,7 @@ type Props = {
 };
 
 const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
-  const { title, company, location, duration, description, partTime, tech } =
+  const { title, company, location, duration, description, partTime, tools } =
     item;
   const logo = urlFor(company.logo).url();
 
@@ -93,26 +90,9 @@ const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
           <RichTextParser content={description} />
         </div>
 
-        {tech && tech.length > 0 && (
+        {tools && tools.length > 0 && (
           <AnimateInView className='flex items-center gap-4 pl-6'>
-            {tech?.map(({ name }, idx) => {
-              const { icon, href } = getToolDetails(name) ?? {
-                icon: <HiOutlineQuestionMarkCircle />,
-                href: null,
-              };
-              return (
-                <a
-                  key={name}
-                  href={href!}
-                  data-tip={name}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='text-xl opacity-70 hover:opacity-100 hover:text-primary transition-all'
-                >
-                  {icon}
-                </a>
-              );
-            })}
+            <ToolsRow tools={tools} />
           </AnimateInView>
         )}
       </div>

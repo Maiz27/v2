@@ -1,4 +1,5 @@
 'use client';
+
 import { motion, useInView } from 'framer-motion';
 import { BaseAnimationWrapperProps } from '@/lib/types';
 import { useRef } from 'react';
@@ -16,7 +17,7 @@ const AnimateInView = ({
 }: BaseAnimationWrapperProps) => {
   const MotionComponent = motion[tag];
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: once, amount: threshold });
+  const isInView = useInView(ref);
 
   return (
     <MotionComponent
@@ -29,6 +30,7 @@ const AnimateInView = ({
         duration,
       }}
       {...rest}
+      viewport={{ once: once, amount: threshold }}
     >
       {children}
     </MotionComponent>

@@ -16,9 +16,6 @@ export type AboutMeStats = {
 };
 
 export type ProjectStatus = 'completed' | 'ongoing' | 'paused';
-export type ProjectTech = {
-  name: string;
-};
 
 export type Project = {
   title: string;
@@ -29,7 +26,7 @@ export type Project = {
   description: string;
   mainImage: string;
   images: string[];
-  tech: ProjectTech[];
+  tools: Tool[];
   href: string | null;
   source: string | null;
   contentTitle: string;
@@ -45,7 +42,7 @@ export type Experience = {
     to?: string;
   };
   company: Company;
-  tech?: ProjectTech[];
+  tools?: Tool[];
   description: RichText;
 };
 
@@ -58,8 +55,10 @@ export type Company = {
 
 export type Tool = {
   name: string;
-  icon: JSX.Element | string;
   href: string;
+  iconSource: 'react-icons' | 'custom';
+  iconName: string;
+  iconSvg: string;
 };
 
 export type SanityMetadata = {
