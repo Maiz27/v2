@@ -11,7 +11,7 @@ const Header = () => {
         <PingIcon />
         <span>Available For Work</span>
       </div>
-      <nav className='flex-grow lg:flex-grow-0 xl:hidden flex justify-center items-center gap-2 px-2 md:px-4'>
+      <nav className='grow lg:grow-0 xl:hidden flex justify-center items-center gap-2 px-2 md:px-4'>
         {ROUTES.map(({ icon, name, href }) => (
           <NavLink key={href} Icon={icon} href={href} name={name} />
         ))}

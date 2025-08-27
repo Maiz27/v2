@@ -55,7 +55,7 @@ const BaseModal = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleCancel}
-            className='bg-foreground/10 backdrop-blur p-6 fixed inset-0 z-50 grid place-items-center cursor-pointer'
+            className='bg-foreground/10 backdrop-blur-sm p-6 fixed inset-0 z-50 grid place-items-center cursor-pointer'
           >
             <motion.div
               initial={{ scale: 0, rotate: '12.5deg' }}

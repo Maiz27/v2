@@ -39,7 +39,7 @@ const ExperienceCard = ({ experience: item, index = 0 }: Props) => {
               className='w-2/3 object-contain'
             />
           </div>
-          <div className='flex flex-col space-y-1 flex-grow'>
+          <div className='flex flex-col space-y-1 grow'>
             <h3 className='text-lg xl:text-2xl w-full lg:w-fit flex justify-between items-center space-x-2'>
               <span className='opacity-100'>{company.name}</span>
               <AnimateInView

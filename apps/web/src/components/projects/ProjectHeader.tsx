@@ -55,7 +55,7 @@ const ProjectHeader = ({ project }: Props) => {
 
       <AnimateInView
         delay={1.4}
-        className='flex w-full h-[30rem] overflow-hidden max-w-full border-b border-border py-4'
+        className='flex w-full h-120 overflow-hidden max-w-full border-b border-border py-4'
         style={{
           maskImage:
             'linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%)',
@@ -75,9 +75,9 @@ export const ProjectHeaderSkeleton = () => {
       <div className='space-y-4 animate-pulse'>
         {/* Title and description */}
         <div className='space-y-2'>
-          <div className='h-8 bg-copy/70 rounded w-3/4'></div>
-          <div className='h-4 bg-copy/70 rounded w-full'></div>
-          <div className='h-4 bg-copy/70 rounded w-5/6'></div>
+          <div className='h-8 bg-copy/70 rounded-sm w-3/4'></div>
+          <div className='h-4 bg-copy/70 rounded-sm w-full'></div>
+          <div className='h-4 bg-copy/70 rounded-sm w-5/6'></div>
         </div>
 
         {/* Meta information */}
@@ -85,20 +85,20 @@ export const ProjectHeaderSkeleton = () => {
           <div className='w-full lg:w-fit flex justify-center items-center gap-4'>
             {/* Date, status, links */}
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className='h-6 bg-copy/70 rounded w-20'></div>
+              <div key={i} className='h-6 bg-copy/70 rounded-sm w-20'></div>
             ))}
           </div>
           <div className='w-full lg:w-fit flex justify-center items-center gap-4'>
             {/* Tech stack */}
             {[1, 2, 3].map((i) => (
-              <div key={i} className='h-6 bg-copy/70 rounded w-16'></div>
+              <div key={i} className='h-6 bg-copy/70 rounded-sm w-16'></div>
             ))}
           </div>
         </div>
       </div>
 
       {/* Image carousel skeleton */}
-      <div className='mt-4 w-full h-[30rem] bg-copy/70 rounded animate-pulse'></div>
+      <div className='mt-4 w-full h-120 bg-copy/70 rounded-sm animate-pulse'></div>
     </>
   );
 };

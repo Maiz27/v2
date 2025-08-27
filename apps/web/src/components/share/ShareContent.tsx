@@ -15,7 +15,7 @@ const ShareContent = () => {
           delay={0}
           tag='button'
           aria-label='Copy to clipboard'
-          className='size-10 grid place-items-center group shadow transition-colors'
+          className='size-10 grid place-items-center group shadow-sm transition-colors'
           onClick={copyToClipboard}
         >
           <HiOutlineClipboard className='text-xl group-hover:text-primary' />
@@ -26,7 +26,7 @@ const ShareContent = () => {
               <ShareButton
                 url={currentURL}
                 title={id}
-                className='size-10 grid place-items-center group shadow'
+                className='size-10 grid place-items-center group shadow-sm'
               >
                 {icon}
               </ShareButton>

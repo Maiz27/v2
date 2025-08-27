@@ -1,7 +1,8 @@
 'use client';
-import { BaseAnimationWrapperProps } from '@/lib/types';
-import { motion } from 'framer-motion';
+
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { BaseAnimationWrapperProps } from '@/lib/types';
 
 const BoxesReveal = ({
   children,

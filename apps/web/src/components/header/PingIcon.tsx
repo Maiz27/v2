@@ -36,7 +36,7 @@ const Band = ({ delay }: { delay: number }) => {
         ease: 'linear',
         delay,
       }}
-      className='absolute left-[50%] top-[50%] z-0 w-[250%] h-[250%] rounded-full border-[1px] border-border bg-gradient-to-br from-green-500/50 to-green-800/20 '
+      className='absolute left-[50%] top-[50%] z-0 w-[250%] h-[250%] rounded-full border border-border bg-linear-to-br from-green-500/50 to-green-800/20 '
     />
   );
 };
