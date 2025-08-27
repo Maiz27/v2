@@ -38,3 +38,10 @@ next-env.d.ts
 # vscode
 .vscode/launch.json
 .env
+
+
+# GEMINI CLI
+/.gemini/
+
+# Turborepo
+.turbo
