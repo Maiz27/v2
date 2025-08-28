@@ -16,7 +16,7 @@ const CodeParser = async ({
 }: Props) => {
   const { language, code: text } = code;
   const html = await codeToHtml(text!, {
-    lang: language!,
+    lang: language || 'typescript',
     theme: 'material-theme-ocean',
   });
 
