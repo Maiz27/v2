@@ -39,6 +39,8 @@ export const EMAIL = process.env.NEXT_PUBLIC_EMAIL;
 
 export const EMAIL_PATTERN = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
+export const CODE_ID_PREFIX = 'Snippet-';
+
 export const ROUTES = [
   {
     icon: (

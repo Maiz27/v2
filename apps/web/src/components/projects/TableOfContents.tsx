@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import Heading from '../heading/Heading';
 import AnimateInView from '../animationWrappers/AnimateInView';
-import { createSlug, extractFilename } from '@/lib/utilities';
+import { createSlug } from '@/lib/utilities';
 import {
   HiMinusSmall,
   HiOutlineCodeBracketSquare,
   HiOutlineListBullet,
 } from 'react-icons/hi2';
-import { BlockContent } from '@/lib/sanity/types';
+import { BlockContent, Snippet, SnippetGroup } from '@/lib/sanity/types';
+import { CODE_ID_PREFIX } from '@/lib/Constants';
 
 type TableOfContentsProps = {
   content: BlockContent;
@@ -29,7 +30,7 @@ const ICONS = {
 };
 
 const HEADING_TAGS = ['h2', 'h3'] as const;
-const CODE_TAG = 'code';
+const CODE_TAGS = ['snippet', 'snippetGroup'];
 
 const TableOfContents = ({ content }: TableOfContentsProps) => {
   const tocItems: TOCItem[] = [];
@@ -57,14 +58,29 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
     }
 
     // Handle code blocks
-    if (block._type === CODE_TAG) {
-      const { name = 'Snippet' } = extractFilename(block.filename || 'Snippet');
-      tocItems.push({
-        id: `code-${++codeBlockCounter}`,
-        text: `Code: ${name}`,
-        level: getHeadingLevel(CODE_TAG),
-        type: CODE_TAG,
-      });
+    if (CODE_TAGS.includes(block._type)) {
+      if (block._type === 'snippet') {
+        const { filename } = block as Snippet;
+        tocItems.push({
+          id: `${CODE_ID_PREFIX}${++codeBlockCounter}`,
+          text: `Snippet: ${filename}`,
+          level: getHeadingLevel('code'),
+          type: 'code',
+        });
+      }
+
+      if (block._type === 'snippetGroup') {
+        const { snippets } = block as SnippetGroup;
+        const id = `${CODE_ID_PREFIX}${++codeBlockCounter}`;
+        snippets.forEach((snippet) => {
+          tocItems.push({
+            id,
+            text: `Snippet: ${snippet.filename}`,
+            level: getHeadingLevel('code'),
+            type: 'code',
+          });
+        });
+      }
     }
   });
 
@@ -73,9 +89,9 @@ const TableOfContents = ({ content }: TableOfContentsProps) => {
       <Heading icon={<HiOutlineListBullet />} heading='Table of Contents'>
         <AnimateInView tag='nav'>
           <ul className='ml-4 space-y-2'>
-            {tocItems.map((item) => (
+            {tocItems.map((item, idx) => (
               <li
-                key={item.id}
+                key={idx}
                 className={`${
                   item.level === 3 ? 'ml-8 text-base' : ''
                 } flex gap-2 items-center hover:text-primary transition-colors`}
