@@ -8,7 +8,9 @@ import {
 import CodeParser from './CodeParser';
 import { createSlug } from '@/lib/utilities';
 import { urlFor } from '@/lib/sanity/client';
-import { BlockContent, Code } from '@/lib/sanity/types';
+import CodeGroup from './CodeGroup';
+import { BlockContent, Code, Snippet, SnippetGroup } from '@/lib/sanity/types';
+import { CODE_ID_PREFIX } from '@/lib/Constants';
 
 type props = {
   content: BlockContent;
@@ -47,9 +49,15 @@ const RichTextParser = memo(({ content }: props) => {
         ) : (
           <div className='callToAction'>{value.text}</div>
         ),
-      code: ({ value }: PortableTextTypeComponentProps<Code>) => {
-        const id = `code-${++codeBlockCounter}`;
+      snippet: ({ value }: PortableTextTypeComponentProps<Snippet>) => {
+        const id = `${CODE_ID_PREFIX}${++codeBlockCounter}`;
         return <CodeParser id={id} snippet={value} />;
+      },
+      snippetGroup: ({
+        value,
+      }: PortableTextTypeComponentProps<SnippetGroup>) => {
+        const id = `${CODE_ID_PREFIX}${++codeBlockCounter}`;
+        return <CodeGroup group={value} id={id} />;
       },
     },
     marks: {

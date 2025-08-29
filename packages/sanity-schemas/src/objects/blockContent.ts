@@ -1,5 +1,4 @@
-import {defineType, defineArrayMember} from 'sanity'
-import codeBlock from './codeBlock'
+import { defineType, defineArrayMember } from 'sanity';
 
 /**
  * This is the schema definition for the rich text fields used for
@@ -24,21 +23,24 @@ export default defineType({
       // you want and decide how you want to deal with it where you want to
       // use your content.
       styles: [
-        {title: 'Normal', value: 'normal'},
-        {title: 'H1', value: 'h1'},
-        {title: 'H2', value: 'h2'},
-        {title: 'H3', value: 'h3'},
-        {title: 'H4', value: 'h4'},
-        {title: 'Quote', value: 'blockquote'},
+        { title: 'Normal', value: 'normal' },
+        { title: 'H1', value: 'h1' },
+        { title: 'H2', value: 'h2' },
+        { title: 'H3', value: 'h3' },
+        { title: 'H4', value: 'h4' },
+        { title: 'Quote', value: 'blockquote' },
       ],
-      lists: [{title: 'Bullet', value: 'bullet'}],
+      lists: [
+        { title: 'Bullet', value: 'bullet' },
+        { title: 'Numbered', value: 'number' },
+      ],
       // Marks let you mark up inline text in the block editor.
       marks: {
         // Decorators usually describe a single property – e.g. a typographic
         // preference or highlighting by editors.
         decorators: [
-          {title: 'Strong', value: 'strong'},
-          {title: 'Emphasis', value: 'em'},
+          { title: 'Strong', value: 'strong' },
+          { title: 'Emphasis', value: 'em' },
         ],
         // Annotations can be any object structure – e.g. a link or a footnote.
         annotations: [
@@ -52,15 +54,25 @@ export default defineType({
                 name: 'href',
                 type: 'string',
                 validation: (Rule: {
-                  custom: (arg0: (href: string) => true | 'Invalid URL') => any
+                  custom: (arg0: (href: string) => true | 'Invalid URL') => any;
                 }) =>
-                  Rule.custom((href: string) =>
-                    href.startsWith('http://') ||
-                    href.startsWith('https://') ||
-                    href.startsWith('mailto:')
-                      ? true
-                      : 'Invalid URL',
-                  ),
+                  Rule.custom((href: string) => {
+                    const validPrefixes = [
+                      'http://',
+                      'https://',
+                      'mailto:',
+                      'tel:',
+                    ];
+                    const isValid = validPrefixes.some((prefix) =>
+                      href.startsWith(prefix)
+                    );
+
+                    if (isValid) {
+                      return true;
+                    } else {
+                      return 'Invalid URL';
+                    }
+                  }),
               },
             ],
           },
@@ -72,9 +84,14 @@ export default defineType({
     // as a block type.
     defineArrayMember({
       type: 'image',
-      options: {hotspot: true},
+      options: { hotspot: true },
     }),
     // Custom Code Block
-    codeBlock,
+    defineArrayMember({
+      type: 'snippet',
+    }),
+    defineArrayMember({
+      type: 'snippetGroup',
+    }),
   ],
-})
+});

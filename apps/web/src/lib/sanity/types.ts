@@ -13,6 +13,21 @@
  */
 
 // Source: schema.json
+export type SnippetGroup = {
+  _type: "snippetGroup";
+  title?: string;
+  snippets: Array<{
+    _key: string;
+  } & Snippet>;
+};
+
+export type Snippet = {
+  _type: "snippet";
+  filename: string;
+  source?: string;
+  code: Code;
+};
+
 export type BlockContent = Array<{
   children?: Array<{
     marks?: Array<string>;
@@ -21,7 +36,7 @@ export type BlockContent = Array<{
     _key: string;
   }>;
   style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-  listItem?: "bullet";
+  listItem?: "bullet" | "number";
   markDefs?: Array<{
     href?: string;
     _type: "link";
@@ -44,7 +59,9 @@ export type BlockContent = Array<{
   _key: string;
 } | {
   _key: string;
-} & Code>;
+} & Snippet | {
+  _key: string;
+} & SnippetGroup>;
 
 export type ProjectImage = {
   _type: "projectImage";
@@ -359,7 +376,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = BlockContent | ProjectImage | Description | Tool | Faq | Metadata | Experience | Company | Duration | Project | AboutMe | Stats | Code | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = SnippetGroup | Snippet | BlockContent | ProjectImage | Description | Tool | Faq | Metadata | Experience | Company | Duration | Project | AboutMe | Stats | Code | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getAboutMe

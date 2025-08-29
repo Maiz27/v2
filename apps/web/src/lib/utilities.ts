@@ -31,11 +31,6 @@ export const getMonthYear = (StringDate: string) => {
     .replace(' ', ', ');
 };
 
-export const extractFilename = (name: string) => {
-  const split = name.split(' ');
-  return { name: split[0], link: split[1] };
-};
-
 export const smoothScrollToElement = (
   elementId: string,
   offset: number = 80
