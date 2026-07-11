@@ -1,120 +1,369 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap')
-layer(base);
-
 @import 'tailwindcss';
 
-@custom-variant dark (&:is(.dark *));
-
 @theme {
-  --color-primary: #96b7e3;
-  --color-background: #010001;
-  --color-foreground: #121212;
-  --color-border: #212222;
-  --color-copy: #fafbfc;
-  --color-copy-light: #cdd7e5;
-  --color-copy-lighter: #cdd7e5;
+  --color-paper: oklch(96.4% 0.009 85);
+  --color-paper-raised: oklch(98.4% 0.006 88);
+  --color-ink: oklch(24% 0.018 70);
+  --color-ink-soft: oklch(40% 0.02 70);
+  --color-ink-faint: oklch(57% 0.016 75);
+  --color-rule: oklch(86% 0.014 82);
+  --color-rule-strong: oklch(70% 0.018 78);
+  --color-mark: oklch(51% 0.165 30);
+  --color-mark-soft: oklch(93.5% 0.028 32);
 
   --animate-scroll-progress: scroll-progress linear;
 
   @keyframes scroll-progress {
     from {
-      width: 0%;
+      transform: scaleX(0);
     }
     to {
-      width: 100%;
+      transform: scaleX(1);
     }
   }
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
+@theme inline {
+  --font-display: var(--font-besley), 'Georgia', serif;
+  --font-body: var(--font-source-serif), 'Georgia', serif;
+  --font-mono: var(--font-fragment-mono), monospace;
+}
 
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
+::selection {
+  background: var(--color-mark);
+  color: var(--color-paper);
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-body {
-  font-family: 'Space Grotesk', sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  @apply 2xl:text-lg;
+/* Tailwind v4 preflight resets cursor on buttons; the Ledger wants pointer on
+   every interactive control (filter chips, print button, annotation tokens,
+   transition-skip links). Fix #8. */
+button:not(:disabled),
+[role='button'],
+summary,
+label[for] {
+  cursor: pointer;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-bold;
+.ledger-body {
+  font-family: var(--font-body);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  font-size: 1.0625rem;
+  line-height: 1.65;
 }
 
-.transition-all,
-.transition-transform,
-.transition-colors,
-.transition-opacity,
-.transition-shadow {
-  @apply duration-500;
+.font-display {
+  font-family: var(--font-display);
+}
+.font-body {
+  font-family: var(--font-body);
+}
+.font-mono {
+  font-family: var(--font-mono);
 }
 
-main {
-  @apply mt-6 mb-8 lg:my-16 px-4 md:px-0 mx-auto xl:max-w-4xl 2xl:max-w-5xl xl:w-4/5 2xl:w-[75%];
+/* ---- Shiki listing ---- */
+.ledger-body .shiki {
+  background: var(--color-paper-raised) !important;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+.ledger-body .shiki code {
+  display: block;
+  min-width: max-content;
 }
 
-p,
-span {
-  @apply opacity-70;
+/* ---- Annotated tokens: proof marks ---- */
+.ledger-body .annot {
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  border-radius: 2px;
+  outline: none;
+  /* Highlighter sweep: a mark-colored wash grown from the left on activation,
+     animated via background-size (compositable, not a layout property). */
+  background-image: linear-gradient(
+    var(--color-mark-soft),
+    var(--color-mark-soft)
+  );
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 0% 100%;
 }
 
-input,
-textarea {
-  @apply w-full bg-foreground/70 p-4 rounded-lg opacity-70 focus:opacity-100 focus:outline-primary transition-all tracking-wider;
+/* Two kinds read differently at a glance: decisions in red, context in grey. */
+.ledger-body .annot-decision {
+  text-decoration-color: var(--color-mark);
+}
+.ledger-body .annot-context {
+  text-decoration-color: var(--color-ink-faint);
+  background-image: linear-gradient(oklch(91% 0.006 80), oklch(91% 0.006 80));
 }
 
-select {
-  @apply bg-foreground/70 p-4 rounded-lg opacity-70 focus:opacity-100 focus:outline-primary transition-all tracking-wider;
+.ledger-body .annot::after {
+  content: attr(data-n);
+  font-size: 0.6em;
+  font-weight: 700;
+  vertical-align: super;
+  padding-left: 2px;
+}
+.ledger-body .annot-decision::after {
+  color: var(--color-mark);
+}
+.ledger-body .annot-context::after {
+  color: var(--color-ink-faint);
 }
 
-body::-webkit-scrollbar {
-  @apply size-2 rounded-lg;
-  /* background-color: #f4f4f4; */
+[data-motion='on'] .ledger-body .annot {
+  transition: background-size 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-body::-webkit-scrollbar-thumb {
-  @apply bg-primary; /*color of the scroll thumb */
-  border-radius: 20px; /* roundness of the scroll thumb */
-  border: 0.1rem solid white; /* creates padding around scroll thumb */
+.ledger-body .annot:hover,
+.ledger-body .annot:focus-visible,
+.ledger-body .annot[data-active] {
+  background-size: 100% 100%;
+}
+.ledger-body .annot[data-pinned] {
+  text-decoration-style: solid;
 }
 
-.shiki {
-  @apply p-4 overflow-auto max-h-[75dvh];
-}
-.shiki code span,
-.shiki code span span {
-  @apply opacity-100;
+/* ---- Motion: print-metaphor load + scroll passes ----
+   All keyed off the [data-motion='on'] gate stamped by <MotionGate>. At rest
+   (gate off / reduced motion) every element is already in its final state, so
+   nothing can get stranded invisible. See lib/motion.ts. */
+@keyframes ledger-settle {
+  from {
+    opacity: 0;
+    transform: translateY(0.55rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.shiki::-webkit-scrollbar {
-  @apply size-2 rounded-lg;
+@keyframes ledger-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
-.shiki::-webkit-scrollbar-thumb {
-  @apply bg-primary; /*color of the scroll thumb */
-  border-radius: 20px; /* roundness of the scroll thumb */
-  border: 0.1rem solid white; /* creates padding around scroll thumb */
+/* Hero headline: letters pressed onto the page one after another. A short
+   downward settle (no bounce), exponential ease-out, total under ~1s. */
+@keyframes ledger-press {
+  from {
+    opacity: 0;
+    transform: translateY(0.2em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+[data-motion='on'] .hero-letter {
+  display: inline-block;
+  opacity: 0;
+  animation: ledger-press 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--li, 0) * 26ms + 200ms);
+}
+
+/* Orchestrated load pass: masthead + hero elements settle in with a short
+   stagger driven by the inline --i index. */
+[data-motion='on'] .ledger-load {
+  opacity: 0;
+  animation: ledger-settle 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 70ms + 60ms);
+}
+
+/* Project rows: each settles in individually the first time it scrolls into
+   view (fix #3). Reveal stamps data-inview per row, so the stagger falls out of
+   scroll position rather than a fixed index. At rest the row is already shown. */
+[data-motion='on'] .ledger-body .row-reveal {
+  opacity: 0;
+  transform: translateY(0.5rem);
+}
+[data-motion='on'] .ledger-body .row-reveal[data-inview] {
+  animation: ledger-settle 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Section hairline rules: drawn in from the left when scrolled into view,
+   reinforcing the ledger lines. Rendered as a scaling ::after so the resting
+   (motion-off) state is a normal full-width rule. */
+.ledger-body .draw-b {
+  position: relative;
+}
+.ledger-body .draw-b::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: var(--color-ink);
+  transform-origin: left;
+}
+.ledger-body .draw-b-hair::after {
+  bottom: -1px;
+  height: 1px;
+  background: var(--color-rule);
+}
+/* FOUC fix (#1): with motion on, a rule that has not yet scrolled into view
+   starts collapsed so it cannot flash at full width before animating. */
+[data-motion='on'] .ledger-body .draw-b:not([data-inview])::after {
+  transform: scaleX(0);
+}
+[data-motion='on'] .ledger-body .draw-b[data-inview]::after {
+  transform: scaleX(0);
+  animation: ledger-draw-x 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 80ms;
+}
+
+/* Link underline that draws on hover instead of popping. */
+.ledger-body .link-underline {
+  text-decoration: none;
+  background-image: linear-gradient(var(--color-mark), var(--color-mark));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1.5px;
+}
+[data-motion='on'] .ledger-body .link-underline {
+  transition: background-size 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ledger-body .link-underline:hover,
+.ledger-body .link-underline:focus-visible {
+  background-size: 100% 1.5px;
+}
+
+/* ---- Annotation popover (below xl) ---- */
+@keyframes ledger-pop {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.ledger-body .ledger-pop {
+  box-shadow: 0 14px 34px -18px oklch(24% 0.018 70 / 0.4);
+}
+[data-motion='on'] .ledger-body .ledger-pop {
+  animation: ledger-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---- Rich text (case study body) ---- */
+.ledger-prose h2,
+.ledger-prose h3 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  scroll-margin-top: 2.5rem;
+}
+.ledger-prose p {
+  max-width: 62ch;
+  line-height: 1.75;
+  color: var(--color-ink-soft);
+  margin-bottom: 1.25rem;
+}
+.ledger-prose a {
+  color: var(--color-mark);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 4px;
+}
+.ledger-prose ul,
+.ledger-prose ol {
+  max-width: 62ch;
+  color: var(--color-ink-soft);
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+  line-height: 1.75;
+}
+.ledger-prose ul {
+  list-style: disc;
+}
+.ledger-prose ol {
+  list-style: decimal;
+}
+.ledger-prose li {
+  margin-bottom: 0.5rem;
+}
+.ledger-prose li::marker {
+  color: var(--color-ink-faint);
+}
+.ledger-prose blockquote {
+  max-width: 60ch;
+  font-style: italic;
+  color: var(--color-ink);
+  border-left: 2px solid var(--color-mark);
+  padding-left: 1.25rem;
+  margin: 1.75rem 0;
+}
+.ledger-prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-paper-raised);
+  border: 1px solid var(--color-rule);
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+  color: var(--color-ink);
+}
+
+/* ---- Print: the /cv document should print clean, black on white ---- */
+@media print {
+  .ledger-body {
+    background: #fff;
+    color: #000;
+    font-size: 10.5pt;
+    line-height: 1.5;
+  }
+  .cv-page {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  /* Hide screen-only chrome and buttons. */
+  .cv-no-print {
+    display: none !important;
+  }
+  /* Flatten the paper texture to plain white and ink to black. */
+  .ledger-body .text-mark,
+  .ledger-body .text-ink-soft,
+  .ledger-body .text-ink-faint {
+    color: #000 !important;
+  }
+  .ledger-body .draw-b::after,
+  .ledger-body .draw-b-hair::after {
+    background: #000;
+  }
+  .ledger-body a {
+    color: #000 !important;
+    text-decoration: none;
+  }
+  /* Keep entries from splitting awkwardly across page breaks. */
+  .cv-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  @page {
+    margin: 16mm 14mm;
+  }
 }
