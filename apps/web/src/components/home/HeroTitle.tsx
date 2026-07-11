@@ -15,7 +15,7 @@ type Props = {
 const HeroTitle = ({ text, className }: Props) => {
   const hasTerminalPeriod = text.endsWith('.');
   const body = hasTerminalPeriod ? text.slice(0, -1) : text;
-  const chars = [...body];
+  const chars = body.split('');
 
   let letterIndex = 0;
 
