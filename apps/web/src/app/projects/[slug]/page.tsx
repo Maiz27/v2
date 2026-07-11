@@ -1,15 +1,18 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import ShareContent from '@/components/share/ShareContent';
-import ProjectHeader from '@/components/projects/ProjectHeader';
-import TableOfContents from '@/components/projects/TableOfContents';
+import Masthead from '@/components/layout/Masthead';
+import SiteFooter from '@/components/layout/SiteFooter';
+import Reveal from '@/components/motion/Reveal';
+import Contents from '@/components/projects/Contents';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import ScrollProgress from '@/components/ui/ScrollProgress';
+import JsonLd from '@/components/jsonLd/JsonLd';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { getProjectBySlug, getProjectMetadata } from '@/lib/sanity/queries';
+import { getDomain, getMonthYear } from '@/lib/utilities';
 import { BASEURL } from '@/lib/Constants';
+import { PersonSchema } from '@/lib/schema';
 import { CreativeWork } from 'schema-dts';
-import { PersonSchema } from '@/app/page';
-import JsonLd from '@/components/jsonLd/JsonLd';
 import {
   GetProjectBySlugResult,
   GetProjectMetadataResult,
@@ -20,8 +23,7 @@ export const revalidate = 60;
 type Params = { [key: string]: string | undefined };
 
 const page = async ({ params }: { params: Promise<Params> }) => {
-  const _params = await params;
-  const { slug } = _params;
+  const { slug } = await params;
   const project: GetProjectBySlugResult = await fetchSanityData(
     getProjectBySlug,
     { slug }
@@ -31,12 +33,24 @@ const page = async ({ params }: { params: Promise<Params> }) => {
     return notFound();
   }
 
-  const { title, href, source, description, date, content } = project;
+  const {
+    title,
+    contentTitle,
+    href,
+    source,
+    description,
+    date,
+    status,
+    tools,
+    content,
+  } = project;
+
+  const stack = tools.map((t) => t.name).join(' / ');
 
   const projectJsonLd: CreativeWork = {
     '@type': 'CreativeWork',
-    name: title,
-    description: description,
+    name: contentTitle || title,
+    description,
     url: href || source || `${BASEURL}/projects/${slug}`,
     datePublished: date,
     author: PersonSchema,
@@ -45,17 +59,102 @@ const page = async ({ params }: { params: Promise<Params> }) => {
   return (
     <>
       <ScrollProgress />
-      <>
+      <div className='mx-auto max-w-6xl px-6 md:px-10'>
         <JsonLd schema={projectJsonLd} />
 
-        <ProjectHeader project={project} />
+        <Masthead />
 
-        <TableOfContents content={content!} />
+        {/* Case header */}
+        <Reveal as='section' className='draw-b-hair py-14 md:py-20'>
+          <p
+            className='ledger-load mb-5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-mark'
+            style={{ '--i': 0 } as React.CSSProperties}
+          >
+            Case study &middot; {title}
+          </p>
+          <h1
+            className='ledger-load font-display max-w-[24ch] text-[clamp(2.25rem,5vw,4rem)] font-black leading-[1.06] tracking-tight'
+            style={{ '--i': 1 } as React.CSSProperties}
+          >
+            {contentTitle || title}
+          </h1>
+          <p
+            className='ledger-load mt-6 max-w-[58ch] text-[1.125rem] leading-[1.7] text-ink-soft'
+            style={{ '--i': 2 } as React.CSSProperties}
+          >
+            {description}
+          </p>
+          <dl className='mt-10 grid gap-x-10 gap-y-4 font-mono text-[0.75rem] sm:grid-cols-2 lg:grid-cols-4'>
+            <div>
+              <dt className='mb-1 text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint'>
+                Filed
+              </dt>
+              <dd className='capitalize'>
+                {getMonthYear(date)} &middot; {status}
+              </dd>
+            </div>
+            <div>
+              <dt className='mb-1 text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint'>
+                Stack
+              </dt>
+              <dd>{stack}</dd>
+            </div>
+            {href && (
+              <div>
+                <dt className='mb-1 text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint'>
+                  Live
+                </dt>
+                <dd>
+                  <a
+                    href={href}
+                    target='_blank'
+                    rel='noreferrer noopener'
+                    className='underline decoration-dotted underline-offset-4 hover:text-mark'
+                  >
+                    {getDomain(href)}
+                  </a>
+                </dd>
+              </div>
+            )}
+            {source && (
+              <div>
+                <dt className='mb-1 text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint'>
+                  Source
+                </dt>
+                <dd>
+                  <a
+                    href={source}
+                    target='_blank'
+                    rel='noreferrer noopener'
+                    className='underline decoration-dotted underline-offset-4 hover:text-mark'
+                  >
+                    {getDomain(source)}
+                  </a>
+                </dd>
+              </div>
+            )}
+          </dl>
+        </Reveal>
 
-        <RichTextParser content={content!} />
+        <div className='gap-16 py-12 lg:grid lg:grid-cols-[11rem_minmax(0,1fr)]'>
+          <Contents content={content!} />
 
-        <ShareContent />
-      </>
+          <article>
+            <RichTextParser content={content!} />
+
+            <footer className='mt-14 border-t-2 border-ink pt-6'>
+              <Link
+                href='/'
+                className='font-mono text-[0.72rem] uppercase tracking-[0.16em] underline decoration-dotted underline-offset-4 hover:text-mark'
+              >
+                &larr; Back to the index
+              </Link>
+            </footer>
+          </article>
+        </div>
+
+        <SiteFooter />
+      </div>
     </>
   );
 };
@@ -67,8 +166,7 @@ export async function generateMetadata({
 }: {
   params: Promise<Params>;
 }) {
-  const _params = await params;
-  const { slug } = _params;
+  const { slug } = await params;
   const project: GetProjectMetadataResult = await fetchSanityData(
     getProjectMetadata,
     { slug }
@@ -99,20 +197,12 @@ export async function generateMetadata({
         title: contentTitle,
         description: description,
         siteName: contentTitle,
-        images: [
-          {
-            url: images,
-          },
-        ],
+        images: [{ url: images }],
       },
       twitter: {
         card: 'summary_large_image',
         site: url,
-        images: [
-          {
-            url: images,
-          },
-        ],
+        images: [{ url: images }],
       },
       robots: {
         index: true,

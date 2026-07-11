@@ -1,30 +1,28 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-// Needs TailwindCSS animation & keyframes setup
+/**
+ * A 2px oxide-red rule pinned to the top of the viewport, drawn left-to-right as
+ * the reader moves down a case study. Uses a scroll-driven animation timeline
+ * (compositable transform), and renders nothing where that is unsupported.
+ */
 const ScrollProgress = () => {
   const [isSupported, setIsSupported] = useState(false);
 
   useEffect(() => {
-    const checkSupport = () => {
-      return (
-        'ScrollTimeline' in window &&
+    setIsSupported(
+      'ScrollTimeline' in window &&
         CSS.supports('animation-timeline: scroll()')
-      );
-    };
-
-    setIsSupported(checkSupport());
+    );
   }, []);
 
-  if (!isSupported) {
-    return null;
-  }
+  if (!isSupported) return null;
 
   return (
     <div
-      className='fixed top-0 left-0 w-full h-2 bg-linear-to-r from-primary/60 to-primary z-50 animate-scroll-progress rounded-2xl border border-white'
+      className='animate-scroll-progress fixed inset-x-0 top-0 z-50 h-[2px] origin-left scale-x-0 bg-mark'
       style={{ animationTimeline: 'scroll()' }}
-    ></div>
+    />
   );
 };
 

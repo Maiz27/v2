@@ -1,8 +1,7 @@
-import { ReactNode, Suspense } from 'react';
-import { ProjectHeaderSkeleton } from '@/components/projects/ProjectHeader';
+import { ReactNode } from 'react';
 
 const layout = ({ children }: { children: ReactNode }) => {
-  return <Suspense fallback={<ProjectHeaderSkeleton />}>{children}</Suspense>;
+  return <>{children}</>;
 };
 
 export default layout;
