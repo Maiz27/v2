@@ -5,6 +5,8 @@ const languageAlternatives = [
   { title: 'Javascript', value: 'javascript' },
   { title: 'HTML', value: 'html' },
   { title: 'CSS', value: 'css' },
+  { title: 'SCSS', value: 'scss' },
+  { title: 'JSON', value: 'json' },
   { title: 'Java', value: 'java' },
   { title: 'Kotlin', value: 'kotlin' },
   { title: 'Dart', value: 'dart' },
