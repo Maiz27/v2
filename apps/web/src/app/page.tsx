@@ -24,12 +24,12 @@ const primaryTool = (tools: GetProjectsResult[number]['tools']) =>
 
 export default async function Home() {
   const [projects, featured, about] = await Promise.all([
-    fetchSanityData(getProjects),
-    fetchSanityData(getFeaturedProjects),
-    fetchSanityData(getAboutMe),
+    fetchSanityData<GetProjectsResult>(getProjects),
+    fetchSanityData<GetFeaturedProjectsResult>(getFeaturedProjects),
+    fetchSanityData<GetAboutMeResult>(getAboutMe),
   ]);
   const selected = featured;
-  const archive: GetProjectsResult = projects.filter((p: GetProjectsResult[number]) => !p.featured);
+  const archive: GetProjectsResult = projects.filter((p) => !p.featured);
 
   return (
     <div className='mx-auto max-w-6xl px-6 md:px-10'>
@@ -70,7 +70,7 @@ export default async function Home() {
         </Reveal>
 
         <ol>
-          {selected.map((project: GetFeaturedProjectsResult[number], i: number) => (
+          {selected.map((project, i) => (
             <Reveal
               as='li'
               key={project.slug?.current ?? i}

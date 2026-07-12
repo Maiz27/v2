@@ -17,9 +17,12 @@ export const urlFor = (source: Object) => {
   return builder.image(source);
 };
 
-export const fetchSanityData = async (query: string, variables?: {}) => {
+export const fetchSanityData = async <T>(
+  query: string,
+  variables?: {}
+): Promise<T> => {
   try {
-    const data = await sanity.fetch(query, variables);
+    const data = await sanity.fetch<T>(query, variables);
     return data;
   } catch (error) {
     console.error('Error fetching data:', error);
