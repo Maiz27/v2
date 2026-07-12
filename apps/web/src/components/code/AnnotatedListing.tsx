@@ -254,8 +254,11 @@ const AnnotatedListing = ({
           )}
         </div>
 
-        {/* Margin notes (xl+ only). */}
-        <aside className='mt-5 hidden xl:mt-0 xl:block'>
+        {/* Margin notes (xl+ only). Sticky + self-start so a long snippet
+            doesn't stretch this column to match its height and strand the
+            notes off-screen (or leave dead space below a short note list) —
+            the notes track the viewport instead of the code block. */}
+        <aside className='mt-5 hidden xl:sticky xl:top-10 xl:mt-0 xl:block xl:max-h-[calc(100vh-5rem)] xl:self-start xl:overflow-y-auto'>
           <p className='mb-3 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-ink-faint'>
             Notes
           </p>
@@ -280,18 +283,18 @@ const AnnotatedListing = ({
                   </span>
                   <span>
                     <span
-                      className={`mr-1.5 font-mono text-[0.62rem] uppercase tracking-[0.14em] ${
+                      className={`mb-1 block font-mono text-[0.62rem] uppercase tracking-[0.14em] ${
                         a.kind === 'decision' ? 'text-mark' : 'text-ink-faint'
                       }`}
                     >
                       {kindLabel(a.kind)}
+                      {isPinned && (
+                        <span className='ml-1.5 normal-case tracking-normal text-ink-faint'>
+                          &middot; pinned
+                        </span>
+                      )}
                     </span>
                     {a.body}
-                    {isPinned && (
-                      <span className='ml-1.5 align-middle font-mono text-[0.58rem] uppercase tracking-[0.14em] text-ink-faint'>
-                        [pinned]
-                      </span>
-                    )}
                   </span>
                 </li>
               );
