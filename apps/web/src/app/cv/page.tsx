@@ -206,7 +206,7 @@ const Section = ({
   title: string;
   children: React.ReactNode;
 }) => (
-  <section className='cv-block py-7'>
+  <section className='py-7'>
     <div className='mb-5 flex items-baseline gap-4 border-b border-rule pb-2.5'>
       <span className='font-mono text-[0.68rem] font-bold text-mark'>{num}</span>
       <h2 className='font-mono text-[0.68rem] uppercase tracking-[0.2em]'>
