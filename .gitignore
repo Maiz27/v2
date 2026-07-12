@@ -68,3 +68,7 @@ dist/
 
 # GEMINI CLI
 /.gemini/
+
+# personal content-authoring / Sanity migration scripts (drafts-only write
+# tooling, personal narrative + seed data) — never committed
+/scripts/
