@@ -117,9 +117,9 @@ export type Description = Array<{
 export type Company = {
   _type: "company";
   name: string;
-  label: string;
-  href: string;
-  logo: {
+  label?: string;
+  href?: string;
+  logo?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
@@ -132,6 +132,51 @@ export type Duration = {
   _type: "duration";
   from: string;
   to?: string;
+};
+
+export type ExperienceReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "experience";
+};
+
+export type ProjectReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "project";
+};
+
+export type Cv = {
+  _id: string;
+  _type: "cv";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  summary: string;
+  experience: Array<{
+    experience: ExperienceReference;
+    bullets: Array<string>;
+    _type: "cvExperienceEntry";
+    _key: string;
+  }>;
+  projects?: Array<
+    {
+      _key: string;
+    } & ProjectReference
+  >;
+  education?: {
+    degree: string;
+    place: string;
+    detail?: string;
+  };
+  skillGroups?: Array<{
+    label: string;
+    items: string;
+    _type: "skillGroup";
+    _key: string;
+  }>;
 };
 
 export type Tool = {
@@ -209,7 +254,14 @@ export type Experience = {
       _key: string;
     } & ToolReference
   >;
-  description: Description;
+  description?: Description;
+};
+
+export type ProjectKindReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "projectKind";
 };
 
 export type Project = {
@@ -222,7 +274,7 @@ export type Project = {
   slug?: Slug;
   featured?: boolean;
   date: string;
-  kind: "Web app" | "Client site" | "Game" | "Android app" | "This site";
+  kind: ProjectKindReference;
   status: "completed" | "ongoing" | "paused";
   description: string;
   href?: string;
@@ -237,8 +289,18 @@ export type Project = {
       _key: string;
     } & ProjectImage
   >;
+  cvBlurb?: string;
   contentTitle?: string;
   content?: BlockContent;
+};
+
+export type ProjectKind = {
+  _id: string;
+  _type: "projectKind";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
 };
 
 export type AboutMe = {
@@ -382,6 +444,9 @@ export type AllSanitySchemaTypes =
   | Description
   | Company
   | Duration
+  | ExperienceReference
+  | ProjectReference
+  | Cv
   | Tool
   | SanityImageCrop
   | SanityImageHotspot
@@ -389,7 +454,9 @@ export type AllSanitySchemaTypes =
   | Slug
   | ToolReference
   | Experience
+  | ProjectKindReference
   | Project
+  | ProjectKind
   | AboutMe
   | Code
   | SanityImagePaletteSwatch
@@ -421,6 +488,60 @@ export type GetAboutMeResult = {
 } | null;
 
 // Source: ../web/src/lib/sanity/queries.ts
+// Variable: getCv
+// Query: *[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{  summary,  experience[]{    bullets,    experience->{      title,      location,      duration,      company{name, label, href},      tools[]->{name}    }  },  projects[]->{    title,    tools[]->{name},    date,    status,    href,    source,    cvBlurb  },  education,  skillGroups}
+export type GetCvResult =
+  | {
+      summary: null;
+      experience: null;
+      projects: null;
+      education: null;
+      skillGroups: null;
+    }
+  | {
+      summary: string;
+      experience: Array<{
+        bullets: Array<string>;
+        experience: {
+          title: string;
+          location: string;
+          duration: Duration;
+          company: {
+            name: string;
+            label: string | null;
+            href: string | null;
+          };
+          tools: Array<{
+            name: string;
+          }> | null;
+        };
+      }>;
+      projects: Array<{
+        title: string;
+        tools: Array<{
+          name: string;
+        }>;
+        date: string;
+        status: "completed" | "ongoing" | "paused";
+        href: string | null;
+        source: string | null;
+        cvBlurb: string | null;
+      }> | null;
+      education: {
+        degree: string;
+        place: string;
+        detail?: string;
+      } | null;
+      skillGroups: Array<{
+        label: string;
+        items: string;
+        _type: "skillGroup";
+        _key: string;
+      }> | null;
+    }
+  | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getMainImage
 // Query: *[_type == "aboutMe"]{  "imageUrl": image.asset->url,}[0]
 export type GetMainImageResult = {
@@ -436,7 +557,7 @@ export type GetExperiencesResult = Array<{
   partTime: boolean | null;
   duration: Duration;
   company: Company;
-  description: Description;
+  description: Description | null;
   logo: string | null;
   tools: Array<{
     name: string;
@@ -521,14 +642,14 @@ export type GetMetadataResult = {
 
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjects
-// Query: *[_type == "project"]{  title,  slug,  featured,  date,  status,  kind,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url} | order(date desc)
+// Query: *[_type == "project"]{  title,  slug,  featured,  date,  status,  "kind": kind->title,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url} | order(date desc)
 export type GetProjectsResult = Array<{
   title: string;
   slug: Slug | null;
   featured: boolean | null;
   date: string;
   status: "completed" | "ongoing" | "paused";
-  kind: "Android app" | "Client site" | "Game" | "This site" | "Web app";
+  kind: string;
   description: string;
   href: string | null;
   source: string | null;
@@ -558,6 +679,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '*[_type == "aboutMe"]{\n  name,\n  bio,\n  "imageUrl": image.asset->url,\n  heroLabel,\n  heroHeadline,\n  heroDescription,\n  currentStatusLabel,\n  currentStatus,\n  email,\n  github,\n  githubLabel,\n  linkedin,\n  linkedinLabel\n}[0]': GetAboutMeResult;
+    '*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{\n  summary,\n  experience[]{\n    bullets,\n    experience->{\n      title,\n      location,\n      duration,\n      company{name, label, href},\n      tools[]->{name}\n    }\n  },\n  projects[]->{\n    title,\n    tools[]->{name},\n    date,\n    status,\n    href,\n    source,\n    cvBlurb\n  },\n  education,\n  skillGroups\n}': GetCvResult;
     '*[_type == "aboutMe"]{\n  "imageUrl": image.asset->url,\n}[0]': GetMainImageResult;
     '*[_type == "experience"]{\n  title,\n  location,\n  partTime,\n  duration,\n  company,\n  description,\n  "logo": company.logo.asset->url,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n} | order(duration.from desc)': GetExperiencesResult;
     '*[_type == "project" && featured == true]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n   name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n}[0..3] | order(date desc)': GetFeaturedProjectsResult;
@@ -565,7 +687,7 @@ declare module "@sanity/client" {
     '*[_type == "project" && slug.current == $slug]{\n  slug,\n  description,\n  "images": images[0].image.asset->url,\n  contentTitle,\n}[0]': GetProjectMetadataResult;
     '*[_type == "project"]{\n  "slug": slug.current,\n  "publishedAt": date,\n}': GetProjectsForSEOResult;
     '*[_type == "metadata" && slug.current == $slug]{\n  "slug": slug.current,\n  title,\n  description,\n}[0]': GetMetadataResult;
-    '*[_type == "project"]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  kind,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n} | order(date desc)': GetProjectsResult;
+    '*[_type == "project"]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  "kind": kind->title,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n} | order(date desc)': GetProjectsResult;
     '*[_type == "tool"]{\n  name,\n  href,\n  iconSource,\n  iconName,\n  "iconSvg": iconSvg.asset->url\n}': GetToolsResult;
   }
 }

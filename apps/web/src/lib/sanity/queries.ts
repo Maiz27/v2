@@ -16,6 +16,31 @@ export const getAboutMe = groq`*[_type == "aboutMe"]{
   linkedinLabel
 }[0]`;
 
+export const getCv = groq`*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{
+  summary,
+  experience[]{
+    bullets,
+    experience->{
+      title,
+      location,
+      duration,
+      company{name, label, href},
+      tools[]->{name}
+    }
+  },
+  projects[]->{
+    title,
+    tools[]->{name},
+    date,
+    status,
+    href,
+    source,
+    cvBlurb
+  },
+  education,
+  skillGroups
+}`;
+
 export const getMainImage = groq`*[_type == "aboutMe"]{
   "imageUrl": image.asset->url,
 }[0]`;
@@ -100,7 +125,7 @@ export const getProjects = groq`*[_type == "project"]{
   featured,
   date,
   status,
-  kind,
+  "kind": kind->title,
   description,
   href,
   source,
