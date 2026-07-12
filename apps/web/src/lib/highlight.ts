@@ -1,17 +1,12 @@
-import { codeToHtml, type DecorationItem } from 'shiki';
-import type { CodeAnnotation } from './annotations';
+import { codeToHtml } from 'shiki';
+import {
+  resolveAnnotations,
+  type CodeAnnotation,
+  type ResolvedAnnotations,
+} from './annotations';
 
 /** The Ledger listing theme: a light editorial palette on the paper surface. */
 export const LEDGER_SHIKI_THEME = 'vitesse-light';
-
-function nthIndexOf(haystack: string, needle: string, n: number): number {
-  let index = -1;
-  for (let i = 0; i < n; i++) {
-    index = haystack.indexOf(needle, index + 1);
-    if (index === -1) return -1;
-  }
-  return index;
-}
 
 /** Highlight a snippet with Shiki, no annotations. */
 export async function highlight(code: string, lang: string): Promise<string> {
@@ -22,38 +17,35 @@ export async function highlight(code: string, lang: string): Promise<string> {
 }
 
 /**
- * Highlight a snippet and wrap each annotated range in a
+ * Highlight a snippet and wrap each resolved annotation range in a
  * `<span data-annot data-kind data-n>` via Shiki decorations, so the listing
  * can attach hover/popover behavior client-side.
+ *
+ * Annotation resolution is delegated to `resolveAnnotations`, which never
+ * throws: a bad authored annotation (wrong `match`/`occurrence`) is skipped and
+ * surfaced via `misses` instead of crashing the page. Misses are `console.warn`ed
+ * outside production so they're visible in dev/server logs, and returned to the
+ * caller alongside the html.
  */
 export async function highlightAnnotated(
   code: string,
   lang: string,
   annotations: CodeAnnotation[]
-): Promise<string> {
-  const decorations: DecorationItem[] = annotations.map((a, i) => {
-    const start = nthIndexOf(code, a.match, a.occurrence ?? 1);
-    if (start === -1) {
-      throw new Error(
-        `Annotation "${a.id}" match not found in code: ${a.match}`
-      );
-    }
-    return {
-      start,
-      end: start + a.match.length,
-      properties: {
-        class: `annot annot-${a.kind}`,
-        'data-annot': a.id,
-        'data-kind': a.kind,
-        'data-n': String(i + 1),
-        tabindex: 0,
-      },
-    };
-  });
+): Promise<{ html: string; misses: ResolvedAnnotations['misses'] }> {
+  const { ranges, misses } = resolveAnnotations(code, annotations);
 
-  return codeToHtml(code, {
+  if (misses.length > 0 && process.env.NODE_ENV !== 'production') {
+    console.warn(
+      `highlightAnnotated: ${misses.length} annotation(s) did not match the code and were skipped:`,
+      misses
+    );
+  }
+
+  const html = await codeToHtml(code, {
     lang: lang || 'typescript',
     theme: LEDGER_SHIKI_THEME,
-    decorations,
+    decorations: ranges,
   });
+
+  return { html, misses };
 }
