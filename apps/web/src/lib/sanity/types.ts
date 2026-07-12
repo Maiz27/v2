@@ -570,7 +570,7 @@ export type GetExperiencesResult = Array<{
 
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getFeaturedProjects
-// Query: *[_type == "project" && featured == true]{  title,  slug,  featured,  date,  status,  description,  href,  source,  tools[]->{   name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url}[0..3] | order(date desc)
+// Query: *[_type == "project" && featured == true] | order(date desc)[0..3]{  title,  slug,  featured,  date,  status,  description,  href,  source,  tools[]->{   name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url}
 export type GetFeaturedProjectsResult = Array<{
   title: string;
   slug: Slug | null;
@@ -615,8 +615,9 @@ export type GetProjectBySlugResult = {
 
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjectMetadata
-// Query: *[_type == "project" && slug.current == $slug]{  slug,  description,  "images": images[0].image.asset->url,  contentTitle,}[0]
+// Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  description,  "images": images[0].image.asset->url,  contentTitle,}[0]
 export type GetProjectMetadataResult = {
+  title: string;
   slug: Slug | null;
   description: string;
   images: string | null;
@@ -682,9 +683,9 @@ declare module "@sanity/client" {
     '*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{\n  summary,\n  experience[]{\n    bullets,\n    experience->{\n      title,\n      location,\n      duration,\n      company{name, label, href},\n      tools[]->{name}\n    }\n  },\n  projects[]->{\n    title,\n    tools[]->{name},\n    date,\n    status,\n    href,\n    source,\n    cvBlurb\n  },\n  education,\n  skillGroups\n}': GetCvResult;
     '*[_type == "aboutMe"]{\n  "imageUrl": image.asset->url,\n}[0]': GetMainImageResult;
     '*[_type == "experience"]{\n  title,\n  location,\n  partTime,\n  duration,\n  company,\n  description,\n  "logo": company.logo.asset->url,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n} | order(duration.from desc)': GetExperiencesResult;
-    '*[_type == "project" && featured == true]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n   name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n}[0..3] | order(date desc)': GetFeaturedProjectsResult;
+    '*[_type == "project" && featured == true] | order(date desc)[0..3]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n   name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n}': GetFeaturedProjectsResult;
     '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n  "images": images[].image.asset->url,\n  contentTitle,\n  content,\n}[0]': GetProjectBySlugResult;
-    '*[_type == "project" && slug.current == $slug]{\n  slug,\n  description,\n  "images": images[0].image.asset->url,\n  contentTitle,\n}[0]': GetProjectMetadataResult;
+    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  description,\n  "images": images[0].image.asset->url,\n  contentTitle,\n}[0]': GetProjectMetadataResult;
     '*[_type == "project"]{\n  "slug": slug.current,\n  "publishedAt": date,\n}': GetProjectsForSEOResult;
     '*[_type == "metadata" && slug.current == $slug]{\n  "slug": slug.current,\n  title,\n  description,\n}[0]': GetMetadataResult;
     '*[_type == "project"]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  "kind": kind->title,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n} | order(date desc)': GetProjectsResult;
