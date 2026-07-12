@@ -46,7 +46,9 @@ const RichTextParser = memo(({ content }: props) => {
       },
       snippet: ({ value }: PortableTextTypeComponentProps<Snippet>) => {
         const id = `${CODE_ID_PREFIX}${++codeBlockCounter}`;
-        return <CodeParser id={id} snippet={value} />;
+        return (
+          <CodeParser id={id} snippet={value} annotations={value.annotations} />
+        );
       },
       snippetGroup: ({
         value,

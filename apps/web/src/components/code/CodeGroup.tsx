@@ -14,7 +14,12 @@ const CodeGroup = ({ group, id }: { group: SnippetGroup; id: string }) => {
     >
       {snippets.map((snippet) => (
         <Suspense key={snippet._key}>
-          <CodeParser id={snippet._key} snippet={snippet} isGroup />
+          <CodeParser
+            id={snippet._key}
+            snippet={snippet}
+            annotations={snippet.annotations}
+            isGroup
+          />
         </Suspense>
       ))}
     </CodeGroupClient>

@@ -30,6 +30,15 @@ export type Snippet = {
   filename: string;
   source?: string;
   code: Code;
+  annotations?: Array<{
+    id: string;
+    kind: "decision" | "context";
+    match: string;
+    occurrence?: number;
+    body: string;
+    _type: "codeAnnotation";
+    _key: string;
+  }>;
 };
 
 export type SanityImageAssetReference = {
