@@ -6,6 +6,6 @@
   "types": "src/index.ts",
   "scripts": {},
   "dependencies": {
-    "sanity": "^4.6.0"
+    "sanity": "^6.4.0"
   }
 }
