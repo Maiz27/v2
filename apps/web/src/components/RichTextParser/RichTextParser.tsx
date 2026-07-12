@@ -8,9 +8,9 @@ import {
 import CodeParser from '@/components/code/CodeParser';
 import CodeGroup from '@/components/code/CodeGroup';
 import { createSlug } from '@/lib/utilities';
+import { buildOutline, plainText } from '@/lib/outline';
 import { urlFor } from '@/lib/sanity/client';
 import { BlockContent, Snippet, SnippetGroup } from '@/lib/sanity/types';
-import { CODE_ID_PREFIX } from '@/lib/Constants';
 
 type props = {
   content: BlockContent;
@@ -20,10 +20,15 @@ type props = {
  * Renders a case study's Portable Text as Ledger typography: serif body capped
  * around 62ch, section headings carrying a numbered mono index, quotes, lists,
  * inline code, and first-class code listings via the code/ components.
+ *
+ * Heading ids, the numbered h2 badge and code-snippet ids all come from
+ * `buildOutline` — the single traversal the Contents rail also renders against
+ * — so the body anchors and the TOC hrefs are guaranteed to match. Only h4
+ * (which is body-only, never in the TOC) derives its id inline via the shared
+ * `plainText` + `createSlug`.
  */
 const RichTextParser = memo(({ content }: props) => {
-  let codeBlockCounter = 0;
-  let headingCounter = 0;
+  const outline = buildOutline(content);
   let imageIndex = 0;
 
   const components: PortableTextReactComponents = {
@@ -44,16 +49,18 @@ const RichTextParser = memo(({ content }: props) => {
           </figure>
         );
       },
-      snippet: ({ value }: PortableTextTypeComponentProps<Snippet>) => {
-        const id = `${CODE_ID_PREFIX}${++codeBlockCounter}`;
+      snippet: ({
+        value,
+      }: PortableTextTypeComponentProps<Snippet & { _key: string }>) => {
+        const id = outline.itemFor(value._key)?.id ?? '';
         return (
           <CodeParser id={id} snippet={value} annotations={value.annotations} />
         );
       },
       snippetGroup: ({
         value,
-      }: PortableTextTypeComponentProps<SnippetGroup>) => {
-        const id = `${CODE_ID_PREFIX}${++codeBlockCounter}`;
+      }: PortableTextTypeComponentProps<SnippetGroup & { _key: string }>) => {
+        const id = outline.itemFor(value._key)?.id ?? '';
         return <CodeGroup group={value} id={id} />;
       },
     },
@@ -74,11 +81,13 @@ const RichTextParser = memo(({ content }: props) => {
       },
     },
     block: {
-      h2: ({ children }) => {
-        const n = String(++headingCounter).padStart(2, '0');
+      h2: ({ children, value }) => {
+        const item = outline.itemFor(value._key);
+        const id = item?.id ?? createSlug(plainText(value));
+        const n = item?.type === 'h2' ? item.n : '';
         return (
           <h2
-            id={createSlug(children?.toString() || '')}
+            id={id}
             className='font-display mt-14 mb-5 flex items-baseline gap-3 text-[1.5rem] font-bold leading-snug md:text-[1.75rem]'
           >
             <span className='font-mono text-[0.72rem] font-normal text-mark'>
@@ -88,17 +97,17 @@ const RichTextParser = memo(({ content }: props) => {
           </h2>
         );
       },
-      h3: ({ children }) => (
+      h3: ({ children, value }) => (
         <h3
-          id={createSlug(children?.toString() || '')}
+          id={outline.itemFor(value._key)?.id ?? createSlug(plainText(value))}
           className='font-display mt-10 mb-4 text-[1.2rem] font-bold md:text-[1.35rem]'
         >
           {children}
         </h3>
       ),
-      h4: ({ children }) => (
+      h4: ({ children, value }) => (
         <h4
-          id={createSlug(children?.toString() || '')}
+          id={createSlug(plainText(value))}
           className='font-display mt-8 mb-3 text-[1.05rem] font-bold'
         >
           {children}

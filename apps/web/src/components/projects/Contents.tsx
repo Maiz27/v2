@@ -1,62 +1,16 @@
-import { createSlug } from '@/lib/utilities';
-import { CODE_ID_PREFIX } from '@/lib/Constants';
-import { BlockContent, Snippet, SnippetGroup } from '@/lib/sanity/types';
-
-type Item =
-  | { type: 'h2'; id: string; text: string; n: string }
-  | { type: 'h3'; id: string; text: string }
-  | { type: 'code'; id: string; text: string };
-
-const HEADING_TAGS = ['h2', 'h3'];
+import { buildOutline } from '@/lib/outline';
+import { BlockContent } from '@/lib/sanity/types';
 
 /**
  * The case-study Contents rail, driven by the real Portable Text. It indexes
  * every section heading (h2 numbered to match the body index, h3 nested) and
- * every code snippet by filename, mirroring the counters in RichTextParser so
- * the anchors line up. Nobody maintains this list by hand.
+ * every code snippet by filename. The list — including the ids/anchors and the
+ * numbered h2 badge — comes straight from `buildOutline`, the same single
+ * traversal RichTextParser renders against, so the anchors always line up and
+ * nobody maintains this list by hand.
  */
 const Contents = ({ content }: { content: BlockContent }) => {
-  const items: Item[] = [];
-  let headingCounter = 0;
-  let codeBlockCounter = 0;
-
-  content.forEach((block) => {
-    if (block._type === 'block' && HEADING_TAGS.includes(block.style ?? '')) {
-      const text = block.children
-        ?.map((child) => child.text)
-        .filter(Boolean)
-        .join('');
-      if (!text) return;
-      if (block.style === 'h2') {
-        items.push({
-          type: 'h2',
-          id: createSlug(text),
-          text,
-          n: String(++headingCounter).padStart(2, '0'),
-        });
-      } else {
-        items.push({ type: 'h3', id: createSlug(text), text });
-      }
-    }
-
-    if (block._type === 'snippet') {
-      const { filename } = block as Snippet;
-      items.push({
-        type: 'code',
-        id: `${CODE_ID_PREFIX}${++codeBlockCounter}`,
-        text: filename,
-      });
-    }
-
-    if (block._type === 'snippetGroup') {
-      const group = block as SnippetGroup;
-      items.push({
-        type: 'code',
-        id: `${CODE_ID_PREFIX}${++codeBlockCounter}`,
-        text: group.title || group.snippets[0]?.filename || 'Snippets',
-      });
-    }
-  });
+  const { items } = buildOutline(content);
 
   if (items.length === 0) return null;
 
