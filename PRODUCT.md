@@ -33,6 +33,6 @@ Story-driven, first-person, honest about mistakes, lightly funny, never salesy. 
 - Freelancer template sites with services/pricing/FAQ sections.
 - AI-slop landing pages: centered hero stack, icon-title-text card grids, gradient text.
 
-## Current identity (v2, being redesigned)
+## Current identity (Ledger)
 
-Dark near-black (#010001), periwinkle accent (#96b7e3), Space Grotesk, side-rail navigation, content down the middle. Treat as a starting point, not a constraint; one redesign variant may evolve it, another may depart entirely.
+Warm paper background, ink text, and a single brick-red accent (`--color-mark`). Typeset in Besley (serif display), Source Serif (body), and Fragment Mono (labels and code). Editorial, print-inspired layout: hairline rules, numbered section markers, generous type scale. This is a full departure from the original dark near-black / periwinkle / Space Grotesk identity, which is retired.

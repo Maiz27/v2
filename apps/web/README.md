@@ -1,16 +1,16 @@
-# v2 - Portfolio Website
+# Portfolio Website
 
-Welcome to the second iteration of my portfolio website, now enhanced with Next.js 14, Tailwind CSS, and Sanity CMS. This project is designed to be open source, allowing you to clone, customize, and deploy your own version with ease.
+The frontend for my personal portfolio website, built with Next.js 16, Tailwind CSS, and Sanity CMS. This project is designed to be open source, allowing you to clone, customize, and deploy your own version with ease.
 
 ## Introduction
 
-This is the second version of my portfolio website built with Next.js 14, Tailwind CSS, and Sanity CMS. You can see the live production version [Preview](https://www.magedfaiz.xyz/). The project is set up for easy cloning and customization.
+This is my portfolio website built with Next.js 16, Tailwind CSS, and Sanity CMS. You can see the live production version [here](https://www.magedfaiz.xyz/). The project is set up for easy cloning and customization.
 
-This project was inspired by [Praha's Framer template](https://darkmate.framer.website). I used it as the primary design reference, building this project from scratch and customizing it to suit my needs and style.
+The site is proof of work: long-form, first-person case studies grounded in real code, with interactive annotated code snippets linked back to their repositories.
 
 ## Features
 
-- **Next.js 14**: The latest features and optimizations.
+- **Next.js 16**: The latest features and optimizations.
 - **Tailwind CSS**: Rapidly build modern websites without ever leaving your HTML.
 - **Sanity CMS**: A headless CMS to manage content with ease.
 - **Sanity Type-Safe Content**: Utilizes the `@v2/sanity-schemas` package for end-to-end type safety with Sanity content.
@@ -24,7 +24,7 @@ This project leverages Sanity TypeGen to provide end-to-end type safety for your
 To generate or update the types, run the following command from the root of the monorepo:
 
 ```bash
-yarn generate:types
+pnpm generate:types
 ```
 
 This command will:
@@ -37,7 +37,7 @@ Ensure you run this command whenever your Sanity schemas or GROQ queries change 
 
 ## Getting Started
 
-This project is part of a Yarn Workspaces monorepo. Please follow the instructions in the [root README.md](../../README.md) for the initial installation and setup.
+This project is part of a pnpm workspaces monorepo. Please follow the instructions in the [root README.md](../../README.md) for the initial installation and setup.
 
 ### Prerequisites
 
@@ -65,6 +65,6 @@ Then, fill in the following environment variables:
 
 The following scripts can be run from the root of the monorepo:
 
-- `yarn dev:web`: Starts the development server for the web app.
-- `yarn build:web`: Builds the web app for production.
-- `yarn lint:web`: Lints the codebase using ESLint.
+- `pnpm dev:web`: Starts the development server for the web app.
+- `pnpm build:web`: Builds the web app for production.
+- `pnpm lint:web`: Lints the codebase using ESLint.

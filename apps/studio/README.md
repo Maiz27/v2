@@ -1,6 +1,6 @@
-# V2- Sanity Studio
+# Sanity Studio
 
-This project provides the Sanity CMS backend for the second iteration of my portfolio website [V2](https://github.com/Maiz27/v2), built with Next.js 14 and Tailwind CSS. It allows you to manage your portfolio content in a structured and flexible way.
+This project provides the Sanity CMS backend for my [portfolio website](https://github.com/Maiz27/v2), built with Next.js and Tailwind CSS. It allows you to manage your portfolio content in a structured and flexible way.
 
 ## Introduction
 
@@ -8,7 +8,7 @@ This repository houses the Sanity CMS configuration for my portfolio website. It
 
 ## Getting Started
 
-This project is part of a Yarn Workspaces monorepo. Please follow the instructions in the [root README.md](../../README.md) for the initial installation and setup.
+This project is part of a pnpm workspaces monorepo. Please follow the instructions in the [root README.md](../../README.md) for the initial installation and setup.
 
 ### Prerequisites
 
@@ -191,6 +191,6 @@ By including the `codeInput()` plugin in your config and using the `code` type i
 
 The following scripts can be run from the root of the monorepo:
 
-- `yarn dev:studio`: Starts the development server for the Sanity studio.
-- `yarn build:studio`: Builds the Sanity studio for production.
-- `yarn lint:studio`: Lints the codebase using ESLint.
+- `pnpm dev:studio`: Starts the development server for the Sanity studio.
+- `pnpm build:studio`: Builds the Sanity studio for production.
+- `pnpm lint:studio`: Lints the codebase using ESLint.

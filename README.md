@@ -1,12 +1,12 @@
-# V2 - Monorepo
+# Portfolio Monorepo
 
-This repository contains the source code for the second iteration of my portfolio website, built with Next.js, Tailwind CSS, and Sanity. The project is structured as a monorepo using Yarn Workspaces and is managed with Turborepo.
+This repository contains the source code for my personal portfolio website, built with Next.js, Tailwind CSS, and Sanity. The project is structured as a monorepo using pnpm workspaces and is managed with Turborepo.
 
-![Portfolio Website Overview](https://drive.google.com/thumbnail?id=10k4FZT--EPVmaNBH3qrKFnKANOsSp930&sz=w1024&t=1681358800&mime=image/png)
+![Portfolio Website Overview](docs/preview.png)
 
 ## Table of Contents
 
-- [V2 - Monorepo](#v2---monorepo)
+- [Portfolio Monorepo](#portfolio-monorepo)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Project Structure](#project-structure)
@@ -19,15 +19,13 @@ This repository contains the source code for the second iteration of my portfoli
 
 ## Introduction
 
-This project is the second version of my portfolio, designed to be open-source, easily customizable, and deployable. It features a Next.js frontend and a Sanity CMS backend for content management.
-
-The project was inspired by [Praha's Framer template](https://darkmate.framer.website), which served as a design reference.
+This project is proof of work: long-form, first-person case studies grounded in real code, with snippets linked back to their repositories. Rather than a services-and-pricing template, it's built to show how I think while I ship — decisions, dead ends, and trade-offs — with interactive annotated code as the centerpiece. It's open-source, easily customizable, and deployable, with a Next.js frontend and a Sanity CMS backend for content management.
 
 ## Project Structure
 
-This monorepo is organized using Yarn Workspaces and Turborepo. The workspaces are located in the `apps` and `packages` directories:
+This monorepo is organized using pnpm workspaces and Turborepo. The workspaces are located in the `apps` and `packages` directories:
 
-- `apps/web`: The Next.js 14 frontend application.
+- `apps/web`: The Next.js frontend application.
 - `apps/studio`: The Sanity CMS studio for content management.
 - `packages/*`: Shared packages and utilities, including `@v2/sanity-schemas` for type-safe Sanity content.
 
@@ -35,8 +33,8 @@ This monorepo is organized using Yarn Workspaces and Turborepo. The workspaces a
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/en/) (v18 or later)
-- [Yarn](https://yarnpkg.com/getting-started/install) (v1.22 or later)
+- [Node.js](https://nodejs.org/en/) (v24 or later)
+- [pnpm](https://pnpm.io/installation) (v11 or later)
 - [Sanity CLI](https://www.sanity.io/docs/cli) (install globally)
 
 ### Installation
@@ -51,7 +49,7 @@ This monorepo is organized using Yarn Workspaces and Turborepo. The workspaces a
 2. **Install dependencies from the root directory:**
 
    ```bash
-   yarn install
+   pnpm install
    ```
 
 3. **Set up environment variables:**
@@ -65,29 +63,30 @@ This project uses Turborepo to manage scripts. You can run the following command
 - **To start all applications in development mode:**
 
   ```bash
-  yarn dev
+  pnpm dev
   ```
 
 - **To build all applications for production:**
 
   ```bash
-  yarn build
+  pnpm build
   ```
 
 - **To lint all applications:**
 
   ```bash
-  yarn lint
+  pnpm lint
   ```
 
 You can also run scripts for individual applications:
 
-- `yarn dev:web`: Starts the development server for the web app.
-- `yarn dev:studio`: Starts the development server for the Sanity studio.
-- `yarn build:web`: Builds the web app for production.
-- `yarn build:studio`: Builds the Sanity studio for production.
-- `yarn lint:web`: Lints the web app.
-- `yarn lint:studio`: Lints the Sanity studio.
+- `pnpm dev:web`: Starts the development server for the web app.
+- `pnpm dev:studio`: Starts the development server for the Sanity studio.
+- `pnpm build:web`: Builds the web app for production.
+- `pnpm build:studio`: Builds the Sanity studio for production.
+- `pnpm lint:web`: Lints the web app.
+- `pnpm lint:studio`: Lints the Sanity studio.
+- `pnpm generate:types`: Extracts the Sanity schema and regenerates the type-safe content types.
 
 ## Contributing
 
