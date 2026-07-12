@@ -5,10 +5,10 @@ import HeroTitle from '@/components/home/HeroTitle';
 import Reveal from '@/components/motion/Reveal';
 import JsonLd from '@/components/jsonLd/JsonLd';
 import { PersonSchema } from '@/lib/schema';
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getProjects, getFeaturedProjects, getAboutMe } from '@/lib/sanity/queries';
+import { projects as projectsData } from '@/lib/data/projects';
+import { about as aboutData } from '@/lib/data/about';
 import { getDynamicMetaData } from '@/lib/utilities';
-import { GetProjectsResult, GetFeaturedProjectsResult, GetAboutMeResult } from '@/lib/sanity/types';
+import { GetProjectsResult } from '@/lib/sanity/types';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 
 export const revalidate = 60;
@@ -24,9 +24,9 @@ const primaryTool = (tools: GetProjectsResult[number]['tools']) =>
 
 export default async function Home() {
   const [projects, featured, about] = await Promise.all([
-    fetchSanityData<GetProjectsResult>(getProjects),
-    fetchSanityData<GetFeaturedProjectsResult>(getFeaturedProjects),
-    fetchSanityData<GetAboutMeResult>(getAboutMe),
+    projectsData.list(),
+    projectsData.featured(),
+    aboutData.get(),
   ]);
   const selected = featured;
   const archive: GetProjectsResult = projects.filter((p) => !p.featured);
@@ -37,6 +37,7 @@ export default async function Home() {
 
       <Masthead />
 
+      <main>
       {/* Hero */}
       <section className='py-16 md:py-24'>
         <p
@@ -200,6 +201,7 @@ export default async function Home() {
           </ul>
         </div>
       </section>
+      </main>
 
       <SiteFooter />
     </div>

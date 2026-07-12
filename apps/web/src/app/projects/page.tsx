@@ -1,10 +1,8 @@
 import Masthead from '@/components/layout/Masthead';
 import SiteFooter from '@/components/layout/SiteFooter';
 import ArchiveTable from '@/components/projects/ArchiveTable';
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getProjects } from '@/lib/sanity/queries';
+import { projects as projectsData } from '@/lib/data/projects';
 import { getDynamicMetaData } from '@/lib/utilities';
-import { GetProjectsResult } from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
@@ -14,12 +12,13 @@ export async function generateMetadata() {
 }
 
 const Projects = async () => {
-  const projects: GetProjectsResult = await fetchSanityData(getProjects);
+  const projects = await projectsData.list();
 
   return (
     <div className='mx-auto max-w-4xl px-6 md:px-10'>
       <Masthead />
 
+      <main>
       <section className='py-14 md:py-20'>
         <p className='mb-5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-mark'>
           The full index
@@ -35,6 +34,7 @@ const Projects = async () => {
       </section>
 
       <ArchiveTable projects={projects} />
+      </main>
 
       <SiteFooter />
     </div>

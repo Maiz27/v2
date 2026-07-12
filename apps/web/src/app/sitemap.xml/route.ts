@@ -1,19 +1,18 @@
 import { NextResponse } from 'next/server';
 import { BASEURL } from '@/lib/Constants';
 import { NAV } from '@/lib/site';
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getProjectsForSEO } from '@/lib/sanity/queries';
+import { projects as projectsData } from '@/lib/data/projects';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 type SanityEntry = {
-  slug: string;
+  slug: string | null;
   publishedAt: string;
 };
 
 export async function GET() {
-  const allProjects: SanityEntry[] = await fetchSanityData(getProjectsForSEO);
+  const allProjects: SanityEntry[] = await projectsData.forSeo();
 
   const projects = mapSanityEntriesToSitemapEntries(allProjects, '/projects');
 
