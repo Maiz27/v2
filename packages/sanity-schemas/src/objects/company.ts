@@ -15,14 +15,12 @@ export const company = defineType({
       name: 'label',
       title: 'Company Type',
       type: 'string',
-      validation: (Rule) => Rule.required(),
       description: "Company Type, e.g. 'Agency', 'Startup', 'Enterprise' etc.",
     }),
     defineField({
       name: 'href',
       title: 'Company Website',
       type: 'url',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'logo',
@@ -31,7 +29,6 @@ export const company = defineType({
       options: {
         hotspot: true,
       },
-      validation: (Rule) => Rule.required(),
       description: 'Company Logo, preferably a png image',
     }),
   ],
