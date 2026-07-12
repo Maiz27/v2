@@ -32,8 +32,8 @@ const Reveal = <T extends ElementType = 'div'>({
     const el = ref.current;
     if (!el) return;
     if (typeof IntersectionObserver === 'undefined') {
-      setInView(true);
-      return;
+      const frame = window.requestAnimationFrame(() => setInView(true));
+      return () => window.cancelAnimationFrame(frame);
     }
     const observer = new IntersectionObserver(
       (entries) => {
