@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Masthead from '@/components/layout/Masthead';
 import SiteFooter from '@/components/layout/SiteFooter';
@@ -7,16 +6,12 @@ import Contents from '@/components/projects/Contents';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import JsonLd from '@/components/jsonLd/JsonLd';
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getProjectBySlug, getProjectMetadata } from '@/lib/sanity/queries';
+import { projects } from '@/lib/data/projects';
 import { getDomain, getMonthYear } from '@/lib/utilities';
+import { buildMetadata } from '@/lib/metadata';
 import { BASEURL } from '@/lib/Constants';
 import { PersonSchema } from '@/lib/schema';
 import { CreativeWork } from 'schema-dts';
-import {
-  GetProjectBySlugResult,
-  GetProjectMetadataResult,
-} from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
@@ -24,10 +19,7 @@ type Params = { [key: string]: string | undefined };
 
 const page = async ({ params }: { params: Promise<Params> }) => {
   const { slug } = await params;
-  const project: GetProjectBySlugResult = await fetchSanityData(
-    getProjectBySlug,
-    { slug }
-  );
+  const project = await projects.bySlug(slug!);
 
   if (!project) {
     return notFound();
@@ -64,6 +56,7 @@ const page = async ({ params }: { params: Promise<Params> }) => {
 
         <Masthead />
 
+        <main>
         {/* Case header */}
         <Reveal as='section' className='draw-b-hair py-14 md:py-20'>
           <p
@@ -141,17 +134,9 @@ const page = async ({ params }: { params: Promise<Params> }) => {
 
           <article>
             <RichTextParser content={content!} />
-
-            <footer className='mt-14 border-t-2 border-ink pt-6'>
-              <Link
-                href='/'
-                className='font-mono text-[0.72rem] uppercase tracking-[0.16em] underline decoration-dotted underline-offset-4 hover:text-mark'
-              >
-                &larr; Back to the index
-              </Link>
-            </footer>
           </article>
         </div>
+        </main>
 
         <SiteFooter />
       </div>
@@ -167,50 +152,16 @@ export async function generateMetadata({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const project: GetProjectMetadataResult = await fetchSanityData(
-    getProjectMetadata,
-    { slug }
-  );
+  const project = await projects.metadataFor(slug!);
   if (project) {
-    const { slug, contentTitle, description, images } = project;
-    const url = `${BASEURL}/projects/${slug?.current}`;
+    const { slug: projectSlug, contentTitle, description, images } = project;
 
-    return {
+    return buildMetadata({
       title: `${contentTitle}`,
-      description: description,
-      image: images,
-      alternates: {
-        canonical: url,
-      },
-      icons: {
-        icon: '/imgs/logo/favicon.ico',
-        shortcut: '/imgs/logo/favicon.ico',
-        apple: '/imgs/logo/favicon.ico',
-        other: {
-          rel: 'apple-touch-icon-precomposed',
-          url: '/imgs/logo/favicon.ico',
-        },
-      },
-      openGraph: {
-        type: 'article',
-        url: url,
-        title: contentTitle,
-        description: description,
-        siteName: contentTitle,
-        images: [{ url: images }],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        site: url,
-        images: [{ url: images }],
-      },
-      robots: {
-        index: true,
-        follow: true,
-        'max-snippet': 50,
-        'max-image-preview': 'large',
-        'max-video-preview': -1,
-      },
-    };
+      description,
+      path: `/projects/${projectSlug?.current}`,
+      image: images ?? undefined,
+      type: 'article',
+    });
   }
 }
