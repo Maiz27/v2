@@ -4,7 +4,16 @@ export const getAboutMe = groq`*[_type == "aboutMe"]{
   name,
   bio,
   "imageUrl": image.asset->url,
-  stats
+  heroLabel,
+  heroHeadline,
+  heroDescription,
+  currentStatusLabel,
+  currentStatus,
+  email,
+  github,
+  githubLabel,
+  linkedin,
+  linkedinLabel
 }[0]`;
 
 export const getMainImage = groq`*[_type == "aboutMe"]{
@@ -45,7 +54,7 @@ export const getFeaturedProjects = groq`*[_type == "project" && featured == true
     "iconSvg": iconSvg.asset->url
   },
    "mainImage": images[0].image.asset->url
-}[0..1] | order(date desc)`;
+}[0..3] | order(date desc)`;
 
 export const getProjectBySlug = groq`*[_type == "project" && slug.current == $slug]{
   title,
@@ -78,12 +87,6 @@ export const getProjectsForSEO = groq`*[_type == "project"]{
   "slug": slug.current,
   "publishedAt": date,
 }`;
-
-export const getFaqs = groq`*[_type == "faq"]{
-  index,
-  question,
-  answer,
-} | order(index asc)`;
 
 export const getMetadata = groq`*[_type == "metadata" && slug.current == $slug]{
   "slug": slug.current,
