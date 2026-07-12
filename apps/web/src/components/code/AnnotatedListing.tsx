@@ -136,23 +136,27 @@ const AnnotatedListing = ({
   // Derive the below-xl popover position from the active token, so it always
   // lands under the token and survives re-renders and scroll-into-view.
   useEffect(() => {
-    if (isWide || !popId) {
-      setPopPos(null);
-      return;
-    }
-    const wrap = wrapRef.current;
-    const token = codeRef.current?.querySelector(`[data-annot="${popId}"]`);
-    if (!wrap || !token) {
-      setPopPos(null);
-      return;
-    }
-    const wrapRect = wrap.getBoundingClientRect();
-    const rect = token.getBoundingClientRect();
-    const maxX = Math.max(8, wrapRect.width - CARD_WIDTH - 8);
-    setPopPos({
-      x: Math.min(Math.max(rect.left - wrapRect.left, 8), maxX),
-      y: rect.bottom - wrapRect.top + 10,
+    const frame = window.requestAnimationFrame(() => {
+      if (isWide || !popId) {
+        setPopPos(null);
+        return;
+      }
+      const wrap = wrapRef.current;
+      const token = codeRef.current?.querySelector(`[data-annot="${popId}"]`);
+      if (!wrap || !token) {
+        setPopPos(null);
+        return;
+      }
+      const wrapRect = wrap.getBoundingClientRect();
+      const rect = token.getBoundingClientRect();
+      const maxX = Math.max(8, wrapRect.width - CARD_WIDTH - 8);
+      setPopPos({
+        x: Math.min(Math.max(rect.left - wrapRect.left, 8), maxX),
+        y: rect.bottom - wrapRect.top + 10,
+      });
     });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [isWide, popId, html]);
 
   // Reflect active / pinned state on the tokens in the highlighted markup.
