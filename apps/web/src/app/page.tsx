@@ -10,6 +10,7 @@ import { about as aboutData } from '@/lib/data/about';
 import { getDynamicMetaData } from '@/lib/utilities';
 import { GetProjectsResult } from '@/lib/sanity/types';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
+import { OWNER } from '@/lib/site';
 
 export const revalidate = 60;
 
@@ -28,8 +29,8 @@ export default async function Home() {
     projectsData.featured(),
     aboutData.get(),
   ]);
-  const selected = featured;
-  const archive: GetProjectsResult = projects.filter((p) => !p.featured);
+  const selected = featured.filter((p) => p.slug?.current);
+  const archive: GetProjectsResult = projects.filter((p) => !p.featured && p.slug?.current);
 
   return (
     <div className='mx-auto max-w-6xl px-6 md:px-10'>
@@ -172,30 +173,30 @@ export default async function Home() {
           <ul className='space-y-2 font-mono text-[0.75rem]'>
             <li>
               <a
-                href={`mailto:${about?.email ?? 'maged@example.com'}`}
+                href={`mailto:${about?.email ?? OWNER.email}`}
                 className='underline decoration-dotted underline-offset-4 hover:text-mark'
               >
-                {about?.email ?? 'maged@example.com'}
+                {about?.email ?? OWNER.email}
               </a>
             </li>
             <li>
               <a
-                href={about?.github ?? 'https://github.com'}
+                href={about?.github ?? OWNER.github}
                 target='_blank'
                 rel='noreferrer noopener'
                 className='underline decoration-dotted underline-offset-4 hover:text-mark'
               >
-                {about?.githubLabel ?? 'GitHub'}
+                {about?.githubLabel ?? OWNER.githubLabel}
               </a>
             </li>
             <li>
               <a
-                href={about?.linkedin ?? 'https://linkedin.com'}
+                href={about?.linkedin ?? OWNER.linkedin}
                 target='_blank'
                 rel='noreferrer noopener'
                 className='underline decoration-dotted underline-offset-4 hover:text-mark'
               >
-                {about?.linkedinLabel ?? 'LinkedIn'}
+                {about?.linkedinLabel ?? OWNER.linkedinLabel}
               </a>
             </li>
           </ul>

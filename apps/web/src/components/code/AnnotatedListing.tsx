@@ -171,8 +171,24 @@ const AnnotatedListing = ({
         return;
       }
       const wrap = wrapRef.current;
-      const token = codeRef.current?.querySelector(`[data-annot="${popId}"]`);
-      if (!wrap || !token) {
+      if (!wrap) {
+        setPopPos(null);
+        return;
+      }
+      const code = codeRef.current;
+      if (!code) {
+        setPopPos(null);
+        return;
+      }
+      const tokens = code.querySelectorAll('[data-annot]');
+      let token: Element | null = null;
+      for (const t of tokens) {
+        if (t.getAttribute('data-annot') === popId) {
+          token = t;
+          break;
+        }
+      }
+      if (!token) {
         setPopPos(null);
         return;
       }
@@ -269,12 +285,7 @@ const AnnotatedListing = ({
               return (
                 <li
                   key={a.id}
-                  onMouseEnter={() => setHoverId(a.id)}
-                  onMouseLeave={() => setHoverId(null)}
-                  onClick={() =>
-                    setPinnedId((current) => (current === a.id ? null : a.id))
-                  }
-                  className={`group grid cursor-pointer grid-cols-[1.4rem_minmax(0,1fr)] gap-x-1 text-[0.8rem] leading-relaxed transition-colors duration-200 ${
+                  className={`group grid grid-cols-[1.4rem_minmax(0,1fr)] gap-x-1 text-[0.8rem] leading-relaxed transition-colors duration-200 ${
                     isActive ? 'text-ink' : 'text-ink-soft'
                   }`}
                 >
@@ -282,19 +293,29 @@ const AnnotatedListing = ({
                     {i + 1}
                   </span>
                   <span>
-                    <span
-                      className={`mb-1 block font-mono text-[0.62rem] uppercase tracking-[0.14em] ${
-                        a.kind === 'decision' ? 'text-mark' : 'text-ink-faint'
-                      }`}
+                    <button
+                      type="button"
+                      onMouseEnter={() => setHoverId(a.id)}
+                      onMouseLeave={() => setHoverId(null)}
+                      onClick={() =>
+                        setPinnedId((current) => (current === a.id ? null : a.id))
+                      }
+                      className={`focus:outline-none focus-visible:ring-2 focus-visible:ring-mark focus-visible:ring-offset-2 focus-visible:ring-offset-paper ${isPinned ? 'font-medium' : ''}`}
                     >
-                      {kindLabel(a.kind)}
-                      {isPinned && (
-                        <span className='ml-1.5 normal-case tracking-normal text-ink-faint'>
-                          &middot; pinned
-                        </span>
-                      )}
-                    </span>
-                    {a.body}
+                      <span
+                        className={`mb-1 block font-mono text-[0.62rem] uppercase tracking-[0.14em] ${
+                          a.kind === 'decision' ? 'text-mark' : 'text-ink-faint'
+                        }`}
+                      >
+                        {kindLabel(a.kind)}
+                        {isPinned && (
+                          <span className='ml-1.5 normal-case tracking-normal text-ink-faint'>
+                            &middot; pinned
+                          </span>
+                        )}
+                      </span>
+                      {a.body}
+                    </button>
                   </span>
                 </li>
               );

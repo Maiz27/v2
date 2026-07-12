@@ -1,9 +1,11 @@
 import { Metadata } from 'next';
-import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
 import { BASEURL } from './Constants';
 
 /** The site logo, used as the default social image. */
 const DEFAULT_IMAGE = `${BASEURL}/imgs/logo/logo.png`;
+
+/** X/Twitter handle for the site, if configured. */
+const TWITTER_SITE = '@maiz27';
 
 type BuildMetadataArgs = {
   title: string;
@@ -59,10 +61,10 @@ export function buildMetadata({
       description,
       siteName: title,
       images: [{ url: socialImage }],
-    } as OpenGraph,
+    } as Metadata['openGraph'],
     twitter: {
       card: 'summary_large_image',
-      site: url,
+      ...(TWITTER_SITE ? { site: TWITTER_SITE } : {}),
       images: [{ url: socialImage }],
     },
     robots: {

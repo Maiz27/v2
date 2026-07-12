@@ -154,10 +154,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = await projects.metadataFor(slug!);
   if (project) {
-    const { slug: projectSlug, contentTitle, description, images } = project;
+    const { slug: projectSlug, contentTitle, description, images, title } = project;
 
     return buildMetadata({
-      title: `${contentTitle}`,
+      title: `${contentTitle || title}`,
       description,
       path: `/projects/${projectSlug?.current}`,
       image: images ?? undefined,

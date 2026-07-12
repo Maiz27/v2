@@ -65,16 +65,28 @@ export function buildOutline(content: BlockContent): {
     ) {
       const text = plainText(block);
       if (!text) return;
+      const baseId = createSlug(text);
+      let id = baseId;
+      const existing = Array.from(byKey.values()).some(
+        (item) => item.id === id
+      );
+      if (existing) {
+        let suffix = 1;
+        while (Array.from(byKey.values()).some((item) => item.id === `${baseId}-${suffix}`)) {
+          suffix++;
+        }
+        id = `${baseId}-${suffix}`;
+      }
       if (block.style === 'h2') {
         push({
           type: 'h2',
-          id: createSlug(text),
+          id,
           text,
           n: String(++headingCounter).padStart(2, '0'),
           key: block._key,
         });
       } else {
-        push({ type: 'h3', id: createSlug(text), text, key: block._key });
+        push({ type: 'h3', id, text, key: block._key });
       }
       return;
     }

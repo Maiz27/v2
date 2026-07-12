@@ -62,7 +62,7 @@ export const getExperiences = groq`*[_type == "experience"]{
   },
 } | order(duration.from desc)`;
 
-export const getFeaturedProjects = groq`*[_type == "project" && featured == true]{
+export const getFeaturedProjects = groq`*[_type == "project" && featured == true] | order(date desc)[0..3]{
   title,
   slug,
   featured,
@@ -79,7 +79,7 @@ export const getFeaturedProjects = groq`*[_type == "project" && featured == true
     "iconSvg": iconSvg.asset->url
   },
    "mainImage": images[0].image.asset->url
-}[0..3] | order(date desc)`;
+}`;
 
 export const getProjectBySlug = groq`*[_type == "project" && slug.current == $slug]{
   title,

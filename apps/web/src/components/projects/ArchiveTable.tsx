@@ -30,7 +30,10 @@ const ArchiveTable = ({ projects }: Props) => {
   const [kind, setKind] = useState('All');
 
   const rows = useMemo(
-    () => (kind === 'All' ? projects : projects.filter((p) => p.kind === kind)),
+    () => {
+      const filtered = projects.filter((p) => p.slug?.current);
+      return kind === 'All' ? filtered : filtered.filter((p) => p.kind === kind);
+    },
     [projects, kind]
   );
 

@@ -361,13 +361,11 @@ label[for] {
   /* Keep entries from splitting awkwardly across page breaks. */
   .cv-block {
     break-inside: avoid;
-    page-break-inside: avoid;
   }
   h1,
   h2,
   h3 {
     break-after: avoid;
-    page-break-after: avoid;
   }
   @page {
     margin: 12mm 12mm 10mm 12mm;

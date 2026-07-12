@@ -4,12 +4,13 @@ const MAX_FEATURED = 4
 const MIN_FEATURED = 2
 
 async function getFeaturedCount(context: any, excludeId?: string) {
-  const {getClient} = context
-  const client = getClient({apiVersion: '2024-01-01'})
+  const { getClient } = context;
+  // Use the API version that includes drafts so draft+published aren't double-counted
+  const client = getClient({ apiVersion: '2024-01-01', perspective: 'previewDrafts' });
   return client.fetch(
     `count(*[_type == "project" && featured == true ${excludeId ? `&& _id != $id` : ''}])`,
-    {id: excludeId}
-  )
+    { id: excludeId }
+  );
 }
 
 export default defineType({

@@ -95,10 +95,12 @@ const Cv = async () => {
               <div className='flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1'>
                 <h3 className='font-display text-[1.2rem] font-bold print:text-[12pt]'>
                   {role.title}
-                  <span className='font-body font-normal text-ink-soft'>
-                    {' '}
-                    &middot; {role.org}
-                  </span>
+                  {role.org && (
+                    <span className='font-body font-normal text-ink-soft'>
+                      {' '}
+                      &middot; {role.org}
+                    </span>
+                  )}
                 </h3>
                 <span className='font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-faint print:text-[7.5pt]'>
                   {role.dates}
@@ -151,14 +153,16 @@ const Cv = async () => {
               <p className='mt-2 max-w-[72ch] text-[0.95rem] leading-relaxed text-ink-soft print:mt-1.5 print:max-w-none print:text-[9pt] print:leading-snug'>
                 {project.blurb}
               </p>
-              <a
-                href={project.href}
-                target='_blank'
-                rel='noreferrer noopener'
-                className='mt-1.5 inline-block font-mono text-[0.68rem] text-mark underline decoration-dotted underline-offset-4 hover:decoration-solid print:mt-1 print:text-[7.5pt]'
-              >
-                {project.hrefLabel}
-              </a>
+              {project.href && (
+                <a
+                  href={project.href}
+                  target='_blank'
+                  rel='noreferrer noopener'
+                  className='mt-1.5 inline-block font-mono text-[0.68rem] text-mark underline decoration-dotted underline-offset-4 hover:decoration-solid print:mt-1 print:text-[7.5pt]'
+                >
+                  {project.hrefLabel}
+                </a>
+              )}
             </article>
           ))}
         </div>

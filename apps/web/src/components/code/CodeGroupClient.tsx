@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect, KeyboardEvent } from 'react';
 
 type Tab = { filename: string; source?: string | null };
 
@@ -22,7 +22,35 @@ const CodeGroupClient = ({
   children: React.ReactNode[];
 }) => {
   const [active, setActive] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const activeSource = tabs[active]?.source;
+
+  // Roving keyboard navigation for tabs
+  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let newIndex = active;
+    switch (e.key) {
+      case 'ArrowRight':
+        e.preventDefault();
+        newIndex = (active + 1) % tabs.length;
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        newIndex = (active - 1 + tabs.length) % tabs.length;
+        break;
+      case 'Home':
+        e.preventDefault();
+        newIndex = 0;
+        break;
+      case 'End':
+        e.preventDefault();
+        newIndex = tabs.length - 1;
+        break;
+      default:
+        return;
+    }
+    setActive(newIndex);
+    tabRefs.current[newIndex]?.focus();
+  };
 
   return (
     <figure id={id} className='my-10 scroll-m-16'>
@@ -35,13 +63,20 @@ const CodeGroupClient = ({
         <div role='tablist' className='flex flex-wrap'>
           {tabs.map((tab, i) => {
             const isActive = i === active;
+            const tabId = `${id}-tab-${i}`;
+            const panelId = `${id}-panel-${i}`;
             return (
               <button
+                ref={(el) => (tabRefs.current[i] = el)}
                 key={tab.filename + i}
+                id={tabId}
                 type='button'
                 role='tab'
                 aria-selected={isActive}
+                aria-controls={panelId}
+                tabIndex={isActive ? 0 : -1}
                 onClick={() => setActive(i)}
+                onKeyDown={(e) => handleKeyDown(e, i)}
                 className={`cursor-pointer border-r border-rule px-4 py-2.5 font-mono text-[0.72rem] transition-colors duration-200 ${
                   isActive
                     ? 'bg-ink text-paper'
@@ -65,11 +100,22 @@ const CodeGroupClient = ({
         )}
       </div>
       <div className='border border-rule'>
-        {children.map((child, i) => (
-          <div key={i} hidden={i !== active}>
-            {child}
-          </div>
-        ))}
+        {children.map((child, i) => {
+          const isActive = i === active;
+          const tabId = `${id}-tab-${i}`;
+          const panelId = `${id}-panel-${i}`;
+          return (
+            <div
+              key={i}
+              id={panelId}
+              role='tabpanel'
+              aria-labelledby={tabId}
+              hidden={!isActive}
+            >
+              {child}
+            </div>
+          );
+        })}
       </div>
     </figure>
   );

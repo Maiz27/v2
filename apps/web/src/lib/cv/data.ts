@@ -29,7 +29,7 @@ export type CvProject = {
   dateLabel: string;
   /** "Flutter / Dart" — screen-only, its own line. */
   stack: string;
-  href: string;
+  href?: string;
   hrefLabel: string;
   blurb: string;
 };
@@ -62,8 +62,12 @@ type RawProject = NonNullable<RawCv['projects']>[number];
 type RawExperienceEntry = NonNullable<RawCv['experience']>[number];
 
 /** "October 2022" — long month + year, en-US, from a `YYYY-MM-DD` date string. */
-const formatMonthYear = (dateStr: string): string =>
-  new Date(dateStr).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+const formatMonthYear = (dateStr: string): string => {
+  // Use UTC to avoid timezone shifts for date-only strings
+  const [year, month] = dateStr.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1));
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+};
 
 /** "October 2022 to Present" / "January 2024 to June 2026" from a duration. */
 const formatDates = (
@@ -113,7 +117,7 @@ const mapProject = (project: RawProject): CvProject => {
     meta: [stack, dateLabel].filter(Boolean).join(' / '),
     dateLabel,
     stack,
-    href: link,
+    href: link || undefined,
     hrefLabel: link ? bareUrl(link) : '',
     blurb: project.cvBlurb ?? '',
   };

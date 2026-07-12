@@ -19,7 +19,7 @@ export const urlFor = (source: Object) => {
 
 export const fetchSanityData = async <T>(
   query: string,
-  variables?: {}
+  variables?: Record<string, unknown>
 ): Promise<T> => {
   try {
     const data = await sanity.fetch<T>(query, variables);

@@ -37,9 +37,11 @@ const mapSanityEntriesToSitemapEntries = (
   entries: SanityEntry[],
   pathPrefix: string
 ) =>
-  entries.map(({ slug, publishedAt }) =>
-    createSitemapEntry(`${pathPrefix}/${slug}`, publishedAt)
-  );
+  entries
+    .filter(({ slug }) => slug !== null)
+    .map(({ slug, publishedAt }) =>
+      createSitemapEntry(`${pathPrefix}/${slug}`, publishedAt)
+    );
 
 const mapRoutesToSitemapEntries = (routes: readonly { href: string }[]) =>
   routes.map(({ href }) => createSitemapEntry(href, new Date().toISOString()));
