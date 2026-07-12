@@ -1,8 +1,9 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { setRouteTransitionEntering } from './route-transition-flag';
+import { INITIAL_MOTION_STATE } from '@/lib/motion';
 
 /**
  * Ledger route transition. A paper panel slides up over the page with a 2px
@@ -18,6 +19,16 @@ import { setRouteTransitionEntering } from './route-transition-flag';
  * paint boundary after the destination commits. The stack is WAAPI, not gsap.
  * When the motion gate resolves off, links are never intercepted and navigation
  * is native.
+ *
+ * Two more entry points into the same phase machine:
+ * - Browser back/forward (popstate): the URL has already changed by the time
+ *   popstate fires, so there is nothing to cover-then-commit the way a click
+ *   does. Instead the curtain snaps straight to "fully covering" (no slide-up)
+ *   and waits for the destination to land, same as the tail end of a click nav.
+ * - Landing on the site fresh (a hard navigation, not a client-side one): the
+ *   root's initial render is server-rendered already in the covering state
+ *   (see startCovered below) so there is no flash of the raw page before JS
+ *   runs, then it holds briefly and reveals once mounted.
  */
 
 type Phase = 'idle' | 'covering' | 'waiting' | 'revealing';
@@ -27,6 +38,7 @@ type Destination = { eyebrow: string; label: string };
 const COVER_MS = 560;
 const REVEAL_MS = 620;
 const WATCHDOG_MS = 7000;
+const ARRIVAL_HOLD_MS = 380;
 const EASE_INOUT = 'cubic-bezier(0.65, 0, 0.35, 1)';
 const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const EASE_IN = 'cubic-bezier(0.5, 0, 0.75, 0)';
@@ -41,9 +53,18 @@ function destinationForPath(pathname: string): Destination {
   return { eyebrow: 'Elsewhere', label: 'Loading' };
 }
 
+// Server-consistent (no browser APIs): whether the curtain's very first
+// render, before any JS has run, should already be in the covering state so
+// a fresh page load never flashes the raw page before the arrival reveal.
+const startCovered = INITIAL_MOTION_STATE === 'on';
+
 const RouteTransition = () => {
   const router = useRouter();
   const pathname = usePathname();
+  // Captured once, from whatever pathname the very first render (SSR) saw.
+  // pathname itself changes on every client-side nav and would otherwise
+  // fight the imperative textContent writes in cover()/instantCover() below.
+  const [initialDest] = useState<Destination>(() => destinationForPath(pathname));
 
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -53,6 +74,11 @@ const RouteTransition = () => {
 
   const phaseRef = useRef<Phase>('idle');
   const apiRef = useRef<{ reveal: () => void } | null>(null);
+  const pathnameRef = useRef(pathname);
+
+  useEffect(() => {
+    pathnameRef.current = pathname;
+  }, [pathname]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -66,12 +92,18 @@ const RouteTransition = () => {
     let pulse: Animation | null = null;
     let watchdog: number | null = null;
     let commitFrame: number | null = null;
+    let arrivalTimer: number | null = null;
+    let popstatePoll: number | null = null;
 
     const clearTimers = () => {
       if (watchdog !== null) window.clearTimeout(watchdog);
       if (commitFrame !== null) window.cancelAnimationFrame(commitFrame);
+      if (arrivalTimer !== null) window.clearTimeout(arrivalTimer);
+      if (popstatePoll !== null) window.cancelAnimationFrame(popstatePoll);
       watchdog = null;
       commitFrame = null;
+      arrivalTimer = null;
+      popstatePoll = null;
     };
     const cancelRunning = (preserveStyles = false) => {
       running.forEach((a) => {
@@ -229,6 +261,51 @@ const RouteTransition = () => {
       });
     };
 
+    // Snap straight to "fully covering", no slide-up: used when the URL has
+    // already changed before we get a chance to animate (popstate, arrival).
+    const instantCover = (dest: Destination) => {
+      phaseRef.current = 'covering';
+      eyebrow.textContent = dest.eyebrow;
+      label.textContent = dest.label;
+      root.style.visibility = 'visible';
+      root.style.pointerEvents = 'auto';
+      panel.style.transform = 'translateY(0)';
+      eyebrow.style.transform = 'translateY(0)';
+      label.style.transform = 'translateY(0)';
+      rule.style.transformOrigin = 'left center';
+      rule.style.transform = 'scaleX(1)';
+    };
+
+    const onPopState = () => {
+      if (document.documentElement.dataset.motion !== 'on') return;
+      if (phaseRef.current !== 'idle') return;
+
+      instantCover(destinationForPath(window.location.pathname));
+      phaseRef.current = 'waiting';
+      setRouteTransitionEntering(true);
+      startPulse();
+      watchdog = window.setTimeout(() => {
+        if (phaseRef.current === 'waiting') reveal();
+      }, WATCHDOG_MS);
+
+      // Safety net: Next's own popstate handling may update `pathname` before
+      // or after this listener runs (order between the two isn't
+      // guaranteed), so the [pathname] effect elsewhere in this component
+      // might already have fired and found phase still idle, missing its
+      // one chance to reveal. Poll briefly and reveal directly if so; the
+      // watchdog above is the fallback of last resort either way.
+      let checks = 0;
+      const poll = () => {
+        if (phaseRef.current !== 'waiting') return;
+        if (pathnameRef.current === window.location.pathname) {
+          reveal();
+          return;
+        }
+        if (++checks < 10) popstatePoll = window.requestAnimationFrame(poll);
+      };
+      popstatePoll = window.requestAnimationFrame(poll);
+    };
+
     const onClick = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0) return;
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
@@ -256,9 +333,24 @@ const RouteTransition = () => {
 
     apiRef.current = { reveal };
     document.addEventListener('click', onClick, true);
+    window.addEventListener('popstate', onPopState);
+
+    // Arrival: this effect only ever runs once per real page load (the
+    // component lives in the root layout and never unmounts across
+    // client-side navigations), so "on mount" here really does mean
+    // "landing on the site". The SSR'd initial render is already in the
+    // covering state (see startCovered) to avoid a flash; hold briefly, then
+    // reveal to arrive.
+    if (startCovered) {
+      phaseRef.current = 'covering';
+      arrivalTimer = window.setTimeout(() => {
+        if (phaseRef.current === 'covering') reveal();
+      }, ARRIVAL_HOLD_MS);
+    }
 
     return () => {
       document.removeEventListener('click', onClick, true);
+      window.removeEventListener('popstate', onPopState);
       apiRef.current = null;
       clearTimers();
       pulse?.cancel();
@@ -288,12 +380,18 @@ const RouteTransition = () => {
       aria-hidden='true'
       ref={rootRef}
       className='pointer-events-none fixed inset-0 z-[120]'
-      style={{ visibility: 'hidden', pointerEvents: 'none' }}
+      style={{
+        visibility: startCovered ? 'visible' : 'hidden',
+        pointerEvents: startCovered ? 'auto' : 'none',
+      }}
     >
       <div
         ref={panelRef}
         className='absolute inset-0'
-        style={{ backgroundColor: 'var(--color-paper)', transform: 'translateY(100%)' }}
+        style={{
+          backgroundColor: 'var(--color-paper)',
+          transform: startCovered ? 'translateY(0)' : 'translateY(100%)',
+        }}
       >
         <span className='absolute inset-x-0 top-0 h-[2px] bg-mark' />
         <div className='absolute inset-0 grid place-items-center'>
@@ -302,20 +400,24 @@ const RouteTransition = () => {
               <span
                 ref={eyebrowRef}
                 className='block font-mono text-[0.7rem] uppercase tracking-[0.3em] text-mark'
-                style={{ transform: 'translateY(180%)' }}
-              />
+                style={{ transform: startCovered ? 'translateY(0)' : 'translateY(180%)' }}
+              >
+                {startCovered ? initialDest.eyebrow : null}
+              </span>
             </div>
             <div className='-my-[0.5em] overflow-hidden py-[0.5em]'>
               <span
                 ref={labelRef}
                 className='font-display block text-4xl font-black leading-[1.15] tracking-tight text-ink sm:text-5xl'
-                style={{ transform: 'translateY(180%)' }}
-              />
+                style={{ transform: startCovered ? 'translateY(0)' : 'translateY(180%)' }}
+              >
+                {startCovered ? initialDest.label : null}
+              </span>
             </div>
             <span
               ref={ruleRef}
               className='block h-[2px] w-24 origin-left bg-mark'
-              style={{ transform: 'scaleX(0)' }}
+              style={{ transform: startCovered ? 'scaleX(1)' : 'scaleX(0)' }}
             />
           </div>
         </div>
