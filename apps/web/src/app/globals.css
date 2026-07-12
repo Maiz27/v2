@@ -266,6 +266,30 @@ label[for] {
   animation: ledger-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ---- Scroll-to-top (long-form reading) ----
+   Hidden + inert at rest; [data-visible] flips it in. The appear transition is
+   gated on the motion switch (like .link-underline) so it snaps when motion is
+   off and never strands the control invisible. */
+.ledger-to-top {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  pointer-events: none;
+  box-shadow: 0 12px 30px -18px oklch(24% 0.018 70 / 0.45);
+}
+.ledger-to-top[data-visible='true'] {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+[data-motion='on'] .ledger-to-top {
+  transition:
+    opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
 /* ---- Rich text (case study body) ---- */
 .ledger-prose h2,
 .ledger-prose h3 {

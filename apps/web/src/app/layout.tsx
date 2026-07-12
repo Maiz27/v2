@@ -3,6 +3,7 @@ import { Besley, Source_Serif_4, Fragment_Mono } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import MotionGate from '@/components/motion/MotionGate';
 import RouteTransition from '@/components/transitions/RouteTransition';
+import ScrollToTop from '@/components/ui/ScrollToTop';
 import { INITIAL_MOTION_STATE } from '@/lib/motion';
 import { OWNER } from '@/lib/site';
 import './globals.css';
@@ -52,6 +53,7 @@ export default function RootLayout({
         <MotionGate />
         <RouteTransition />
         {children}
+        <ScrollToTop />
         <SpeedInsights />
       </body>
     </html>
