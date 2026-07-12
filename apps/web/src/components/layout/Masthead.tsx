@@ -52,7 +52,7 @@ const Masthead = () => {
         </a>
         <Link
           href={OWNER.cv}
-          aria-label='Curriculum vitae'
+          aria-label='CV, Curriculum vitae'
           className='flex items-center gap-1.5 hover:text-mark md:underline md:decoration-dotted md:underline-offset-4'
         >
           <HiOutlineDocumentText className='text-base md:hidden' aria-hidden />
