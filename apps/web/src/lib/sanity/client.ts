@@ -1,5 +1,6 @@
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
+import type { QueryParams } from '@sanity/client';
 
 export const sanity = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
@@ -19,10 +20,12 @@ export const urlFor = (source: Object) => {
 
 export const fetchSanityData = async <T>(
   query: string,
-  variables?: Record<string, unknown>
+  variables?: QueryParams
 ): Promise<T> => {
   try {
-    const data = await sanity.fetch<T>(query, variables);
+    const data = variables
+      ? await sanity.fetch<T>(query, variables)
+      : await sanity.fetch<T>(query);
     return data;
   } catch (error) {
     console.error('Error fetching data:', error);

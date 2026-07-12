@@ -67,7 +67,7 @@ const CodeGroupClient = ({
             const panelId = `${id}-panel-${i}`;
             return (
               <button
-                ref={(el) => (tabRefs.current[i] = el)}
+                ref={(el) => { tabRefs.current[i] = el; }}
                 key={tab.filename + i}
                 id={tabId}
                 type='button'

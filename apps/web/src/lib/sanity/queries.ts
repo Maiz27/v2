@@ -102,6 +102,7 @@ export const getProjectBySlug = groq`*[_type == "project" && slug.current == $sl
 }[0]`;
 
 export const getProjectMetadata = groq`*[_type == "project" && slug.current == $slug]{
+  title,
   slug,
   description,
   "images": images[0].image.asset->url,
