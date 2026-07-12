@@ -1,5 +1,17 @@
 import {defineField, defineType} from 'sanity'
 
+const MAX_FEATURED = 4
+const MIN_FEATURED = 2
+
+async function getFeaturedCount(context: any, excludeId?: string) {
+  const {getClient} = context
+  const client = getClient({apiVersion: '2024-01-01'})
+  return client.fetch(
+    `count(*[_type == "project" && featured == true ${excludeId ? `&& _id != $id` : ''}])`,
+    {id: excludeId}
+  )
+}
+
 export default defineType({
   name: 'project',
   title: 'Project',
@@ -25,6 +37,36 @@ export default defineType({
       title: 'Featured Project',
       type: 'boolean',
       initialValue: false,
+      validation: (Rule) =>
+        Rule.custom(async (value, context) => {
+          // Get current featured count excluding this document
+          const count = await getFeaturedCount(context, context.document?._id)
+          
+          // Get the CURRENT stored value of featured for this document
+          const currentFeatured = context.document?.featured ?? false
+          
+          // Only validate if the value is actually CHANGING
+          if (value === currentFeatured) return true
+          
+          // Trying to FEATURE a project (false -> true)
+          if (value === true && currentFeatured === false) {
+            if (count >= MAX_FEATURED) {
+              return `Maximum of ${MAX_FEATURED} featured projects allowed. Unfeature another project first.`
+            }
+            return true
+          }
+          
+          // Trying to UNFEATURE a project (true -> false)
+          if (value === false && currentFeatured === true) {
+            // After unfeaturing, total featured would be `count` (since current is excluded)
+            if (count < MIN_FEATURED) {
+              return `Minimum of ${MIN_FEATURED} featured projects required. Feature another project before unfeaturing this one.`
+            }
+            return true
+          }
+          
+          return true
+        }),
     }),
     defineField({
       name: 'date',
