@@ -77,17 +77,9 @@ export default defineType({
     defineField({
       name: 'kind',
       title: 'Kind',
-      type: 'string',
+      type: 'reference',
+      to: {type: 'projectKind'},
       description: 'What this project is, for the archive filter (not the tech stack).',
-      options: {
-        list: [
-          {title: 'Web app', value: 'Web app'},
-          {title: 'Client site', value: 'Client site'},
-          {title: 'Game', value: 'Game'},
-          {title: 'Android app', value: 'Android app'},
-          {title: 'This site', value: 'This site'},
-        ],
-      },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -132,6 +124,15 @@ export default defineType({
       title: 'Images',
       type: 'array',
       of: [{type: 'projectImage'}],
+    }),
+    defineField({
+      name: 'cvBlurb',
+      title: 'CV Blurb',
+      type: 'text',
+      rows: 4,
+      description:
+        'Short resume-style description, used only when this project is listed on the CV.',
+      validation: (Rule) => Rule.max(600),
     }),
     defineField({
       name: 'contentTitle',
