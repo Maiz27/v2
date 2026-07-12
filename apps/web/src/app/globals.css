@@ -5,7 +5,9 @@
   --color-paper-raised: oklch(98.4% 0.006 88);
   --color-ink: oklch(24% 0.018 70);
   --color-ink-soft: oklch(40% 0.02 70);
-  --color-ink-faint: oklch(57% 0.016 75);
+  /* Bumped from 57% -> 53% L so faint text clears WCAG AA (4.5:1) on paper;
+     was 4.04:1 (Lighthouse a11y color-contrast, #7d766d). Now ~4.76:1. */
+  --color-ink-faint: oklch(53% 0.016 75);
   --color-rule: oklch(86% 0.014 82);
   --color-rule-strong: oklch(70% 0.018 78);
   --color-mark: oklch(51% 0.165 30);
@@ -368,6 +370,6 @@ label[for] {
     page-break-after: avoid;
   }
   @page {
-    margin: 16mm 14mm;
+    margin: 12mm 12mm 10mm 12mm;
   }
 }
