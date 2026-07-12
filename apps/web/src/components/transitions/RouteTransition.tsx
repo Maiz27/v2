@@ -94,16 +94,62 @@ const RouteTransition = () => {
     let commitFrame: number | null = null;
     let arrivalTimer: number | null = null;
     let popstatePoll: number | null = null;
+    let scrollFrame: number | null = null;
 
     const clearTimers = () => {
       if (watchdog !== null) window.clearTimeout(watchdog);
       if (commitFrame !== null) window.cancelAnimationFrame(commitFrame);
       if (arrivalTimer !== null) window.clearTimeout(arrivalTimer);
       if (popstatePoll !== null) window.cancelAnimationFrame(popstatePoll);
+      if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame);
       watchdog = null;
       commitFrame = null;
       arrivalTimer = null;
       popstatePoll = null;
+      scrollFrame = null;
+    };
+
+    // Chromium silently downgrades `scroll-behavior: smooth` (and the
+    // `behavior: 'smooth'` option on scrollTo/scrollIntoView) to an instant
+    // jump whenever the OS reports prefers-reduced-motion, regardless of the
+    // page's own CSS — a browser-internal accessibility override our motion
+    // gate has no way to reach (see lib/motion.ts). On this machine that
+    // downgrades every same-page anchor jump, so same-page hash links (TOC,
+    // footnotes) animate the scroll manually instead of relying on native
+    // fragment navigation.
+    const smoothScrollToHash = (hash: string) => {
+      const target = document.getElementById(hash.slice(1));
+      if (!target) return;
+      if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame);
+
+      const startY = window.scrollY;
+      const scrollMarginTop =
+        parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      const destY = Math.max(
+        0,
+        startY + target.getBoundingClientRect().top - scrollMarginTop
+      );
+      const distance = destY - startY;
+      if (Math.abs(distance) < 1) {
+        history.pushState(null, '', hash);
+        return;
+      }
+
+      const duration = Math.min(900, Math.max(320, Math.abs(distance) * 0.5));
+      const start = performance.now();
+      const easeOutQuint = (t: number) => 1 - Math.pow(1 - t, 5);
+
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        window.scrollTo(0, startY + distance * easeOutQuint(t));
+        if (t < 1) {
+          scrollFrame = window.requestAnimationFrame(step);
+        } else {
+          scrollFrame = null;
+          history.pushState(null, '', hash);
+        }
+      };
+      scrollFrame = window.requestAnimationFrame(step);
     };
     const cancelRunning = (preserveStyles = false) => {
       running.forEach((a) => {
@@ -279,6 +325,12 @@ const RouteTransition = () => {
     const onPopState = () => {
       if (document.documentElement.dataset.motion !== 'on') return;
       if (phaseRef.current !== 'idle') return;
+      // popstate also fires for same-document fragment navigation (a TOC
+      // link, or back/forward across hash-only history entries on the same
+      // route) — that's a scroll, not a route change, so let it stay a
+      // native smooth scroll instead of flashing the curtain and yanking
+      // the scroll position back to the top via reveal()'s scrollTo(0, 0).
+      if (window.location.pathname === pathnameRef.current) return;
 
       instantCover(destinationForPath(window.location.pathname));
       phaseRef.current = 'waiting';
@@ -323,8 +375,15 @@ const RouteTransition = () => {
 
       const url = new URL(anchor.href, window.location.href);
       if (url.origin !== window.location.origin) return;
-      // Same-pathname targets (hash jumps, query-state filters) stay native.
-      if (url.pathname === window.location.pathname) return;
+      // Same-pathname targets: query-state filters stay native, hash jumps
+      // get our own animated scroll (see smoothScrollToHash above).
+      if (url.pathname === window.location.pathname) {
+        if (url.hash) {
+          event.preventDefault();
+          smoothScrollToHash(url.hash);
+        }
+        return;
+      }
 
       event.preventDefault();
       if (phaseRef.current !== 'idle') return;
