@@ -8,14 +8,16 @@ type Props = {
 /**
  * The home headline, the centerpiece. Each letter is pressed onto the page in
  * sequence (see `.hero-letter` in globals.css, gated by the motion attribute).
- * The visible letters are aria-hidden and paired with an sr-only copy of the
- * full string so screen readers hear one clean line. A trailing period is inked
- * red as a terminal accent, a small nod to a cursor blinking after the line.
+ * Letters are grouped per word in a nowrap wrapper so a line can only ever
+ * break between words, never mid-word. The visible letters are aria-hidden and
+ * paired with an sr-only copy of the full string so screen readers hear one
+ * clean line. A trailing period is inked red as a terminal accent, a small nod
+ * to a cursor blinking after the line.
  */
 const HeroTitle = ({ text, className }: Props) => {
   const hasTerminalPeriod = text.endsWith('.');
   const body = hasTerminalPeriod ? text.slice(0, -1) : text;
-  const chars = body.split('');
+  const words = body.split(' ');
 
   let letterIndex = 0;
 
@@ -23,29 +25,36 @@ const HeroTitle = ({ text, className }: Props) => {
     <h1 className={className}>
       <span className='sr-only'>{text}</span>
       <span aria-hidden='true'>
-        {chars.map((char, i) => {
-          if (char === ' ') {
-            return <Fragment key={i}> </Fragment>;
-          }
-          const li = letterIndex++;
+        {words.map((word, wi) => {
+          const isLast = wi === words.length - 1;
           return (
-            <span
-              key={i}
-              className='hero-letter'
-              style={{ '--li': li } as React.CSSProperties}
-            >
-              {char}
-            </span>
+            <Fragment key={wi}>
+              <span className='inline-block whitespace-nowrap'>
+                {word.split('').map((char, ci) => {
+                  const li = letterIndex++;
+                  return (
+                    <span
+                      key={ci}
+                      className='hero-letter'
+                      style={{ '--li': li } as React.CSSProperties}
+                    >
+                      {char}
+                    </span>
+                  );
+                })}
+                {isLast && hasTerminalPeriod && (
+                  <span
+                    className='hero-letter text-mark'
+                    style={{ '--li': letterIndex++ } as React.CSSProperties}
+                  >
+                    .
+                  </span>
+                )}
+              </span>
+              {!isLast && ' '}
+            </Fragment>
           );
         })}
-        {hasTerminalPeriod && (
-          <span
-            className='hero-letter text-mark'
-            style={{ '--li': letterIndex } as React.CSSProperties}
-          >
-            .
-          </span>
-        )}
       </span>
     </h1>
   );
