@@ -83,10 +83,37 @@ const AnnotatedListing = ({
       const t = (e.target as HTMLElement).closest('[data-annot]');
       if (t) setHoverId(null);
     };
-    const click = (e: Event) => {
+
+    // Tap/click-to-pin via pointerdown+pointerup rather than a native click.
+    // The code block scrolls horizontally (overflow-x: auto), and inside a
+    // scrollable region mobile browsers can suppress the synthetic click for a
+    // stationary tap while still firing pointer events, silently eating taps.
+    // Pointer events aren't subject to that suppression, so we detect a tap
+    // ourselves: pointerdown and pointerup on the same mark, close together in
+    // both time and position.
+    let pointerStart: { id: string; x: number; y: number; time: number } | null =
+      null;
+    const pointerDown = (e: PointerEvent) => {
       const t = (e.target as HTMLElement).closest('[data-annot]');
-      if (t) togglePin(t);
+      pointerStart = t
+        ? {
+            id: t.getAttribute('data-annot')!,
+            x: e.clientX,
+            y: e.clientY,
+            time: Date.now(),
+          }
+        : null;
     };
+    const pointerUp = (e: PointerEvent) => {
+      if (!pointerStart) return;
+      const { id, x, y, time } = pointerStart;
+      pointerStart = null;
+      const t = (e.target as HTMLElement).closest('[data-annot]');
+      if (!t || t.getAttribute('data-annot') !== id) return;
+      const moved = Math.hypot(e.clientX - x, e.clientY - y);
+      if (moved < 10 && Date.now() - time < 500) togglePin(t);
+    };
+
     const key = (e: KeyboardEvent) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       const t = (e.target as HTMLElement).closest('[data-annot]');
@@ -100,14 +127,16 @@ const AnnotatedListing = ({
     root.addEventListener('mouseout', out);
     root.addEventListener('focusin', over);
     root.addEventListener('focusout', out);
-    root.addEventListener('click', click);
+    root.addEventListener('pointerdown', pointerDown);
+    root.addEventListener('pointerup', pointerUp);
     root.addEventListener('keydown', key);
     return () => {
       root.removeEventListener('mouseover', over);
       root.removeEventListener('mouseout', out);
       root.removeEventListener('focusin', over);
       root.removeEventListener('focusout', out);
-      root.removeEventListener('click', click);
+      root.removeEventListener('pointerdown', pointerDown);
+      root.removeEventListener('pointerup', pointerUp);
       root.removeEventListener('keydown', key);
     };
   }, [togglePin]);
@@ -173,21 +202,7 @@ const AnnotatedListing = ({
   const popNote = byId(popId);
 
   return (
-    <figure className='my-10'>
-      {/* Map key */}
-      <p className='mb-3 font-mono text-[0.62rem] leading-relaxed text-ink-faint'>
-        <span className='uppercase tracking-[0.16em]'>Map key</span>
-        <span className='mx-2 text-rule-strong'>/</span>
-        <span className='text-mark'>red</span> marks read as a decision,{' '}
-        <span className='text-ink-soft'>grey</span> as context.{' '}
-        <span className='hidden xl:inline'>
-          Hover a mark to read its note, click to pin it.
-        </span>
-        <span className='xl:hidden'>
-          Hover or tap a mark to read its note, click to pin it.
-        </span>
-      </p>
-
+    <figure className={isGroup ? '' : 'my-10'}>
       <div className='xl:grid xl:grid-cols-[minmax(0,1fr)_15rem] xl:gap-8'>
         <div ref={wrapRef} className='relative min-w-0'>
           {!isGroup && (
@@ -210,7 +225,7 @@ const AnnotatedListing = ({
           <div
             ref={codeRef}
             data-nosnippet
-            className='border border-rule'
+            className={isGroup ? '' : 'border border-rule'}
             dangerouslySetInnerHTML={{ __html: html }}
           />
 
