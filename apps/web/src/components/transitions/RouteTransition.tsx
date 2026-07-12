@@ -13,9 +13,11 @@ import { setRouteTransitionEntering } from './route-transition-flag';
  *
  * Logic reused from the Nilotik reference (document-level click interception,
  * idle -> covering -> waiting -> revealing, router.push under cover, pathname
- * effect triggers the reveal, ~7s watchdog, scroll-to-top on reveal). The stack
- * is WAAPI, not gsap. When the motion gate resolves off, links are never
- * intercepted and navigation is native.
+ * effect triggers the reveal, ~7s watchdog, scroll-to-top on reveal). Navigation
+ * waits for the panel animation and two painted frames, then reveal gets the same
+ * paint boundary after the destination commits. The stack is WAAPI, not gsap.
+ * When the motion gate resolves off, links are never intercepted and navigation
+ * is native.
  */
 
 type Phase = 'idle' | 'covering' | 'waiting' | 'revealing';
@@ -63,16 +65,19 @@ const RouteTransition = () => {
     let running: Animation[] = [];
     let pulse: Animation | null = null;
     let watchdog: number | null = null;
-    let commitTimer: number | null = null;
+    let commitFrame: number | null = null;
 
     const clearTimers = () => {
       if (watchdog !== null) window.clearTimeout(watchdog);
-      if (commitTimer !== null) window.clearTimeout(commitTimer);
+      if (commitFrame !== null) window.cancelAnimationFrame(commitFrame);
       watchdog = null;
-      commitTimer = null;
+      commitFrame = null;
     };
-    const cancelRunning = () => {
-      running.forEach((a) => a.cancel());
+    const cancelRunning = (preserveStyles = false) => {
+      running.forEach((a) => {
+        if (preserveStyles) a.commitStyles();
+        a.cancel();
+      });
       running = [];
     };
     const run = (
@@ -100,6 +105,12 @@ const RouteTransition = () => {
       cancelRunning();
       root.style.visibility = 'hidden';
       root.style.pointerEvents = 'none';
+      // Reset panel to starting position (off-screen bottom) for next navigation
+      panel.style.transform = 'translateY(100%)';
+      // Reset text elements to starting position
+      eyebrow.style.transform = 'translateY(180%)';
+      label.style.transform = 'translateY(180%)';
+      rule.style.transform = 'scaleX(0)';
     };
 
     const reveal = () => {
@@ -109,7 +120,7 @@ const RouteTransition = () => {
       pulse?.cancel();
       pulse = null;
       clearTimers();
-      cancelRunning();
+      cancelRunning(true);
       window.scrollTo(0, 0);
 
       run(
@@ -173,11 +184,6 @@ const RouteTransition = () => {
       rule.style.transform = 'scaleX(0)';
 
       run(
-        panel,
-        [{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }],
-        COVER_MS
-      );
-      run(
         eyebrow,
         [{ transform: 'translateY(180%)' }, { transform: 'translateY(0)' }],
         500,
@@ -194,7 +200,33 @@ const RouteTransition = () => {
         delay: 460,
       });
 
-      commitTimer = window.setTimeout(() => commit(href), REVEAL_MS);
+      const panelCover = run(
+        panel,
+        [{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }],
+        COVER_MS
+      );
+      panelCover.finished.then(() => {
+        if (phaseRef.current !== 'covering') return;
+        panel.style.transform = 'translateY(0)';
+
+        // Wait for the browser to paint the fully-covered frame before committing navigation.
+        // Use multiple RAFs + a microtask to ensure paint has occurred.
+        // This is critical: the panel must be visibly covering the viewport before the new route renders.
+        const waitForPaint = () =>
+          new Promise<void>((resolve) => {
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
+                // Force a style recalc/paint by reading a layout property
+                void panel.offsetHeight;
+                resolve();
+              });
+            });
+          });
+
+        waitForPaint().then(() => {
+          if (phaseRef.current === 'covering') commit(href);
+        });
+      });
     };
 
     const onClick = (event: MouseEvent) => {
@@ -240,18 +272,28 @@ const RouteTransition = () => {
 
   // The router committed the new route under the panel: lift it.
   useEffect(() => {
-    if (phaseRef.current === 'waiting') apiRef.current?.reveal();
+    if (phaseRef.current !== 'waiting') return;
+
+    let revealFrame = window.requestAnimationFrame(() => {
+      revealFrame = window.requestAnimationFrame(() => {
+        apiRef.current?.reveal();
+      });
+    });
+
+    return () => window.cancelAnimationFrame(revealFrame);
   }, [pathname]);
 
   return (
     <div
       aria-hidden='true'
       ref={rootRef}
-      className='pointer-events-none invisible fixed inset-0 z-[120]'
+      className='pointer-events-none fixed inset-0 z-[120]'
+      style={{ visibility: 'hidden', pointerEvents: 'none' }}
     >
       <div
         ref={panelRef}
-        className='absolute inset-0 translate-y-full bg-paper'
+        className='absolute inset-0'
+        style={{ backgroundColor: 'var(--color-paper)', transform: 'translateY(100%)' }}
       >
         <span className='absolute inset-x-0 top-0 h-[2px] bg-mark' />
         <div className='absolute inset-0 grid place-items-center'>
@@ -259,18 +301,21 @@ const RouteTransition = () => {
             <div className='-my-[0.5em] overflow-hidden py-[0.5em]'>
               <span
                 ref={eyebrowRef}
-                className='block translate-y-[180%] font-mono text-[0.7rem] uppercase tracking-[0.3em] text-mark'
+                className='block font-mono text-[0.7rem] uppercase tracking-[0.3em] text-mark'
+                style={{ transform: 'translateY(180%)' }}
               />
             </div>
             <div className='-my-[0.5em] overflow-hidden py-[0.5em]'>
               <span
                 ref={labelRef}
-                className='font-display block translate-y-[180%] text-4xl font-black leading-[1.15] tracking-tight text-ink sm:text-5xl'
+                className='font-display block text-4xl font-black leading-[1.15] tracking-tight text-ink sm:text-5xl'
+                style={{ transform: 'translateY(180%)' }}
               />
             </div>
             <span
               ref={ruleRef}
-              className='block h-[2px] w-24 origin-left scale-x-0 bg-mark'
+              className='block h-[2px] w-24 origin-left bg-mark'
+              style={{ transform: 'scaleX(0)' }}
             />
           </div>
         </div>
