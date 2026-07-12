@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "main": "package.json",
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "sanity dev",
     "start": "sanity start",
