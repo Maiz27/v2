@@ -28,7 +28,7 @@ const CodeParser = async ({ id, snippet, isGroup, annotations }: Props) => {
   const lang = language || 'typescript';
 
   if (annotations && annotations.length > 0) {
-    const html = await highlightAnnotated(text, lang, annotations);
+    const { html } = await highlightAnnotated(text, lang, annotations);
     return (
       <div id={id} className='scroll-m-16'>
         <AnnotatedListing
