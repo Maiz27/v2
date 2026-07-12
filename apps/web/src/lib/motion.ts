@@ -9,14 +9,14 @@
  * dead on his screen and we could never review it.
  *
  * So ALL motion is routed through this one gate. Nothing reads
- * `@media (prefers-reduced-motion)` directly, and nothing calls framer-motion's
- * `useReducedMotion()` directly. Everything keys off the `data-motion`
- * attribute that <MotionGate> stamps on the document root from the value below.
+ * `@media (prefers-reduced-motion)` directly. Everything keys off the
+ * `data-motion` attribute that <MotionGate> stamps on the document root from
+ * the value below.
  *
  * When we want to honor the OS setting again, flipping THIS ONE CONSTANT to
  * `true` is the only change needed: the resolver below will then defer to
  * `prefers-reduced-motion`, MotionGate will set `data-motion="off"` for users
- * who asked for less motion, and the CSS / framer gates all fall in line.
+ * who asked for less motion, and every CSS motion rule falls in line.
  *
  *   false  ->  motion always plays, OS setting ignored (current: we iterate)
  *   true   ->  motion respects the visitor's prefers-reduced-motion (ship)
