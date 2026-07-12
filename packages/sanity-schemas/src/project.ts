@@ -75,6 +75,22 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'kind',
+      title: 'Kind',
+      type: 'string',
+      description: 'What this project is, for the archive filter (not the tech stack).',
+      options: {
+        list: [
+          {title: 'Web app', value: 'Web app'},
+          {title: 'Client site', value: 'Client site'},
+          {title: 'Game', value: 'Game'},
+          {title: 'Android app', value: 'Android app'},
+          {title: 'This site', value: 'This site'},
+        ],
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'status',
       title: 'Status',
       type: 'string',

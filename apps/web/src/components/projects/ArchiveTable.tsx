@@ -14,26 +14,24 @@ const primaryTool = (tools: GetProjectsResult[number]['tools']) =>
   tools?.[0]?.name ?? '';
 
 /**
- * The full archive as a Ledger table, filtered by tool. There is no "kind"
- * field in Sanity, so the chips are built from the tools referenced across all
- * projects. Every row links to its case study. Filtering is client-side and
- * single-select; the /projects URL never changes.
+ * The full archive as a Ledger table, filtered by kind (what the project is,
+ * not its tech stack). Every row links to its case study. Filtering is
+ * client-side and single-select; the /projects URL never changes.
  */
 const ArchiveTable = ({ projects }: Props) => {
-  const tools = useMemo(() => {
+  const kinds = useMemo(() => {
     const names = new Set<string>();
-    projects.forEach((p) => p.tools?.forEach((t) => names.add(t.name)));
+    projects.forEach((p) => {
+      if (p.kind) names.add(p.kind);
+    });
     return ['All', ...Array.from(names).sort()];
   }, [projects]);
 
-  const [tool, setTool] = useState('All');
+  const [kind, setKind] = useState('All');
 
   const rows = useMemo(
-    () =>
-      tool === 'All'
-        ? projects
-        : projects.filter((p) => p.tools?.some((t) => t.name === tool)),
-    [projects, tool]
+    () => (kind === 'All' ? projects : projects.filter((p) => p.kind === kind)),
+    [projects, kind]
   );
 
   return (
@@ -43,13 +41,13 @@ const ArchiveTable = ({ projects }: Props) => {
         <span className='mr-1 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint'>
           Filter
         </span>
-        {tools.map((t) => {
-          const active = t === tool;
+        {kinds.map((k) => {
+          const active = k === kind;
           return (
             <button
-              key={t}
+              key={k}
               type='button'
-              onClick={() => setTool(t)}
+              onClick={() => setKind(k)}
               aria-pressed={active}
               className={`cursor-pointer rounded-sm border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] transition-colors duration-200 ${
                 active
@@ -57,7 +55,7 @@ const ArchiveTable = ({ projects }: Props) => {
                   : 'border-rule text-ink-soft hover:border-rule-strong hover:text-ink'
               }`}
             >
-              {t}
+              {k}
             </button>
           );
         })}

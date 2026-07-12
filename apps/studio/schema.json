@@ -1204,6 +1204,35 @@
         },
         "optional": false
       },
+      "kind": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "union",
+          "of": [
+            {
+              "type": "string",
+              "value": "Web app"
+            },
+            {
+              "type": "string",
+              "value": "Client site"
+            },
+            {
+              "type": "string",
+              "value": "Game"
+            },
+            {
+              "type": "string",
+              "value": "Android app"
+            },
+            {
+              "type": "string",
+              "value": "This site"
+            }
+          ]
+        },
+        "optional": false
+      },
       "status": {
         "type": "objectAttribute",
         "value": {

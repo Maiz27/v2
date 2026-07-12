@@ -100,6 +100,7 @@ export const getProjects = groq`*[_type == "project"]{
   featured,
   date,
   status,
+  kind,
   description,
   href,
   source,

@@ -213,6 +213,7 @@ export type Project = {
   slug?: Slug;
   featured?: boolean;
   date: string;
+  kind: "Web app" | "Client site" | "Game" | "Android app" | "This site";
   status: "completed" | "ongoing" | "paused";
   description: string;
   href?: string;
@@ -511,13 +512,14 @@ export type GetMetadataResult = {
 
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjects
-// Query: *[_type == "project"]{  title,  slug,  featured,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url} | order(date desc)
+// Query: *[_type == "project"]{  title,  slug,  featured,  date,  status,  kind,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url} | order(date desc)
 export type GetProjectsResult = Array<{
   title: string;
   slug: Slug | null;
   featured: boolean | null;
   date: string;
   status: "completed" | "ongoing" | "paused";
+  kind: "Android app" | "Client site" | "Game" | "This site" | "Web app";
   description: string;
   href: string | null;
   source: string | null;
@@ -554,7 +556,7 @@ declare module "@sanity/client" {
     '*[_type == "project" && slug.current == $slug]{\n  slug,\n  description,\n  "images": images[0].image.asset->url,\n  contentTitle,\n}[0]': GetProjectMetadataResult;
     '*[_type == "project"]{\n  "slug": slug.current,\n  "publishedAt": date,\n}': GetProjectsForSEOResult;
     '*[_type == "metadata" && slug.current == $slug]{\n  "slug": slug.current,\n  title,\n  description,\n}[0]': GetMetadataResult;
-    '*[_type == "project"]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n} | order(date desc)': GetProjectsResult;
+    '*[_type == "project"]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  kind,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n} | order(date desc)': GetProjectsResult;
     '*[_type == "tool"]{\n  name,\n  href,\n  iconSource,\n  iconName,\n  "iconSvg": iconSvg.asset->url\n}': GetToolsResult;
   }
 }

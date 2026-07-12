@@ -29,7 +29,7 @@ const Projects = async () => {
         </h1>
         <p className='mt-6 max-w-[54ch] text-[1.0625rem] leading-[1.7] text-ink-soft'>
           Every project here has a full case study. This is the whole index; the
-          home page just keeps a shorter list of it. Filter by a tool, or read
+          home page just keeps a shorter list of it. Filter by kind, or read
           any of them end to end.
         </p>
       </section>
