@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { BASEURL, ROUTES } from '@/lib/Constants';
+import { BASEURL } from '@/lib/Constants';
+import { NAV } from '@/lib/site';
 import { fetchSanityData } from '@/lib/sanity/client';
 import { getProjectsForSEO } from '@/lib/sanity/queries';
 
@@ -16,7 +17,7 @@ export async function GET() {
 
   const projects = mapSanityEntriesToSitemapEntries(allProjects, '/projects');
 
-  const routes = mapRoutesToSitemapEntries(ROUTES);
+  const routes = mapRoutesToSitemapEntries(NAV);
 
   const allUrls = [...routes, ...projects];
   const sitemapContent = generateSitemapXml(allUrls);
@@ -41,7 +42,7 @@ const mapSanityEntriesToSitemapEntries = (
     createSitemapEntry(`${pathPrefix}/${slug}`, publishedAt)
   );
 
-const mapRoutesToSitemapEntries = (routes: { href: string }[]) =>
+const mapRoutesToSitemapEntries = (routes: readonly { href: string }[]) =>
   routes.map(({ href }) => createSitemapEntry(href, new Date().toISOString()));
 
 const generateSitemapXml = (urls: { url: string; lastModified: string }[]) => {
