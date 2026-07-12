@@ -22,7 +22,10 @@ const kindLabel = (kind: AnnotationKind) =>
  * clicking a mark pins it so the note stays lit while you scan the code (click
  * again or Esc to release). Below xl the margin does not fit, so hovering a
  * mark (pointer devices) opens a small popover at the token, and clicking pins
- * it open; tap works the same on touch (tap opens/pins, tap again closes).
+ * it open. On touch there is no hover, so the popover is driven purely by the
+ * pin: a tap opens it, and tapping the mark again, tapping outside the figure,
+ * or Esc closes it (touch hover is suppressed so a synthesized hover can't keep
+ * the popover stuck open after an outside tap).
  *
  * The below-xl popover position is derived from the active token in a layout
  * effect rather than only at click time, so it can never miss the token or race
@@ -75,11 +78,19 @@ const AnnotatedListing = ({
     const root = codeRef.current;
     if (!root) return;
 
+    // Hover is a pointer-device affordance only. Touch taps fire *synthesized*
+    // mouse/pointer-over events, so if we honored them on touch the resulting
+    // hoverId would outlive the tap and — since activeId falls back to hoverId —
+    // keep the popover pinned open even after an outside tap cleared the real
+    // pin. On touch the popover is driven solely by the pin (tap opens, tap
+    // again / outside / Esc closes). Guard hover to genuine pointer devices.
     const over = (e: Event) => {
+      if (e instanceof PointerEvent && e.pointerType === 'touch') return;
       const t = (e.target as HTMLElement).closest('[data-annot]');
       if (t) setHoverId(t.getAttribute('data-annot'));
     };
     const out = (e: Event) => {
+      if (e instanceof PointerEvent && e.pointerType === 'touch') return;
       const t = (e.target as HTMLElement).closest('[data-annot]');
       if (t) setHoverId(null);
     };
@@ -123,16 +134,16 @@ const AnnotatedListing = ({
       }
     };
 
-    root.addEventListener('mouseover', over);
-    root.addEventListener('mouseout', out);
+    root.addEventListener('pointerover', over);
+    root.addEventListener('pointerout', out);
     root.addEventListener('focusin', over);
     root.addEventListener('focusout', out);
     root.addEventListener('pointerdown', pointerDown);
     root.addEventListener('pointerup', pointerUp);
     root.addEventListener('keydown', key);
     return () => {
-      root.removeEventListener('mouseover', over);
-      root.removeEventListener('mouseout', out);
+      root.removeEventListener('pointerover', over);
+      root.removeEventListener('pointerout', out);
       root.removeEventListener('focusin', over);
       root.removeEventListener('focusout', out);
       root.removeEventListener('pointerdown', pointerDown);
@@ -141,7 +152,12 @@ const AnnotatedListing = ({
     };
   }, [togglePin]);
 
-  // Esc releases everything; a pointerdown outside the figure releases the pin.
+  // Esc releases everything; a pointerdown anywhere that is not itself an
+  // annotation mark releases the pin. Scoping this to "outside wrapRef" was too
+  // narrow: wrapRef wraps the full-width code block, so on mobile a tap meant to
+  // dismiss almost always lands on the code *inside* wrapRef and never closed
+  // the popover — the whole reported bug. Tapping another mark is intentionally
+  // exempt so the pointerup toggle can switch the pin to it instead.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -150,9 +166,9 @@ const AnnotatedListing = ({
       }
     };
     const onDown = (e: Event) => {
-      if (!wrapRef.current?.contains(e.target as Node)) {
-        setPinnedId(null);
-      }
+      if ((e.target as HTMLElement).closest('[data-annot]')) return;
+      setPinnedId(null);
+      setHoverId(null);
     };
     document.addEventListener('keydown', onKey);
     document.addEventListener('pointerdown', onDown);
