@@ -1,175 +1,148 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import Image from 'next/image';
 import {
   PortableText,
   PortableTextReactComponents,
   PortableTextTypeComponentProps,
 } from '@portabletext/react';
-import CodeParser from './CodeParser';
+import CodeParser from '@/components/code/CodeParser';
+import CodeGroup from '@/components/code/CodeGroup';
 import { createSlug } from '@/lib/utilities';
+import { buildOutline, plainText } from '@/lib/outline';
 import { urlFor } from '@/lib/sanity/client';
-import CodeGroup from './CodeGroup';
-import { BlockContent, Code, Snippet, SnippetGroup } from '@/lib/sanity/types';
-import { CODE_ID_PREFIX } from '@/lib/Constants';
+import { BlockContent, Snippet, SnippetGroup } from '@/lib/sanity/types';
 
 type props = {
   content: BlockContent;
 };
 
+/**
+ * Renders a case study's Portable Text as Ledger typography: serif body capped
+ * around 62ch, section headings carrying a numbered mono index, quotes, lists,
+ * inline code, and first-class code listings via the code/ components.
+ *
+ * Heading ids, the numbered h2 badge and code-snippet ids all come from
+ * `buildOutline` — the single traversal the Contents rail also renders against
+ * — so the body anchors and the TOC hrefs are guaranteed to match. Only h4
+ * (which is body-only, never in the TOC) derives its id inline via the shared
+ * `plainText` + `createSlug`.
+ */
 const RichTextParser = memo(({ content }: props) => {
-  let codeBlockCounter = 0;
+  const outline = buildOutline(content);
   let imageIndex = 0;
 
-  const myPortableTextComponents: PortableTextReactComponents = {
+  const components: PortableTextReactComponents = {
     types: {
       image: ({ value }) => {
         const imgUrl = urlFor(value).url();
         imageIndex++;
-
         return (
-          <figure className='border-4 border-primary rounded-lg'>
+          <figure className='my-8 border border-rule bg-paper-raised p-1.5'>
             <Image
-              width={1080}
-              height={1080}
+              width={1280}
+              height={800}
               src={imgUrl}
               loading='lazy'
-              alt={`Image(${imageIndex})`}
+              alt={`Figure ${imageIndex}`}
+              className='h-auto w-full'
             />
           </figure>
         );
       },
-      callToAction: ({ value, isInline }) =>
-        isInline ? (
-          <a
-            href={value.url}
-            className='underline underline-offset-4 text-primary'
-          >
-            {value.text}
-          </a>
-        ) : (
-          <div className='callToAction'>{value.text}</div>
-        ),
-      snippet: ({ value }: PortableTextTypeComponentProps<Snippet>) => {
-        const id = `${CODE_ID_PREFIX}${++codeBlockCounter}`;
-        return <CodeParser id={id} snippet={value} />;
+      snippet: ({
+        value,
+      }: PortableTextTypeComponentProps<Snippet & { _key: string }>) => {
+        const id = outline.itemFor(value._key)?.id ?? '';
+        return (
+          <CodeParser id={id} snippet={value} annotations={value.annotations} />
+        );
       },
       snippetGroup: ({
         value,
-      }: PortableTextTypeComponentProps<SnippetGroup>) => {
-        const id = `${CODE_ID_PREFIX}${++codeBlockCounter}`;
+      }: PortableTextTypeComponentProps<SnippetGroup & { _key: string }>) => {
+        const id = outline.itemFor(value._key)?.id ?? '';
         return <CodeGroup group={value} id={id} />;
       },
     },
     marks: {
-      em: ({ children }) => <em className=''>{children}</em>,
+      strong: ({ children }) => (
+        <strong className='font-semibold text-ink'>{children}</strong>
+      ),
+      em: ({ children }) => <em>{children}</em>,
+      code: ({ children }) => <code>{children}</code>,
       link: ({ children, value }) => {
-        const target = value.href.startsWith('http') ? '_blank' : undefined;
+        const target = value?.href?.startsWith('http') ? '_blank' : undefined;
         const rel = target === '_blank' ? 'noreferrer noopener' : undefined;
-
         return (
-          <a
-            href={value.href}
-            target={target}
-            rel={rel}
-            className='underline underline-offset-4 text-primary'
-          >
+          <a href={value?.href} target={target} rel={rel}>
             {children}
           </a>
         );
       },
-
-      // Add any other custom marks you want to handle
     },
     block: {
-      h1: ({ children }) => (
-        <h1
-          id={createSlug(children?.toString() || '')}
-          className='text-4xl scroll-m-16 px-2 mt-10 mb-8'
-        >
-          {children}
-        </h1>
-      ),
-      h2: ({ children }) => (
-        <h2
-          id={createSlug(children?.toString() || '')}
-          className='text-3xl scroll-m-16 px-2 mt-8 mb-6'
-        >
-          {children}
-        </h2>
-      ),
-      h3: ({ children }) => (
+      h2: ({ children, value }) => {
+        const item = outline.itemFor(value._key);
+        const id = item?.id ?? createSlug(plainText(value));
+        const n = item?.type === 'h2' ? item.n : '';
+        return (
+          <h2
+            id={id}
+            className='font-display mt-14 mb-5 flex items-baseline gap-3 text-[1.5rem] font-bold leading-snug md:text-[1.75rem]'
+          >
+            <span className='font-mono text-[0.72rem] font-normal text-mark'>
+              {n}
+            </span>
+            <span>{children}</span>
+          </h2>
+        );
+      },
+      h3: ({ children, value }) => (
         <h3
-          id={createSlug(children?.toString() || '')}
-          className='text-2xl scroll-m-16 px-2 mt-6 mb-4'
+          id={outline.itemFor(value._key)?.id ?? createSlug(plainText(value))}
+          className='font-display mt-10 mb-4 text-[1.2rem] font-bold md:text-[1.35rem]'
         >
           {children}
         </h3>
       ),
-      h4: ({ children }) => (
+      h4: ({ children, value }) => (
         <h4
-          id={createSlug(children?.toString() || '')}
-          className='text-xl scroll-m-16 px-2 mt-5 mb-3 '
+          id={createSlug(plainText(value))}
+          className='font-display mt-8 mb-3 text-[1.05rem] font-bold'
         >
           {children}
         </h4>
       ),
-      h5: ({ children }) => (
-        <h5
-          id={createSlug(children?.toString() || '')}
-          className='text-lg scroll-m-16 px-2 mt-4 mb-2 '
-        >
-          {children}
-        </h5>
-      ),
-      h6: ({ children }) => (
-        <h6
-          id={createSlug(children?.toString() || '')}
-          className='text-base scroll-m-16 px-2 mt-3 mb-1 '
-        >
-          {children}
-        </h6>
-      ),
-      normal: ({ children }) => (
-        <p className='text-base mb-2 p-2 opacity-80'>{children}</p>
-      ),
-      blockquote: ({ children }) => (
-        <blockquote className='text-base italic border-l-4 pl-2 mb-2 opacity-80'>
-          {children}
-        </blockquote>
-      ),
+      normal: ({ children }) => <p>{children}</p>,
+      blockquote: ({ children }) => <blockquote>{children}</blockquote>,
     },
     list: {
-      bullet: ({ children }) => (
-        <ul className='list-disc pl-10 pr-2 space-y-2 opacity-80 mb-4'>
-          {children}
-        </ul>
-      ),
-      number: ({ children }) => (
-        <ol className='list-decimal pl-10 pr-2 space-y-2'>{children}</ol>
-      ),
-      // Add any other custom list types you want to handle
+      bullet: ({ children }) => <ul>{children}</ul>,
+      number: ({ children }) => <ol>{children}</ol>,
     },
     listItem: {
-      bullet: ({ children }) => <li className=''>{children}</li>,
-      // Add any other custom list item types you want to handle
+      bullet: ({ children }) => <li>{children}</li>,
+      number: ({ children }) => <li>{children}</li>,
     },
     hardBreak: () => <br />,
-    unknownMark: () => null,
+    unknownMark: ({ children }) => <>{children}</>,
     unknownType: () => null,
-    unknownBlockStyle: () => null,
-    unknownList: () => null,
-    unknownListItem: () => null,
+    unknownBlockStyle: ({ children }) => <p>{children}</p>,
+    unknownList: ({ children }) => <ul>{children}</ul>,
+    unknownListItem: ({ children }) => <li>{children}</li>,
   };
 
   return (
-    <PortableText
-      value={content}
-      components={myPortableTextComponents}
-      onMissingComponent={false}
-    />
+    <div className='ledger-prose'>
+      <PortableText
+        value={content}
+        components={components}
+        onMissingComponent={false}
+      />
+    </div>
   );
 });
 
-RichTextParser.displayName = 'Rich Text Parser';
+RichTextParser.displayName = 'RichTextParser';
 
 export default RichTextParser;

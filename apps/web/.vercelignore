@@ -1,0 +1,3 @@
+# web app only - ignore studio and packages
+apps/studio
+packages

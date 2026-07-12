@@ -1,11 +1,8 @@
-import Heading from '@/components/heading/Heading';
-import EmptyState from '@/components/ui/EmptyState';
-import ProjectsFilter from '@/components/projects/ProjectsFilter';
-import AnimatedProjectsGrid from '@/components/projects/AnimatedProjectsGrid';
-import { fetchSanityData } from '@/lib/sanity/client';
+import Masthead from '@/components/layout/Masthead';
+import SiteFooter from '@/components/layout/SiteFooter';
+import ArchiveTable from '@/components/projects/ArchiveTable';
+import { projects as projectsData } from '@/lib/data/projects';
 import { getDynamicMetaData } from '@/lib/utilities';
-import { HiOutlineLightBulb } from 'react-icons/hi2';
-import { GetProjectsResult } from '@/lib/sanity/types';
 
 export const revalidate = 60;
 
@@ -14,82 +11,34 @@ export async function generateMetadata() {
   return data;
 }
 
-type SearchParams = { [key: string]: string | string[] | undefined };
-
-const Projects = async ({
-  searchParams,
-}: {
-  searchParams?: Promise<SearchParams>;
-}) => {
-  const _searchParams = await searchParams;
-  const projects = await fetchProjects(_searchParams);
-  const isEmpty = projects.length <= 0;
+const Projects = async () => {
+  const projects = await projectsData.list();
 
   return (
-    <>
-      <Heading
-        Tag='h1'
-        icon={<HiOutlineLightBulb />}
-        heading='My Projects Showcase'
-        paragraph='Explore the landscape of innovation and technology through my projects, each a testament to creative solutions and technical prowess.'
-      >
-        <ProjectsFilter projectsTotal={projects.length} />
-      </Heading>
+    <div className='mx-auto max-w-4xl px-6 md:px-10'>
+      <Masthead />
 
-      <div className='min-h-[75dvh]'>
-        {isEmpty ? (
-          <EmptyState
-            heading='No Projects Found'
-            paragraph={
-              "We couldn't find any projects matching your filters. Adjust your selections or reset the filters to explore all projects."
-            }
-          />
-        ) : (
-          <AnimatedProjectsGrid projects={[...projects]} />
-        )}
-      </div>
-    </>
+      <main>
+      <section className='py-14 md:py-20'>
+        <p className='mb-5 font-mono text-[0.7rem] uppercase tracking-[0.2em] text-mark'>
+          The full index
+        </p>
+        <h1 className='font-display text-[clamp(2.25rem,5vw,3.5rem)] font-black leading-[1.05] tracking-tight'>
+          Archive
+        </h1>
+        <p className='mt-6 max-w-[54ch] text-[1.0625rem] leading-[1.7] text-ink-soft'>
+          Every project here has a full case study. This is the whole index; the
+          home page just keeps a shorter list of it. Filter by kind, or read
+          any of them end to end.
+        </p>
+      </section>
+
+      <ArchiveTable projects={projects} />
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 };
 
 export default Projects;
-
-const fetchProjects = async (searchParams: SearchParams = {}) => {
-  const { status, tech } = searchParams;
-  const techArray = tech?.toString().split(',').filter(Boolean) ?? [];
-
-  let query = '*[_type == "project"';
-  let params: { [key: string]: string | string[] | number } = {};
-
-  if (!!techArray.length) {
-    query += ' && count((tools[]->name)[@ in $tech]) > 0';
-    params.tech = techArray;
-  }
-
-  if (status) {
-    query += ' && status == $status';
-    params.status = status;
-  }
-
-  query += `]{
-    title,
-    slug,
-    featured,
-    date,
-    status,
-    description,
-    href,
-    source,
-    tools[]->{ 
-    name,
-    href,
-    iconSource,
-    iconName,
-    "iconSvg": iconSvg.asset->url 
-    },
-  } | order(featured desc, date desc)`;
-
-  const projects: GetProjectsResult = await fetchSanityData(query, params);
-
-  return projects;
-};

@@ -12,13 +12,17 @@
  * ---------------------------------------------------------------------------------
  */
 
+export declare const internalGroqTypeReferenceTo: unique symbol;
+
 // Source: schema.json
 export type SnippetGroup = {
   _type: "snippetGroup";
   title?: string;
-  snippets: Array<{
-    _key: string;
-  } & Snippet>;
+  snippets: Array<
+    {
+      _key: string;
+    } & Snippet
+  >;
 };
 
 export type Snippet = {
@@ -26,53 +30,64 @@ export type Snippet = {
   filename: string;
   source?: string;
   code: Code;
+  annotations?: Array<{
+    id: string;
+    kind: "decision" | "context";
+    match: string;
+    occurrence?: number;
+    body: string;
+    _type: "codeAnnotation";
+    _key: string;
+  }>;
 };
 
-export type BlockContent = Array<{
-  children?: Array<{
-    marks?: Array<string>;
-    text?: string;
-    _type: "span";
-    _key: string;
-  }>;
-  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-  listItem?: "bullet" | "number";
-  markDefs?: Array<{
-    href?: string;
-    _type: "link";
-    _key: string;
-  }>;
-  level?: number;
-  _type: "block";
-  _key: string;
-} | {
-  asset?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-  };
-  media?: unknown;
-  hotspot?: SanityImageHotspot;
-  crop?: SanityImageCrop;
-  _type: "image";
-  _key: string;
-} | {
-  _key: string;
-} & Snippet | {
-  _key: string;
-} & SnippetGroup>;
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type BlockContent = Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: SanityImageAssetReference;
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+      _key: string;
+    }
+  | ({
+      _key: string;
+    } & Snippet)
+  | ({
+      _key: string;
+    } & SnippetGroup)
+>;
 
 export type ProjectImage = {
   _type: "projectImage";
   index: number;
   image: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -99,85 +114,13 @@ export type Description = Array<{
   _key: string;
 }>;
 
-export type Tool = {
-  _id: string;
-  _type: "tool";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name: string;
-  href?: string;
-  iconSource: "react-icons" | "custom";
-  iconName?: string;
-  iconSvg?: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  };
-};
-
-export type Faq = {
-  _id: string;
-  _type: "faq";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  index: number;
-  question: string;
-  answer: string;
-};
-
-export type Metadata = {
-  _id: string;
-  _type: "metadata";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  slug: Slug;
-  title: string;
-  description: string;
-};
-
-export type Experience = {
-  _id: string;
-  _type: "experience";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  location: string;
-  partTime?: boolean;
-  duration: Duration;
-  company: Company;
-  tools?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "tool";
-  }>;
-  description: Description;
-};
-
 export type Company = {
   _type: "company";
   name: string;
-  label: string;
-  href: string;
-  logo: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+  label?: string;
+  href?: string;
+  logo?: {
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
@@ -191,6 +134,136 @@ export type Duration = {
   to?: string;
 };
 
+export type ExperienceReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "experience";
+};
+
+export type ProjectReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "project";
+};
+
+export type Cv = {
+  _id: string;
+  _type: "cv";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  summary: string;
+  experience: Array<{
+    experience: ExperienceReference;
+    bullets: Array<string>;
+    _type: "cvExperienceEntry";
+    _key: string;
+  }>;
+  projects?: Array<
+    {
+      _key: string;
+    } & ProjectReference
+  >;
+  education?: {
+    degree: string;
+    place: string;
+    detail?: string;
+  };
+  skillGroups?: Array<{
+    label: string;
+    items: string;
+    _type: "skillGroup";
+    _key: string;
+  }>;
+};
+
+export type Tool = {
+  _id: string;
+  _type: "tool";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  href?: string;
+  iconSource: "react-icons" | "custom";
+  iconName?: string;
+  iconSvg?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+};
+
+export type Metadata = {
+  _id: string;
+  _type: "metadata";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  slug: Slug;
+  title: string;
+  description: string;
+};
+
+export type Slug = {
+  _type: "slug";
+  current: string;
+  source?: string;
+};
+
+export type ToolReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "tool";
+};
+
+export type Experience = {
+  _id: string;
+  _type: "experience";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
+  location: string;
+  partTime?: boolean;
+  duration: Duration;
+  company: Company;
+  tools?: Array<
+    {
+      _key: string;
+    } & ToolReference
+  >;
+  description?: Description;
+};
+
+export type ProjectKindReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "projectKind";
+};
+
 export type Project = {
   _id: string;
   _type: "project";
@@ -201,22 +274,33 @@ export type Project = {
   slug?: Slug;
   featured?: boolean;
   date: string;
+  kind: ProjectKindReference;
   status: "completed" | "ongoing" | "paused";
   description: string;
   href?: string;
   source?: string;
-  tools: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "tool";
-  }>;
-  images?: Array<{
-    _key: string;
-  } & ProjectImage>;
+  tools: Array<
+    {
+      _key: string;
+    } & ToolReference
+  >;
+  images?: Array<
+    {
+      _key: string;
+    } & ProjectImage
+  >;
+  cvBlurb?: string;
   contentTitle?: string;
   content?: BlockContent;
+};
+
+export type ProjectKind = {
+  _id: string;
+  _type: "projectKind";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title: string;
 };
 
 export type AboutMe = {
@@ -226,28 +310,24 @@ export type AboutMe = {
   _updatedAt: string;
   _rev: string;
   name: string;
-  bio: string;
+  bio: BlockContent;
   image: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
+    asset?: SanityImageAssetReference;
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
   };
-  stats: Stats;
-};
-
-export type Stats = {
-  _type: "stats";
-  clients: number;
-  experience: number;
-  projects: number;
-  contributions: number;
+  heroLabel: string;
+  heroHeadline: string;
+  heroDescription: string;
+  currentStatusLabel: string;
+  currentStatus: string;
+  email: string;
+  github: string;
+  githubLabel: string;
+  linkedin: string;
+  linkedinLabel: string;
 };
 
 export type Code = {
@@ -284,20 +364,16 @@ export type SanityImageDimensions = {
   aspectRatio: number;
 };
 
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
+export type SanityImageMetadata = {
+  _type: "sanity.imageMetadata";
+  location?: Geopoint;
+  dimensions?: SanityImageDimensions;
+  palette?: SanityImagePalette;
+  lqip?: string;
+  blurHash?: string;
+  thumbHash?: string;
+  hasAlpha?: boolean;
+  isOpaque?: boolean;
 };
 
 export type SanityFileAsset = {
@@ -311,15 +387,22 @@ export type SanityFileAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
+  sha1hash: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  assetId: string;
   uploadId?: string;
-  path?: string;
-  url?: string;
+  path: string;
+  url: string;
   source?: SanityAssetSourceData;
+};
+
+export type SanityAssetSourceData = {
+  _type: "sanity.assetSourceData";
+  name?: string;
+  id?: string;
+  url?: string;
 };
 
 export type SanityImageAsset = {
@@ -333,27 +416,16 @@ export type SanityImageAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
+  sha1hash: string;
+  extension: string;
+  mimeType: string;
+  size: number;
+  assetId: string;
   uploadId?: string;
-  path?: string;
-  url?: string;
+  path: string;
+  url: string;
   metadata?: SanityImageMetadata;
   source?: SanityAssetSourceData;
-};
-
-export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
-  location?: Geopoint;
-  dimensions?: SanityImageDimensions;
-  palette?: SanityImagePalette;
-  lqip?: string;
-  blurHash?: string;
-  hasAlpha?: boolean;
-  isOpaque?: boolean;
 };
 
 export type Geopoint = {
@@ -363,35 +435,120 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type Slug = {
-  _type: "slug";
-  current: string;
-  source?: string;
-};
+export type AllSanitySchemaTypes =
+  | SnippetGroup
+  | Snippet
+  | SanityImageAssetReference
+  | BlockContent
+  | ProjectImage
+  | Description
+  | Company
+  | Duration
+  | ExperienceReference
+  | ProjectReference
+  | Cv
+  | Tool
+  | SanityImageCrop
+  | SanityImageHotspot
+  | Metadata
+  | Slug
+  | ToolReference
+  | Experience
+  | ProjectKindReference
+  | Project
+  | ProjectKind
+  | AboutMe
+  | Code
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageMetadata
+  | SanityFileAsset
+  | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint;
 
-export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
-
-export type AllSanitySchemaTypes = SnippetGroup | Snippet | BlockContent | ProjectImage | Description | Tool | Faq | Metadata | Experience | Company | Duration | Project | AboutMe | Stats | Code | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
-export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getAboutMe
-// Query: *[_type == "aboutMe"]{  name,  bio,  "imageUrl": image.asset->url,  stats}[0]
+// Query: *[_type == "aboutMe"]{  name,  bio,  "imageUrl": image.asset->url,  heroLabel,  heroHeadline,  heroDescription,  currentStatusLabel,  currentStatus,  email,  github,  githubLabel,  linkedin,  linkedinLabel}[0]
 export type GetAboutMeResult = {
   name: string;
-  bio: string;
+  bio: BlockContent;
   imageUrl: string | null;
-  stats: Stats;
+  heroLabel: string;
+  heroHeadline: string;
+  heroDescription: string;
+  currentStatusLabel: string;
+  currentStatus: string;
+  email: string;
+  github: string;
+  githubLabel: string;
+  linkedin: string;
+  linkedinLabel: string;
 } | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
+// Variable: getCv
+// Query: *[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{  summary,  experience[]{    bullets,    experience->{      title,      location,      duration,      company{name, label, href},      tools[]->{name}    }  },  projects[]->{    title,    tools[]->{name},    date,    status,    href,    source,    cvBlurb  },  education,  skillGroups}
+export type GetCvResult =
+  | {
+      summary: null;
+      experience: null;
+      projects: null;
+      education: null;
+      skillGroups: null;
+    }
+  | {
+      summary: string;
+      experience: Array<{
+        bullets: Array<string>;
+        experience: {
+          title: string;
+          location: string;
+          duration: Duration;
+          company: {
+            name: string;
+            label: string | null;
+            href: string | null;
+          };
+          tools: Array<{
+            name: string;
+          }> | null;
+        };
+      }>;
+      projects: Array<{
+        title: string;
+        tools: Array<{
+          name: string;
+        }>;
+        date: string;
+        status: "completed" | "ongoing" | "paused";
+        href: string | null;
+        source: string | null;
+        cvBlurb: string | null;
+      }> | null;
+      education: {
+        degree: string;
+        place: string;
+        detail?: string;
+      } | null;
+      skillGroups: Array<{
+        label: string;
+        items: string;
+        _type: "skillGroup";
+        _key: string;
+      }> | null;
+    }
+  | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getMainImage
 // Query: *[_type == "aboutMe"]{  "imageUrl": image.asset->url,}[0]
 export type GetMainImageResult = {
   imageUrl: string | null;
 } | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getExperiences
 // Query: *[_type == "experience"]{  title,  location,  partTime,  duration,  company,  description,  "logo": company.logo.asset->url,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },} | order(duration.from desc)
 export type GetExperiencesResult = Array<{
@@ -400,7 +557,7 @@ export type GetExperiencesResult = Array<{
   partTime: boolean | null;
   duration: Duration;
   company: Company;
-  description: Description;
+  description: Description | null;
   logo: string | null;
   tools: Array<{
     name: string;
@@ -410,12 +567,14 @@ export type GetExperiencesResult = Array<{
     iconSvg: string | null;
   }> | null;
 }>;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getFeaturedProjects
-// Query: *[_type == "project" && featured == true]{  title,  slug,  featured,  date,  status,  description,  href,  source,  tools[]->{   name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url}[0..1] | order(date desc)
+// Query: *[_type == "project" && featured == true] | order(date desc)[0..3]{  title,  slug,  featured,  date,  status,  description,  href,  source,  tools[]->{   name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url}
 export type GetFeaturedProjectsResult = Array<{
   title: string;
   slug: Slug | null;
-  featured: boolean | null;
+  featured: true;
   date: string;
   status: "completed" | "ongoing" | "paused";
   description: string;
@@ -430,6 +589,8 @@ export type GetFeaturedProjectsResult = Array<{
   }>;
   mainImage: string | null;
 }>;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjectBySlug
 // Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },  "images": images[].image.asset->url,  contentTitle,  content,}[0]
 export type GetProjectBySlugResult = {
@@ -451,27 +612,27 @@ export type GetProjectBySlugResult = {
   contentTitle: string | null;
   content: BlockContent | null;
 } | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjectMetadata
-// Query: *[_type == "project" && slug.current == $slug]{  slug,  description,  "images": images[0].image.asset->url,  contentTitle,}[0]
+// Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  description,  "images": images[0].image.asset->url,  contentTitle,}[0]
 export type GetProjectMetadataResult = {
+  title: string;
   slug: Slug | null;
   description: string;
   images: string | null;
   contentTitle: string | null;
 } | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjectsForSEO
 // Query: *[_type == "project"]{  "slug": slug.current,  "publishedAt": date,}
 export type GetProjectsForSEOResult = Array<{
   slug: string | null;
   publishedAt: string;
 }>;
-// Variable: getFaqs
-// Query: *[_type == "faq"]{  index,  question,  answer,} | order(index asc)
-export type GetFaqsResult = Array<{
-  index: number;
-  question: string;
-  answer: string;
-}>;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getMetadata
 // Query: *[_type == "metadata" && slug.current == $slug]{  "slug": slug.current,  title,  description,}[0]
 export type GetMetadataResult = {
@@ -479,14 +640,17 @@ export type GetMetadataResult = {
   title: string;
   description: string;
 } | null;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjects
-// Query: *[_type == "project"]{  title,  slug,  featured,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url} | order(date desc)
+// Query: *[_type == "project"]{  title,  slug,  featured,  date,  status,  "kind": kind->title,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },   "mainImage": images[0].image.asset->url} | order(date desc)
 export type GetProjectsResult = Array<{
   title: string;
   slug: Slug | null;
   featured: boolean | null;
   date: string;
   status: "completed" | "ongoing" | "paused";
+  kind: string;
   description: string;
   href: string | null;
   source: string | null;
@@ -499,6 +663,8 @@ export type GetProjectsResult = Array<{
   }>;
   mainImage: string | null;
 }>;
+
+// Source: ../web/src/lib/sanity/queries.ts
 // Variable: getTools
 // Query: *[_type == "tool"]{  name,  href,  iconSource,  iconName,  "iconSvg": iconSvg.asset->url}
 export type GetToolsResult = Array<{
@@ -513,16 +679,16 @@ export type GetToolsResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "*[_type == \"aboutMe\"]{\n  name,\n  bio,\n  \"imageUrl\": image.asset->url,\n  stats\n}[0]": GetAboutMeResult;
-    "*[_type == \"aboutMe\"]{\n  \"imageUrl\": image.asset->url,\n}[0]": GetMainImageResult;
-    "*[_type == \"experience\"]{\n  title,\n  location,\n  partTime,\n  duration,\n  company,\n  description,\n  \"logo\": company.logo.asset->url,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    \"iconSvg\": iconSvg.asset->url\n  },\n} | order(duration.from desc)": GetExperiencesResult;
-    "*[_type == \"project\" && featured == true]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n   name,\n    href,\n    iconSource,\n    iconName,\n    \"iconSvg\": iconSvg.asset->url\n  },\n   \"mainImage\": images[0].image.asset->url\n}[0..1] | order(date desc)": GetFeaturedProjectsResult;
-    "*[_type == \"project\" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    \"iconSvg\": iconSvg.asset->url\n  },\n  \"images\": images[].image.asset->url,\n  contentTitle,\n  content,\n}[0]": GetProjectBySlugResult;
-    "*[_type == \"project\" && slug.current == $slug]{\n  slug,\n  description,\n  \"images\": images[0].image.asset->url,\n  contentTitle,\n}[0]": GetProjectMetadataResult;
-    "*[_type == \"project\"]{\n  \"slug\": slug.current,\n  \"publishedAt\": date,\n}": GetProjectsForSEOResult;
-    "*[_type == \"faq\"]{\n  index,\n  question,\n  answer,\n} | order(index asc)": GetFaqsResult;
-    "*[_type == \"metadata\" && slug.current == $slug]{\n  \"slug\": slug.current,\n  title,\n  description,\n}[0]": GetMetadataResult;
-    "*[_type == \"project\"]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    \"iconSvg\": iconSvg.asset->url\n  },\n   \"mainImage\": images[0].image.asset->url\n} | order(date desc)": GetProjectsResult;
-    "*[_type == \"tool\"]{\n  name,\n  href,\n  iconSource,\n  iconName,\n  \"iconSvg\": iconSvg.asset->url\n}": GetToolsResult;
+    '*[_type == "aboutMe"]{\n  name,\n  bio,\n  "imageUrl": image.asset->url,\n  heroLabel,\n  heroHeadline,\n  heroDescription,\n  currentStatusLabel,\n  currentStatus,\n  email,\n  github,\n  githubLabel,\n  linkedin,\n  linkedinLabel\n}[0]': GetAboutMeResult;
+    '*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{\n  summary,\n  experience[]{\n    bullets,\n    experience->{\n      title,\n      location,\n      duration,\n      company{name, label, href},\n      tools[]->{name}\n    }\n  },\n  projects[]->{\n    title,\n    tools[]->{name},\n    date,\n    status,\n    href,\n    source,\n    cvBlurb\n  },\n  education,\n  skillGroups\n}': GetCvResult;
+    '*[_type == "aboutMe"]{\n  "imageUrl": image.asset->url,\n}[0]': GetMainImageResult;
+    '*[_type == "experience"]{\n  title,\n  location,\n  partTime,\n  duration,\n  company,\n  description,\n  "logo": company.logo.asset->url,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n} | order(duration.from desc)': GetExperiencesResult;
+    '*[_type == "project" && featured == true] | order(date desc)[0..3]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n   name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n}': GetFeaturedProjectsResult;
+    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n  "images": images[].image.asset->url,\n  contentTitle,\n  content,\n}[0]': GetProjectBySlugResult;
+    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  description,\n  "images": images[0].image.asset->url,\n  contentTitle,\n}[0]': GetProjectMetadataResult;
+    '*[_type == "project"]{\n  "slug": slug.current,\n  "publishedAt": date,\n}': GetProjectsForSEOResult;
+    '*[_type == "metadata" && slug.current == $slug]{\n  "slug": slug.current,\n  title,\n  description,\n}[0]': GetMetadataResult;
+    '*[_type == "project"]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  "kind": kind->title,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n} | order(date desc)': GetProjectsResult;
+    '*[_type == "tool"]{\n  name,\n  href,\n  iconSource,\n  iconName,\n  "iconSvg": iconSvg.asset->url\n}': GetToolsResult;
   }
 }

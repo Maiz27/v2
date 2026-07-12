@@ -1,9 +1,6 @@
 import { Metadata } from 'next';
-import { BASEURL } from './Constants';
-import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
-import { fetchSanityData } from './sanity/client';
-import { getMetadata } from './sanity/queries';
-import { GetMetadataResult } from './sanity/types';
+import { siteMetadata } from './data/siteMetadata';
+import { buildMetadata } from './metadata';
 
 export const getDomain = (url: string) => {
   const { hostname } = new URL(url);
@@ -55,56 +52,16 @@ export const createSlug = (text: string) => {
     .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
 };
 
-export const getDynamicMetaData = async (slug: string) => {
-  const data: GetMetadataResult = await fetchSanityData(getMetadata, { slug });
+export const getDynamicMetaData = async (slug: string): Promise<Metadata> => {
+  const data = await siteMetadata.forSlug(slug);
 
   if (!data) {
     return {};
   }
 
-  return {
-    metadataBase: new URL(BASEURL),
+  return buildMetadata({
     title: data.title,
     description: data.description,
-    alternates: {
-      canonical: `${BASEURL}${slug}`,
-    },
-    icons: {
-      icon: '/imgs/logo/favicon.ico',
-      shortcut: '/imgs/logo/favicon.ico',
-      apple: '/imgs/logo/apple-touch-icon.png',
-      other: {
-        rel: 'apple-touch-icon-precomposed',
-        url: '/imgs/logo/apple-touch-icon.png',
-      },
-    },
-    openGraph: {
-      type: 'website',
-      url: `${BASEURL}${slug}`,
-      title: data.title,
-      description: data.description,
-      siteName: data.title,
-      images: [
-        {
-          url: `${BASEURL}/imgs/logo/logo.png`,
-        },
-      ],
-    } as OpenGraph,
-    twitter: {
-      card: 'summary_large_image',
-      site: `${BASEURL}${slug}`,
-      images: [
-        {
-          url: `${BASEURL}/imgs/logo/logo.png`,
-        },
-      ],
-    },
-    robots: {
-      index: true,
-      follow: true,
-      'max-snippet': 50,
-      'max-image-preview': 'large',
-      'max-video-preview': -1,
-    },
-  } as Metadata;
+    path: slug,
+  });
 };

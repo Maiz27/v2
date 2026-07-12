@@ -1,5 +1,18 @@
 import {defineField, defineType} from 'sanity'
 
+const MAX_FEATURED = 4
+const MIN_FEATURED = 2
+
+async function getFeaturedCount(context: any, excludeId?: string) {
+  const { getClient } = context;
+  // Use the API version that includes drafts so draft+published aren't double-counted
+  const client = getClient({ apiVersion: '2024-01-01', perspective: 'previewDrafts' });
+  return client.fetch(
+    `count(*[_type == "project" && featured == true ${excludeId ? `&& _id != $id` : ''}])`,
+    { id: excludeId }
+  );
+}
+
 export default defineType({
   name: 'project',
   title: 'Project',
@@ -25,11 +38,49 @@ export default defineType({
       title: 'Featured Project',
       type: 'boolean',
       initialValue: false,
+      validation: (Rule) =>
+        Rule.custom(async (value, context) => {
+          // Get current featured count excluding this document
+          const count = await getFeaturedCount(context, context.document?._id)
+          
+          // Get the CURRENT stored value of featured for this document
+          const currentFeatured = context.document?.featured ?? false
+          
+          // Only validate if the value is actually CHANGING
+          if (value === currentFeatured) return true
+          
+          // Trying to FEATURE a project (false -> true)
+          if (value === true && currentFeatured === false) {
+            if (count >= MAX_FEATURED) {
+              return `Maximum of ${MAX_FEATURED} featured projects allowed. Unfeature another project first.`
+            }
+            return true
+          }
+          
+          // Trying to UNFEATURE a project (true -> false)
+          if (value === false && currentFeatured === true) {
+            // After unfeaturing, total featured would be `count` (since current is excluded)
+            if (count < MIN_FEATURED) {
+              return `Minimum of ${MIN_FEATURED} featured projects required. Feature another project before unfeaturing this one.`
+            }
+            return true
+          }
+          
+          return true
+        }),
     }),
     defineField({
       name: 'date',
       title: 'Date',
       type: 'date',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'kind',
+      title: 'Kind',
+      type: 'reference',
+      to: {type: 'projectKind'},
+      description: 'What this project is, for the archive filter (not the tech stack).',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -74,6 +125,15 @@ export default defineType({
       title: 'Images',
       type: 'array',
       of: [{type: 'projectImage'}],
+    }),
+    defineField({
+      name: 'cvBlurb',
+      title: 'CV Blurb',
+      type: 'text',
+      rows: 4,
+      description:
+        'Short resume-style description, used only when this project is listed on the CV.',
+      validation: (Rule) => Rule.max(600),
     }),
     defineField({
       name: 'contentTitle',

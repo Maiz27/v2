@@ -5,6 +5,8 @@ const languageAlternatives = [
   { title: 'Javascript', value: 'javascript' },
   { title: 'HTML', value: 'html' },
   { title: 'CSS', value: 'css' },
+  { title: 'SCSS', value: 'scss' },
+  { title: 'JSON', value: 'json' },
   { title: 'Java', value: 'java' },
   { title: 'Kotlin', value: 'kotlin' },
   { title: 'Dart', value: 'dart' },
@@ -40,6 +42,77 @@ export const snippet = defineType({
       },
       validation: (Rule) => Rule.required(),
     }),
+defineField({
+              name: 'annotations',
+              title: 'Annotations',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  name: 'codeAnnotation',
+                  title: 'Code Annotation',
+                  fields: [
+                    defineField({
+                      name: 'id',
+                      title: 'ID',
+                      type: 'string',
+                      description:
+                        'Short slug-ish string, unique within this snippet. Used as the anchor id and the data-annot value.',
+                      validation: (Rule) => Rule.required(),
+                    }),
+                    defineField({
+                      name: 'kind',
+                      title: 'Kind',
+                      type: 'string',
+                      options: {
+                        list: [
+                          { title: 'Decision', value: 'decision' },
+                          { title: 'Context', value: 'context' },
+                        ],
+                      },
+                      validation: (Rule) => Rule.required(),
+                    }),
+                    defineField({
+                      name: 'match',
+                      title: 'Match',
+                      type: 'string',
+                      description:
+                        "Exact substring of the code to anchor to. Must appear verbatim in the snippet's code.",
+                      validation: (Rule) => Rule.required(),
+                    }),
+                    defineField({
+                      name: 'occurrence',
+                      title: 'Occurrence',
+                      type: 'number',
+                      description:
+                        '1-based; which occurrence of `match` to use if it appears more than once. Defaults to 1.',
+                      validation: (Rule) =>
+                        Rule.positive().integer().custom((value) => {
+                          if (value !== undefined && value < 1) return 'Must be a positive integer';
+                          return true;
+                        }),
+                    }),
+                    defineField({
+                      name: 'body',
+                      title: 'Body',
+                      type: 'text',
+                      description: 'The note itself.',
+                      validation: (Rule) => Rule.required(),
+                    }),
+                  ],
+                  preview: {
+                    select: { title: 'id', subtitle: 'kind' },
+                  },
+                },
+              ],
+              validation: (Rule) =>
+                Rule.custom((annotations: Array<{ id: string }> | undefined) => {
+                  if (!annotations) return true;
+                  const ids = annotations.map((a) => a.id);
+                  const unique = new Set(ids);
+                  return unique.size === ids.length ? true : 'Annotation IDs must be unique within this snippet';
+                }),
+            }),
   ],
 });
 

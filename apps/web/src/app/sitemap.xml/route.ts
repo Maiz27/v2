@@ -1,22 +1,22 @@
 import { NextResponse } from 'next/server';
-import { BASEURL, ROUTES } from '@/lib/Constants';
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getProjectsForSEO } from '@/lib/sanity/queries';
+import { BASEURL } from '@/lib/Constants';
+import { NAV } from '@/lib/site';
+import { projects as projectsData } from '@/lib/data/projects';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 type SanityEntry = {
-  slug: string;
+  slug: string | null;
   publishedAt: string;
 };
 
 export async function GET() {
-  const allProjects: SanityEntry[] = await fetchSanityData(getProjectsForSEO);
+  const allProjects: SanityEntry[] = await projectsData.forSeo();
 
   const projects = mapSanityEntriesToSitemapEntries(allProjects, '/projects');
 
-  const routes = mapRoutesToSitemapEntries(ROUTES);
+  const routes = mapRoutesToSitemapEntries(NAV);
 
   const allUrls = [...routes, ...projects];
   const sitemapContent = generateSitemapXml(allUrls);
@@ -37,11 +37,13 @@ const mapSanityEntriesToSitemapEntries = (
   entries: SanityEntry[],
   pathPrefix: string
 ) =>
-  entries.map(({ slug, publishedAt }) =>
-    createSitemapEntry(`${pathPrefix}/${slug}`, publishedAt)
-  );
+  entries
+    .filter(({ slug }) => slug !== null)
+    .map(({ slug, publishedAt }) =>
+      createSitemapEntry(`${pathPrefix}/${slug}`, publishedAt)
+    );
 
-const mapRoutesToSitemapEntries = (routes: { href: string }[]) =>
+const mapRoutesToSitemapEntries = (routes: readonly { href: string }[]) =>
   routes.map(({ href }) => createSitemapEntry(href, new Date().toISOString()));
 
 const generateSitemapXml = (urls: { url: string; lastModified: string }[]) => {

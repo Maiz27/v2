@@ -45,7 +45,6 @@ export default defineType({
       name: 'description',
       title: 'Job description',
       type: 'description',
-      validation: (Rule) => Rule.required(),
     }),
   ],
   preview: {

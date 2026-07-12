@@ -1,49 +1,57 @@
-import type { Viewport } from 'next';
-import Left from '@/components/aside/Left';
-import Right from '@/components/aside/Right';
-import Header from '@/components/header/Header';
-import Footer from '@/components/footer/Footer';
-import ContextProvider from '@/components/context/ContextProvider';
-import PageTransition from '@/components/animationWrappers/PageTransition';
-import { MobileScrollToTop } from '@/components/aside/ScrollToTop';
+import type { Metadata, Viewport } from 'next';
+import { Besley, Source_Serif_4, Fragment_Mono } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getTools } from '@/lib/sanity/queries';
-import { getDynamicMetaData } from '@/lib/utilities';
-import { GetToolsResult } from '@/lib/sanity/types';
+import MotionGate from '@/components/motion/MotionGate';
+import RouteTransition from '@/components/transitions/RouteTransition';
+import { INITIAL_MOTION_STATE } from '@/lib/motion';
+import { OWNER } from '@/lib/site';
 import './globals.css';
 
+const besley = Besley({
+  subsets: ['latin'],
+  variable: '--font-besley',
+});
+
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  variable: '--font-source-serif',
+});
+
+const fragmentMono = Fragment_Mono({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-fragment-mono',
+});
+
 export const viewport: Viewport = {
-  themeColor: '#96b7e3',
+  themeColor: '#f4f1ea',
 };
 
-export async function generateMetadata() {
-  const data = await getDynamicMetaData('/');
-  return data;
-}
+// Static fallback only: every route defines its own generateMetadata (driven
+// by the Sanity `metadata` document for that slug), which Next merges over
+// this. A layout-level Sanity fetch here would just be a second, discarded
+// round trip on every navigation.
+export const metadata: Metadata = {
+  title: OWNER.name,
+  description: `${OWNER.name}, ${OWNER.role}.`,
+};
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const tools: GetToolsResult = await fetchSanityData(getTools);
-
   return (
-    <html lang='en' data-scroll-behavior='smooth'>
-      <body className='bg-background text-copy flex'>
-        <ContextProvider tools={tools}>
-          <Left />
-          <div className='w-full mx-auto md:max-w-2xl lg:max-w-4xl xl:max-w-full xl:border-x xl:border-border overflow-hidden'>
-            <Header />
-            <main>
-              <PageTransition>{children}</PageTransition>
-            </main>
-            <Footer />
-            <MobileScrollToTop />
-          </div>
-          <Right />
-        </ContextProvider>
+    <html
+      lang='en'
+      data-motion={INITIAL_MOTION_STATE}
+      data-scroll-behavior='smooth'
+      className={`${besley.variable} ${sourceSerif.variable} ${fragmentMono.variable}`}
+    >
+      <body className='ledger-body min-h-dvh'>
+        <MotionGate />
+        <RouteTransition />
+        {children}
         <SpeedInsights />
       </body>
     </html>
