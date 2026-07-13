@@ -234,12 +234,12 @@ const AnnotatedListing = ({
   const popNote = byId(popId);
 
   return (
-    <figure className={isGroup ? '' : 'my-10'}>
+    <figure className={`${isGroup ? '' : 'my-10'} min-w-0`}>
       <div className='xl:grid xl:grid-cols-[minmax(0,1fr)_15rem] xl:gap-8'>
         <div ref={wrapRef} className='relative min-w-0'>
           {!isGroup && (
-            <figcaption className='flex items-baseline justify-between gap-4 border border-b-0 border-rule bg-paper-raised px-4 py-2.5'>
-              <span className='font-mono text-[0.75rem] text-ink-soft'>
+            <figcaption className='flex items-baseline justify-between gap-4 min-w-0 border border-b-0 border-rule bg-paper-raised px-4 py-2.5'>
+              <span className='font-mono text-[0.75rem] text-ink-soft truncate'>
                 {filename}
               </span>
               {source && (

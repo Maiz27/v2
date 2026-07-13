@@ -53,38 +53,38 @@ const CodeGroupClient = ({
   };
 
   return (
-    <figure id={id} className='my-10 scroll-m-16'>
+    <figure id={id} className='my-10 scroll-m-16 min-w-0'>
       {title && (
         <p className='mb-2 font-mono text-[0.62rem] uppercase tracking-[0.18em] text-ink-faint'>
           {title}
         </p>
       )}
-      <div className='flex flex-wrap items-stretch justify-between gap-2 border border-b-0 border-rule bg-paper-raised'>
-        <div role='tablist' className='flex flex-wrap'>
+      <div className='flex flex-wrap items-stretch justify-between gap-2 min-w-0 border border-b-0 border-rule bg-paper-raised'>
+        <div role='tablist' className='flex flex-wrap min-w-0'>
           {tabs.map((tab, i) => {
             const isActive = i === active;
             const tabId = `${id}-tab-${i}`;
             const panelId = `${id}-panel-${i}`;
             return (
-              <button
-                ref={(el) => { tabRefs.current[i] = el; }}
-                key={tab.filename + i}
-                id={tabId}
-                type='button'
-                role='tab'
-                aria-selected={isActive}
-                aria-controls={panelId}
-                tabIndex={isActive ? 0 : -1}
-                onClick={() => setActive(i)}
-                onKeyDown={(e) => handleKeyDown(e, i)}
-                className={`cursor-pointer border-r border-rule px-4 py-2.5 font-mono text-[0.72rem] transition-colors duration-200 ${
-                  isActive
-                    ? 'bg-ink text-paper'
-                    : 'text-ink-soft hover:text-ink'
-                }`}
-              >
-                {tab.filename}
-              </button>
+<button
+                  ref={(el) => { tabRefs.current[i] = el; }}
+                  key={tab.filename + i}
+                  id={tabId}
+                  type='button'
+                  role='tab'
+                  aria-selected={isActive}
+                  aria-controls={panelId}
+                  tabIndex={isActive ? 0 : -1}
+                  onClick={() => setActive(i)}
+                  onKeyDown={(e) => handleKeyDown(e, i)}
+                  className={`cursor-pointer border-r border-rule px-4 py-2.5 font-mono text-[0.72rem] transition-colors duration-200 min-w-0 ${
+                    isActive
+                      ? 'bg-ink text-paper'
+                      : 'text-ink-soft hover:text-ink'
+                  }`}
+                >
+                  <span className='truncate'>{tab.filename}</span>
+                </button>
             );
           })}
         </div>

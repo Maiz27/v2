@@ -58,10 +58,10 @@ const CodeParser = async ({ id, snippet, isGroup, annotations }: Props) => {
   }
 
   return (
-    <figure id={id} className='my-10 scroll-m-16'>
+    <figure id={id} className='my-10 scroll-m-16 min-w-0'>
       {!isGroup && (
-        <figcaption className='flex items-baseline justify-between gap-4 border border-b-0 border-rule bg-paper-raised px-4 py-2.5'>
-          <span className='font-mono text-[0.75rem] text-ink-soft'>
+        <figcaption className='flex items-baseline justify-between gap-4 min-w-0 border border-b-0 border-rule bg-paper-raised px-4 py-2.5'>
+          <span className='font-mono text-[0.75rem] text-ink-soft truncate'>
             {filename}
           </span>
           {source && (
