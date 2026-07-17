@@ -1,29 +1,53 @@
 'use client';
 
-import { useState, useRef, useEffect, KeyboardEvent } from 'react';
+import { useRef, useState, KeyboardEvent } from 'react';
+import type { CodeAnnotation } from '@/lib/annotations';
+import { useAnnotatedCode } from './useAnnotatedCode';
+import NotesRail from './NotesRail';
+import AnnotationPopover from './AnnotationPopover';
 
-type Tab = { filename: string; source?: string | null };
+type Panel = {
+  filename: string;
+  source?: string | null;
+  html: string;
+  annotations: CodeAnnotation[];
+};
 
 /**
  * Ledger snippet group: a tab strip of filenames on the paper-raised surface,
- * with a view-source link for the active file. The listings themselves are
- * highlighted on the server and passed in as children; this only switches which
- * one is shown.
+ * with a view-source link for the active file. Highlighting happens server-
+ * side in CodeGroup; this only switches which panel's html/annotations are
+ * shown.
+ *
+ * There is exactly one code panel and one notes rail on screen at a time,
+ * shared across tabs via useAnnotatedCode rather than one independent panel +
+ * rail mounted per tab. That matters for two things a per-tab-mount design
+ * got wrong: the notes rail used to render *inside* the tab strip's shared
+ * bordered box (that box was only ever meant to wrap bare code), trapping it
+ * behind the same border as the code instead of sitting beside it as its own
+ * unbordered, sticky column; and mounting every tab's listing simultaneously
+ * (just toggling `hidden`) meant every tab's independent hover/pin state and
+ * global document listeners were live at once, even for tabs you couldn't see.
  */
 const CodeGroupClient = ({
   id,
   title,
-  tabs,
-  children,
+  panels,
 }: {
   id: string;
   title?: string;
-  tabs: Tab[];
-  children: React.ReactNode[];
+  panels: Panel[];
 }) => {
   const [active, setActive] = useState(0);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const activeSource = tabs[active]?.source;
+
+  const activePanel = panels[active];
+  const hasAnnotations = panels.some((p) => p.annotations.length > 0);
+
+  const { codeRef, wrapRef, innerHtml, isWide, activeId, pinnedId, popId, popPos, byId, setHoverId, togglePinnedId, CARD_WIDTH } =
+    useAnnotatedCode(activePanel?.html ?? '', activePanel?.annotations ?? []);
+
+  const popNote = byId(popId);
 
   // Roving keyboard navigation for tabs
   const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -31,11 +55,11 @@ const CodeGroupClient = ({
     switch (e.key) {
       case 'ArrowRight':
         e.preventDefault();
-        newIndex = (active + 1) % tabs.length;
+        newIndex = (active + 1) % panels.length;
         break;
       case 'ArrowLeft':
         e.preventDefault();
-        newIndex = (active - 1 + tabs.length) % tabs.length;
+        newIndex = (active - 1 + panels.length) % panels.length;
         break;
       case 'Home':
         e.preventDefault();
@@ -43,7 +67,7 @@ const CodeGroupClient = ({
         break;
       case 'End':
         e.preventDefault();
-        newIndex = tabs.length - 1;
+        newIndex = panels.length - 1;
         break;
       default:
         return;
@@ -52,6 +76,68 @@ const CodeGroupClient = ({
     tabRefs.current[newIndex]?.focus();
   };
 
+  const panelId = `${id}-panel`;
+
+  const tabStrip = (
+    <div className='flex flex-wrap items-stretch justify-between gap-2 min-w-0 border border-b-0 border-rule bg-paper-raised'>
+      <div role='tablist' className='flex flex-wrap min-w-0'>
+        {panels.map((panel, i) => {
+          const isActive = i === active;
+          const tabId = `${id}-tab-${i}`;
+          return (
+            <button
+              ref={(el) => {
+                tabRefs.current[i] = el;
+              }}
+              key={panel.filename + i}
+              id={tabId}
+              type='button'
+              role='tab'
+              aria-selected={isActive}
+              aria-controls={panelId}
+              tabIndex={isActive ? 0 : -1}
+              onClick={() => setActive(i)}
+              onKeyDown={(e) => handleKeyDown(e, i)}
+              className={`cursor-pointer border-r border-rule px-4 py-2.5 font-mono text-[0.72rem] transition-colors duration-200 min-w-0 ${
+                isActive ? 'bg-ink text-paper' : 'text-ink-soft hover:text-ink'
+              }`}
+            >
+              <span className='truncate'>{panel.filename}</span>
+            </button>
+          );
+        })}
+      </div>
+      {activePanel?.source && (
+        <a
+          href={activePanel.source}
+          target='_blank'
+          rel='noreferrer noopener'
+          className='link-underline self-center px-4 font-mono text-[0.7rem] text-mark'
+        >
+          view source
+        </a>
+      )}
+    </div>
+  );
+
+  const codeBox = (
+    <div ref={wrapRef} className='relative min-w-0'>
+      {tabStrip}
+      <div
+        ref={codeRef}
+        id={panelId}
+        role='tabpanel'
+        aria-labelledby={`${id}-tab-${active}`}
+        data-nosnippet
+        className='border border-rule'
+        dangerouslySetInnerHTML={innerHtml}
+      />
+      {hasAnnotations && !isWide && popPos && popNote && (
+        <AnnotationPopover note={popNote} pos={popPos} cardWidth={CARD_WIDTH} />
+      )}
+    </div>
+  );
+
   return (
     <figure id={id} className='my-10 scroll-m-16 min-w-0'>
       {title && (
@@ -59,64 +145,21 @@ const CodeGroupClient = ({
           {title}
         </p>
       )}
-      <div className='flex flex-wrap items-stretch justify-between gap-2 min-w-0 border border-b-0 border-rule bg-paper-raised'>
-        <div role='tablist' className='flex flex-wrap min-w-0'>
-          {tabs.map((tab, i) => {
-            const isActive = i === active;
-            const tabId = `${id}-tab-${i}`;
-            const panelId = `${id}-panel-${i}`;
-            return (
-<button
-                  ref={(el) => { tabRefs.current[i] = el; }}
-                  key={tab.filename + i}
-                  id={tabId}
-                  type='button'
-                  role='tab'
-                  aria-selected={isActive}
-                  aria-controls={panelId}
-                  tabIndex={isActive ? 0 : -1}
-                  onClick={() => setActive(i)}
-                  onKeyDown={(e) => handleKeyDown(e, i)}
-                  className={`cursor-pointer border-r border-rule px-4 py-2.5 font-mono text-[0.72rem] transition-colors duration-200 min-w-0 ${
-                    isActive
-                      ? 'bg-ink text-paper'
-                      : 'text-ink-soft hover:text-ink'
-                  }`}
-                >
-                  <span className='truncate'>{tab.filename}</span>
-                </button>
-            );
-          })}
+
+      {hasAnnotations ? (
+        <div className='xl:grid xl:grid-cols-[minmax(0,1fr)_15rem] xl:gap-8'>
+          {codeBox}
+          <NotesRail
+            annotations={activePanel?.annotations ?? []}
+            activeId={activeId}
+            pinnedId={pinnedId}
+            onHover={setHoverId}
+            onPin={togglePinnedId}
+          />
         </div>
-        {activeSource && (
-          <a
-            href={activeSource}
-            target='_blank'
-            rel='noreferrer noopener'
-            className='link-underline self-center px-4 font-mono text-[0.7rem] text-mark'
-          >
-            view source
-          </a>
-        )}
-      </div>
-      <div className='border border-rule'>
-        {children.map((child, i) => {
-          const isActive = i === active;
-          const tabId = `${id}-tab-${i}`;
-          const panelId = `${id}-panel-${i}`;
-          return (
-            <div
-              key={i}
-              id={panelId}
-              role='tabpanel'
-              aria-labelledby={tabId}
-              hidden={!isActive}
-            >
-              {child}
-            </div>
-          );
-        })}
-      </div>
+      ) : (
+        codeBox
+      )}
     </figure>
   );
 };
