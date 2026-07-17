@@ -98,7 +98,12 @@ export const getProjectBySlug = groq`*[_type == "project" && slug.current == $sl
   },
   "images": images[].image.asset->url,
   contentTitle,
-  content,
+  content[]{
+    ...,
+    _type == "image" => {
+      "altText": asset->altText
+    }
+  },
 }[0]`;
 
 export const getProjectMetadata = groq`*[_type == "project" && slug.current == $slug]{
