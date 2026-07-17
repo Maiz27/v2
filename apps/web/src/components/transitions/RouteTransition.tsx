@@ -14,21 +14,29 @@ import { INITIAL_MOTION_STATE } from '@/lib/motion';
  *
  * Logic reused from the Nilotik reference (document-level click interception,
  * idle -> covering -> waiting -> revealing, router.push under cover, pathname
- * effect triggers the reveal, ~7s watchdog, scroll-to-top on reveal). Navigation
- * waits for the panel animation and two painted frames, then reveal gets the same
- * paint boundary after the destination commits. The stack is WAAPI, not gsap.
- * When the motion gate resolves off, links are never intercepted and navigation
- * is native.
+ * effect triggers the reveal, ~7s watchdog, scroll-to-top on reveal by
+ * default). Navigation waits for the panel animation and two painted frames,
+ * then reveal gets the same paint boundary after the destination commits. The
+ * stack is WAAPI, not gsap. When the motion gate resolves off, links are
+ * never intercepted and navigation is native.
  *
  * Two more entry points into the same phase machine:
  * - Browser back/forward (popstate): the URL has already changed by the time
  *   popstate fires, so there is nothing to cover-then-commit the way a click
  *   does. Instead the curtain snaps straight to "fully covering" (no slide-up)
  *   and waits for the destination to land, same as the tail end of a click nav.
+ *   reveal() skips its scroll reset here — the browser/Next scroll
+ *   restoration already placed the viewport, and stomping it would defeat
+ *   Back landing where the reader was.
  * - Landing on the site fresh (a hard navigation, not a client-side one): the
  *   root's initial render is server-rendered already in the covering state
  *   (see startCovered below) so there is no flash of the raw page before JS
  *   runs, then it holds briefly and reveals once mounted.
+ *
+ * A click-nav whose URL carries a #hash (cover() gets the hash separately)
+ * scrolls to that target — respecting its scroll-margin-top — instead of the
+ * top once the destination has committed; a plain click-nav still resets to
+ * the top.
  */
 
 type Phase = 'idle' | 'covering' | 'waiting' | 'revealing';
@@ -95,6 +103,12 @@ const RouteTransition = () => {
     let arrivalTimer: number | null = null;
     let popstatePoll: number | null = null;
     let scrollFrame: number | null = null;
+    // Set by onPopState: back/forward already has the browser/Next scroll
+    // restoration in flight, so reveal() must not stomp it with scrollTo(0, 0).
+    let preserveScroll = false;
+    // Set by cover() when the clicked link's URL carried a #hash: reveal()
+    // jumps there instead of the top once the destination has committed.
+    let pendingHash: string | null = null;
 
     const clearTimers = () => {
       if (watchdog !== null) window.clearTimeout(watchdog);
@@ -107,6 +121,17 @@ const RouteTransition = () => {
       arrivalTimer = null;
       popstatePoll = null;
       scrollFrame = null;
+    };
+
+    // Scroll-margin-aware landing Y for a hash target, shared by the animated
+    // same-page jump below and the instant post-cover jump in reveal().
+    const targetScrollY = (target: Element) => {
+      const scrollMarginTop =
+        parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      return Math.max(
+        0,
+        window.scrollY + target.getBoundingClientRect().top - scrollMarginTop
+      );
     };
 
     // Chromium silently downgrades `scroll-behavior: smooth` (and the
@@ -123,12 +148,7 @@ const RouteTransition = () => {
       if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame);
 
       const startY = window.scrollY;
-      const scrollMarginTop =
-        parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-      const destY = Math.max(
-        0,
-        startY + target.getBoundingClientRect().top - scrollMarginTop
-      );
+      const destY = targetScrollY(target);
       const distance = destY - startY;
       if (Math.abs(distance) < 1) {
         history.pushState(null, '', hash);
@@ -150,6 +170,16 @@ const RouteTransition = () => {
         }
       };
       scrollFrame = window.requestAnimationFrame(step);
+    };
+
+    // Instant counterpart to smoothScrollToHash: the jump happens while the
+    // panel is still fully covering the viewport (see reveal() below), so
+    // there's nothing on screen to animate. Returns whether it found a target.
+    const scrollToHashTarget = (hash: string): boolean => {
+      const target = document.getElementById(hash.slice(1));
+      if (!target) return false;
+      window.scrollTo(0, targetScrollY(target));
+      return true;
     };
     const cancelRunning = (preserveStyles = false) => {
       running.forEach((a) => {
@@ -199,7 +229,18 @@ const RouteTransition = () => {
       pulse = null;
       clearTimers();
       cancelRunning(true);
-      window.scrollTo(0, 0);
+
+      const hash = pendingHash;
+      const skipScrollReset = preserveScroll;
+      pendingHash = null;
+      preserveScroll = false;
+
+      if (skipScrollReset) {
+        // Back/forward nav: browser/Next scroll restoration already placed
+        // the viewport, don't fight it with scrollTo(0, 0).
+      } else if (!hash || !scrollToHashTarget(hash)) {
+        window.scrollTo(0, 0);
+      }
 
       run(
         label,
@@ -248,8 +289,9 @@ const RouteTransition = () => {
       }, WATCHDOG_MS);
     };
 
-    const cover = (href: string, dest: Destination) => {
+    const cover = (href: string, dest: Destination, hash: string) => {
       phaseRef.current = 'covering';
+      pendingHash = hash || null;
       eyebrow.textContent = dest.eyebrow;
       label.textContent = dest.label;
 
@@ -328,10 +370,13 @@ const RouteTransition = () => {
       // popstate also fires for same-document fragment navigation (a TOC
       // link, or back/forward across hash-only history entries on the same
       // route) — that's a scroll, not a route change, so let it stay a
-      // native smooth scroll instead of flashing the curtain and yanking
-      // the scroll position back to the top via reveal()'s scrollTo(0, 0).
+      // native smooth scroll instead of flashing the curtain over it.
       if (window.location.pathname === pathnameRef.current) return;
 
+      // The browser (and Next's own history integration) already restores
+      // scroll position for back/forward — reveal() must not override that
+      // with scrollTo(0, 0).
+      preserveScroll = true;
       instantCover(destinationForPath(window.location.pathname));
       phaseRef.current = 'waiting';
       setRouteTransitionEntering(true);
@@ -387,7 +432,11 @@ const RouteTransition = () => {
 
       event.preventDefault();
       if (phaseRef.current !== 'idle') return;
-      cover(url.pathname + url.search + url.hash, destinationForPath(url.pathname));
+      cover(
+        url.pathname + url.search + url.hash,
+        destinationForPath(url.pathname),
+        url.hash
+      );
     };
 
     apiRef.current = { reveal };
