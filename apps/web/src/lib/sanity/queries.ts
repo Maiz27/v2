@@ -41,27 +41,6 @@ export const getCv = groq`*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{
   skillGroups
 }`;
 
-export const getMainImage = groq`*[_type == "aboutMe"]{
-  "imageUrl": image.asset->url,
-}[0]`;
-
-export const getExperiences = groq`*[_type == "experience"]{
-  title,
-  location,
-  partTime,
-  duration,
-  company,
-  description,
-  "logo": company.logo.asset->url,
-  tools[]->{
-    name,
-    href,
-    iconSource,
-    iconName,
-    "iconSvg": iconSvg.asset->url
-  },
-} | order(duration.from desc)`;
-
 export const getFeaturedProjects = groq`*[_type == "project" && featured == true] | order(date desc)[0..3]{
   title,
   slug,
@@ -98,7 +77,12 @@ export const getProjectBySlug = groq`*[_type == "project" && slug.current == $sl
   },
   "images": images[].image.asset->url,
   contentTitle,
-  content,
+  content[]{
+    ...,
+    _type == "image" => {
+      "altText": asset->altText
+    }
+  },
 }[0]`;
 
 export const getProjectMetadata = groq`*[_type == "project" && slug.current == $slug]{
@@ -139,11 +123,3 @@ export const getProjects = groq`*[_type == "project"]{
   },
    "mainImage": images[0].image.asset->url
 } | order(date desc)`;
-
-export const getTools = groq`*[_type == "tool"]{
-  name,
-  href,
-  iconSource,
-  iconName,
-  "iconSvg": iconSvg.asset->url
-}`;

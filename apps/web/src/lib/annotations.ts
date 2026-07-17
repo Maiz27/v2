@@ -1,7 +1,7 @@
 /**
- * Interactive code annotations: the V3 centerpiece. Real Sanity snippets carry
- * no annotations yet, so the case-study listing renders plain today, but the
- * component API is ready for authored notes to be attached per snippet.
+ * Interactive code annotations: the V3 centerpiece. Every case study now
+ * carries authored annotations, rendering the hybrid margin-notes / popover
+ * listing; plain rendering remains the fallback for a snippet with none.
  *
  * "decision" notes read in red (why this, what I rejected); "context" notes in
  * grey (what it does).

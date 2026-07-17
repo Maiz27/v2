@@ -11,37 +11,11 @@ export const getDomain = (url: string) => {
   return parts.join('.');
 };
 
-export const roundYear = (dateString: string): number => {
-  const date = new Date(dateString);
-  const month = date.getMonth();
-  const year = date.getFullYear();
-
-  // If the month is less than 6 (January to May), round down
-  // Otherwise, round up
-  return month < 6 ? year : year + 1;
-};
-
 export const getMonthYear = (StringDate: string) => {
   const date = new Date(StringDate);
   return date
     .toLocaleString(undefined, { month: 'short', year: 'numeric' })
     .replace(' ', ', ');
-};
-
-export const smoothScrollToElement = (
-  elementId: string,
-  offset: number = 80
-) => {
-  const element = document.getElementById(elementId);
-  if (element) {
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth',
-    });
-  }
 };
 
 export const createSlug = (text: string) => {

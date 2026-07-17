@@ -592,7 +592,7 @@ export type GetFeaturedProjectsResult = Array<{
 
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjectBySlug
-// Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },  "images": images[].image.asset->url,  contentTitle,  content,}[0]
+// Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },  "images": images[].image.asset->url,  contentTitle,  content[]{    ...,    _type == "image" => {      "altText": asset->altText    }  },}[0]
 export type GetProjectBySlugResult = {
   title: string;
   slug: Slug | null;
@@ -610,7 +610,61 @@ export type GetProjectBySlugResult = {
   }>;
   images: Array<string | null> | null;
   contentTitle: string | null;
-  content: BlockContent | null;
+  content: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+        altText: string | null;
+      }
+    | {
+        _key: string;
+        _type: "snippet";
+        filename: string;
+        source?: string;
+        code: Code;
+        annotations?: Array<{
+          id: string;
+          kind: "context" | "decision";
+          match: string;
+          occurrence?: number;
+          body: string;
+          _type: "codeAnnotation";
+          _key: string;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "snippetGroup";
+        title?: string;
+        snippets: Array<
+          {
+            _key: string;
+          } & Snippet
+        >;
+      }
+  > | null;
 } | null;
 
 // Source: ../web/src/lib/sanity/queries.ts
@@ -684,7 +738,7 @@ declare module "@sanity/client" {
     '*[_type == "aboutMe"]{\n  "imageUrl": image.asset->url,\n}[0]': GetMainImageResult;
     '*[_type == "experience"]{\n  title,\n  location,\n  partTime,\n  duration,\n  company,\n  description,\n  "logo": company.logo.asset->url,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n} | order(duration.from desc)': GetExperiencesResult;
     '*[_type == "project" && featured == true] | order(date desc)[0..3]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n   name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n}': GetFeaturedProjectsResult;
-    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n  "images": images[].image.asset->url,\n  contentTitle,\n  content,\n}[0]': GetProjectBySlugResult;
+    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n  "images": images[].image.asset->url,\n  contentTitle,\n  content[]{\n    ...,\n    _type == "image" => {\n      "altText": asset->altText\n    }\n  },\n}[0]': GetProjectBySlugResult;
     '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  description,\n  "images": images[0].image.asset->url,\n  contentTitle,\n}[0]': GetProjectMetadataResult;
     '*[_type == "project"]{\n  "slug": slug.current,\n  "publishedAt": date,\n}': GetProjectsForSEOResult;
     '*[_type == "metadata" && slug.current == $slug]{\n  "slug": slug.current,\n  title,\n  description,\n}[0]': GetMetadataResult;

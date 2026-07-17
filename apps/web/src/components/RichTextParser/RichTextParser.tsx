@@ -36,6 +36,12 @@ const RichTextParser = memo(({ content }: props) => {
       image: ({ value }) => {
         const imgUrl = urlFor(value).url();
         imageIndex++;
+        // `altText` comes from the getProjectBySlug content projection
+        // ("altText": asset->altText), which the generic Portable Text image
+        // type from @portabletext/react doesn't know about. Cast until that's
+        // reflected in a query-specific type; regenerate lib/sanity/types.ts
+        // via `pnpm generate:types` if the schema changes.
+        const altText = (value as { altText?: string | null }).altText;
         return (
           <figure className='my-8 border border-rule bg-paper-raised p-1.5'>
             <Image
@@ -43,7 +49,7 @@ const RichTextParser = memo(({ content }: props) => {
               height={800}
               src={imgUrl}
               loading='lazy'
-              alt={`Figure ${imageIndex}`}
+              alt={altText ?? `Figure ${imageIndex}`}
               className='h-auto w-full'
             />
           </figure>

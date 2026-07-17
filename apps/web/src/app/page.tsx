@@ -12,7 +12,9 @@ import { GetProjectsResult } from '@/lib/sanity/types';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import { OWNER } from '@/lib/site';
 
-export const revalidate = 60;
+// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
+// for a missed webhook.
+export const revalidate = 86400;
 
 export async function generateMetadata() {
   const data = await getDynamicMetaData('/');

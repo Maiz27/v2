@@ -13,7 +13,9 @@ import { BASEURL } from '@/lib/Constants';
 import { PersonSchema } from '@/lib/schema';
 import { CreativeWork } from 'schema-dts';
 
-export const revalidate = 60;
+// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
+// for a missed webhook.
+export const revalidate = 86400;
 
 type Params = { [key: string]: string | undefined };
 

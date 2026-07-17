@@ -14,21 +14,35 @@ import { INITIAL_MOTION_STATE } from '@/lib/motion';
  *
  * Logic reused from the Nilotik reference (document-level click interception,
  * idle -> covering -> waiting -> revealing, router.push under cover, pathname
- * effect triggers the reveal, ~7s watchdog, scroll-to-top on reveal). Navigation
- * waits for the panel animation and two painted frames, then reveal gets the same
- * paint boundary after the destination commits. The stack is WAAPI, not gsap.
- * When the motion gate resolves off, links are never intercepted and navigation
- * is native.
+ * effect triggers the reveal, ~7s watchdog, scroll-to-top on reveal by
+ * default). Navigation waits for the panel animation and two painted frames,
+ * then reveal gets the same paint boundary after the destination commits. The
+ * stack is WAAPI, not gsap. When the motion gate resolves off, links are
+ * never intercepted and navigation is native.
  *
  * Two more entry points into the same phase machine:
  * - Browser back/forward (popstate): the URL has already changed by the time
  *   popstate fires, so there is nothing to cover-then-commit the way a click
  *   does. Instead the curtain snaps straight to "fully covering" (no slide-up)
  *   and waits for the destination to land, same as the tail end of a click nav.
+ *   reveal() skips its scroll reset here — the browser/Next scroll
+ *   restoration already placed the viewport, and stomping it would defeat
+ *   Back landing where the reader was.
  * - Landing on the site fresh (a hard navigation, not a client-side one): the
  *   root's initial render is server-rendered already in the covering state
  *   (see startCovered below) so there is no flash of the raw page before JS
- *   runs, then it holds briefly and reveals once mounted.
+ *   runs. The reveal itself is CSS (`.ledger-arrival` in globals.css) rather
+ *   than a JS timer, so it starts at first paint and runs on a fixed ~1.1s
+ *   schedule regardless of how long hydration takes — real-user FCP/LCP on a
+ *   slow device would otherwise be gated on the bundle loading and running.
+ *   Once mounted, this effect watches the panel's CSS animation via the
+ *   WAAPI and hands off to the normal finish() cleanup when it completes (or
+ *   immediately, if hydration lands after the animation already has).
+ *
+ * A click-nav whose URL carries a #hash (cover() gets the hash separately)
+ * scrolls to that target — respecting its scroll-margin-top — instead of the
+ * top once the destination has committed; a plain click-nav still resets to
+ * the top.
  */
 
 type Phase = 'idle' | 'covering' | 'waiting' | 'revealing';
@@ -38,7 +52,6 @@ type Destination = { eyebrow: string; label: string };
 const COVER_MS = 560;
 const REVEAL_MS = 620;
 const WATCHDOG_MS = 7000;
-const ARRIVAL_HOLD_MS = 380;
 const EASE_INOUT = 'cubic-bezier(0.65, 0, 0.35, 1)';
 const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const EASE_IN = 'cubic-bezier(0.5, 0, 0.75, 0)';
@@ -92,21 +105,35 @@ const RouteTransition = () => {
     let pulse: Animation | null = null;
     let watchdog: number | null = null;
     let commitFrame: number | null = null;
-    let arrivalTimer: number | null = null;
     let popstatePoll: number | null = null;
     let scrollFrame: number | null = null;
+    // Set by onPopState: back/forward already has the browser/Next scroll
+    // restoration in flight, so reveal() must not stomp it with scrollTo(0, 0).
+    let preserveScroll = false;
+    // Set by cover() when the clicked link's URL carried a #hash: reveal()
+    // jumps there instead of the top once the destination has committed.
+    let pendingHash: string | null = null;
 
     const clearTimers = () => {
       if (watchdog !== null) window.clearTimeout(watchdog);
       if (commitFrame !== null) window.cancelAnimationFrame(commitFrame);
-      if (arrivalTimer !== null) window.clearTimeout(arrivalTimer);
       if (popstatePoll !== null) window.cancelAnimationFrame(popstatePoll);
       if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame);
       watchdog = null;
       commitFrame = null;
-      arrivalTimer = null;
       popstatePoll = null;
       scrollFrame = null;
+    };
+
+    // Scroll-margin-aware landing Y for a hash target, shared by the animated
+    // same-page jump below and the instant post-cover jump in reveal().
+    const targetScrollY = (target: Element) => {
+      const scrollMarginTop =
+        parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+      return Math.max(
+        0,
+        window.scrollY + target.getBoundingClientRect().top - scrollMarginTop
+      );
     };
 
     // Chromium silently downgrades `scroll-behavior: smooth` (and the
@@ -123,12 +150,7 @@ const RouteTransition = () => {
       if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame);
 
       const startY = window.scrollY;
-      const scrollMarginTop =
-        parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-      const destY = Math.max(
-        0,
-        startY + target.getBoundingClientRect().top - scrollMarginTop
-      );
+      const destY = targetScrollY(target);
       const distance = destY - startY;
       if (Math.abs(distance) < 1) {
         history.pushState(null, '', hash);
@@ -150,6 +172,16 @@ const RouteTransition = () => {
         }
       };
       scrollFrame = window.requestAnimationFrame(step);
+    };
+
+    // Instant counterpart to smoothScrollToHash: the jump happens while the
+    // panel is still fully covering the viewport (see reveal() below), so
+    // there's nothing on screen to animate. Returns whether it found a target.
+    const scrollToHashTarget = (hash: string): boolean => {
+      const target = document.getElementById(hash.slice(1));
+      if (!target) return false;
+      window.scrollTo(0, targetScrollY(target));
+      return true;
     };
     const cancelRunning = (preserveStyles = false) => {
       running.forEach((a) => {
@@ -199,7 +231,18 @@ const RouteTransition = () => {
       pulse = null;
       clearTimers();
       cancelRunning(true);
-      window.scrollTo(0, 0);
+
+      const hash = pendingHash;
+      const skipScrollReset = preserveScroll;
+      pendingHash = null;
+      preserveScroll = false;
+
+      if (skipScrollReset) {
+        // Back/forward nav: browser/Next scroll restoration already placed
+        // the viewport, don't fight it with scrollTo(0, 0).
+      } else if (!hash || !scrollToHashTarget(hash)) {
+        window.scrollTo(0, 0);
+      }
 
       run(
         label,
@@ -248,8 +291,9 @@ const RouteTransition = () => {
       }, WATCHDOG_MS);
     };
 
-    const cover = (href: string, dest: Destination) => {
+    const cover = (href: string, dest: Destination, hash: string) => {
       phaseRef.current = 'covering';
+      pendingHash = hash || null;
       eyebrow.textContent = dest.eyebrow;
       label.textContent = dest.label;
 
@@ -328,10 +372,13 @@ const RouteTransition = () => {
       // popstate also fires for same-document fragment navigation (a TOC
       // link, or back/forward across hash-only history entries on the same
       // route) — that's a scroll, not a route change, so let it stay a
-      // native smooth scroll instead of flashing the curtain and yanking
-      // the scroll position back to the top via reveal()'s scrollTo(0, 0).
+      // native smooth scroll instead of flashing the curtain over it.
       if (window.location.pathname === pathnameRef.current) return;
 
+      // The browser (and Next's own history integration) already restores
+      // scroll position for back/forward — reveal() must not override that
+      // with scrollTo(0, 0).
+      preserveScroll = true;
       instantCover(destinationForPath(window.location.pathname));
       phaseRef.current = 'waiting';
       setRouteTransitionEntering(true);
@@ -387,7 +434,11 @@ const RouteTransition = () => {
 
       event.preventDefault();
       if (phaseRef.current !== 'idle') return;
-      cover(url.pathname + url.search + url.hash, destinationForPath(url.pathname));
+      cover(
+        url.pathname + url.search + url.hash,
+        destinationForPath(url.pathname),
+        url.hash
+      );
     };
 
     apiRef.current = { reveal };
@@ -398,13 +449,46 @@ const RouteTransition = () => {
     // component lives in the root layout and never unmounts across
     // client-side navigations), so "on mount" here really does mean
     // "landing on the site". The SSR'd initial render is already in the
-    // covering state (see startCovered) to avoid a flash; hold briefly, then
-    // reveal to arrive.
+    // covering state (see startCovered), driven entirely by the
+    // `.ledger-arrival` CSS animations (globals.css) so the reveal starts at
+    // first paint and runs on a fixed schedule with no JS required — this is
+    // what keeps real-user FCP/LCP from being gated on hydration. Hydration
+    // just needs to hand off cleanly once those animations are done:
+    // - mid-animation: await the panel's `finished` promise, then complete.
+    // - already finished (hydration landed after the ~1.1s timeline):
+    //   getAnimations() still returns it, but not 'running'/'pending' — fall
+    //   through to completing immediately.
+    // - missing entirely (animation never applied): complete immediately,
+    //   same as the "already finished" case.
+    // Phase stays 'covering' throughout, same as before, so onClick's
+    // `phaseRef.current !== 'idle'` guard keeps ignoring clicks until the
+    // handoff completes.
     if (startCovered) {
       phaseRef.current = 'covering';
-      arrivalTimer = window.setTimeout(() => {
-        if (phaseRef.current === 'covering') reveal();
-      }, ARRIVAL_HOLD_MS);
+
+      const completeArrival = () => {
+        if (phaseRef.current !== 'covering') return;
+        // Drop the marker class FIRST: it's what the CSS animation rules are
+        // scoped to, so removing it cancels the animation and discards its
+        // fill:forwards end state. Order matters — finish()'s inline styles
+        // below would otherwise lose to that fill (animation wins over
+        // inline style while it's still applied).
+        root.classList.remove('ledger-arrival');
+        finish();
+      };
+
+      // lib.dom's AnimationPlayState omits 'pending' even though the spec
+      // allows it, so this checks the negative instead of enumerating every
+      // "still going" state by name.
+      const arrivalAnimation = panel
+        .getAnimations()
+        .find((a) => a.playState !== 'finished');
+
+      if (arrivalAnimation) {
+        arrivalAnimation.finished.then(completeArrival).catch(completeArrival);
+      } else {
+        completeArrival();
+      }
     }
 
     return () => {
@@ -438,18 +522,37 @@ const RouteTransition = () => {
     <div
       aria-hidden='true'
       ref={rootRef}
-      className='pointer-events-none fixed inset-0 z-[120]'
+      // Keep the utility classes in a plain string literal: Tailwind's source
+      // scanner can't terminate an arbitrary-value candidate that abuts a
+      // template `${` (`z-[120]${...}` drops the z-index rule from the build,
+      // sending the curtain behind every positioned element on the page).
+      className={
+        'pointer-events-none fixed inset-0 z-[120]' +
+        (startCovered ? ' ledger-arrival' : '')
+      }
       style={{
         visibility: startCovered ? 'visible' : 'hidden',
-        pointerEvents: startCovered ? 'auto' : 'none',
+        // Always none here: the CSS arrival animation can lift the panel
+        // before hydration ever runs, and if the root stayed auto-clickable
+        // it would eat every click/scroll on the page underneath until JS
+        // took over. The panel below is the actual covering surface, so it
+        // carries pointer-events instead — cover()/instantCover() still flip
+        // this back to 'auto' imperatively for JS-driven transitions.
+        pointerEvents: 'none',
       }}
     >
       <div
         ref={panelRef}
-        className='absolute inset-0'
+        className='ledger-arrival-panel absolute inset-0'
         style={{
           backgroundColor: 'var(--color-paper)',
           transform: startCovered ? 'translateY(0)' : 'translateY(100%)',
+          // Re-enables pointer events for just this element (pointer-events
+          // inherits), matching the root's old 'auto while covering'
+          // behavior for the SSR arrival case. Once the CSS animation lifts
+          // the panel off-screen it stops overlapping the page and this
+          // stops mattering.
+          pointerEvents: startCovered ? 'auto' : undefined,
         }}
       >
         <span className='absolute inset-x-0 top-0 h-[2px] bg-mark' />
@@ -458,7 +561,7 @@ const RouteTransition = () => {
             <div className='-my-[0.5em] overflow-hidden py-[0.5em]'>
               <span
                 ref={eyebrowRef}
-                className='block font-mono text-[0.7rem] uppercase tracking-[0.3em] text-mark'
+                className='ledger-arrival-eyebrow block font-mono text-[0.7rem] uppercase tracking-[0.3em] text-mark'
                 style={{ transform: startCovered ? 'translateY(0)' : 'translateY(180%)' }}
               >
                 {startCovered ? initialDest.eyebrow : null}
@@ -467,7 +570,7 @@ const RouteTransition = () => {
             <div className='-my-[0.5em] overflow-hidden py-[0.5em]'>
               <span
                 ref={labelRef}
-                className='font-display block text-4xl font-black leading-[1.15] tracking-tight text-ink sm:text-5xl'
+                className='ledger-arrival-label font-display block text-4xl font-black leading-[1.15] tracking-tight text-ink sm:text-5xl'
                 style={{ transform: startCovered ? 'translateY(0)' : 'translateY(180%)' }}
               >
                 {startCovered ? initialDest.label : null}
@@ -475,7 +578,7 @@ const RouteTransition = () => {
             </div>
             <span
               ref={ruleRef}
-              className='block h-[2px] w-24 origin-left bg-mark'
+              className='ledger-arrival-rule block h-[2px] w-24 origin-left bg-mark'
               style={{ transform: startCovered ? 'scaleX(1)' : 'scaleX(0)' }}
             />
           </div>

@@ -5,7 +5,12 @@ import type { QueryParams } from '@sanity/client';
 export const sanity = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-  useCdn: true, // set to `false` to bypass the edge cache
+  // Revalidation is webhook-driven (see /api/revalidate) rather than time-based,
+  // so fetches only happen right after content actually changes (plus the
+  // daily fallback on each page). They need to be authoritative: the CDN
+  // cache would still be serving the pre-edit content in the seconds right
+  // after the webhook fires, undoing the point of revalidating on-demand.
+  useCdn: false,
   apiVersion: '2024-04-09', // use current date (YYYY-MM-DD) to target the latest API version
   // token: process.env.SANITY_SECRET_TOKEN // Only if you want to update content with the client
 });
