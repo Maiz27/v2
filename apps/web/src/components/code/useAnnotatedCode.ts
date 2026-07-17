@@ -225,45 +225,71 @@ export function useAnnotatedCode(html: string, annotations: CodeAnnotation[]) {
   }, []);
 
   // Derive the below-xl popover position from the active token, so it always
-  // lands under the token and survives re-renders and scroll-into-view.
+  // lands under the token and survives re-renders and scroll-into-view. The
+  // code block scrolls horizontally on its inner `.shiki` element (not the
+  // wrap or code root), and the wrap's own size/position can change on
+  // viewport resize (crossing the xl breakpoint) or other layout shifts —
+  // any of those leaves a previously-computed position stale, so the same
+  // rAF-throttled calculation also re-runs on scroll/resize/ResizeObserver,
+  // not just when isWide/popId/html change.
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      if (isWide || !popId) {
-        setPopPos(null);
-        return;
-      }
-      const wrap = wrapRef.current;
-      if (!wrap) {
-        setPopPos(null);
-        return;
-      }
-      const code = codeRef.current;
-      if (!code) {
-        setPopPos(null);
-        return;
-      }
-      const tokens = code.querySelectorAll('[data-annot]');
-      let token: Element | null = null;
-      for (const t of tokens) {
-        if (t.getAttribute('data-annot') === popId) {
-          token = t;
-          break;
+    let frame: number | null = null;
+    const recalc = () => {
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        frame = null;
+        if (isWide || !popId) {
+          setPopPos(null);
+          return;
         }
-      }
-      if (!token) {
-        setPopPos(null);
-        return;
-      }
-      const wrapRect = wrap.getBoundingClientRect();
-      const rect = token.getBoundingClientRect();
-      const maxX = Math.max(8, wrapRect.width - CARD_WIDTH - 8);
-      setPopPos({
-        x: Math.min(Math.max(rect.left - wrapRect.left, 8), maxX),
-        y: rect.bottom - wrapRect.top + 10,
+        const wrap = wrapRef.current;
+        if (!wrap) {
+          setPopPos(null);
+          return;
+        }
+        const code = codeRef.current;
+        if (!code) {
+          setPopPos(null);
+          return;
+        }
+        const tokens = code.querySelectorAll('[data-annot]');
+        let token: Element | null = null;
+        for (const t of tokens) {
+          if (t.getAttribute('data-annot') === popId) {
+            token = t;
+            break;
+          }
+        }
+        if (!token) {
+          setPopPos(null);
+          return;
+        }
+        const wrapRect = wrap.getBoundingClientRect();
+        const rect = token.getBoundingClientRect();
+        const maxX = Math.max(8, wrapRect.width - CARD_WIDTH - 8);
+        setPopPos({
+          x: Math.min(Math.max(rect.left - wrapRect.left, 8), maxX),
+          y: rect.bottom - wrapRect.top + 10,
+        });
       });
-    });
+    };
 
-    return () => window.cancelAnimationFrame(frame);
+    recalc();
+
+    const scroller = codeRef.current?.querySelector('.shiki') ?? codeRef.current;
+    scroller?.addEventListener('scroll', recalc, { passive: true });
+    window.addEventListener('resize', recalc);
+
+    const wrap = wrapRef.current;
+    const resizeObserver = wrap ? new ResizeObserver(recalc) : null;
+    if (wrap && resizeObserver) resizeObserver.observe(wrap);
+
+    return () => {
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      scroller?.removeEventListener('scroll', recalc);
+      window.removeEventListener('resize', recalc);
+      resizeObserver?.disconnect();
+    };
   }, [isWide, popId, html]);
 
   // Reflect active / pinned state on the tokens in the highlighted markup.
