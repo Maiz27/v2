@@ -3,8 +3,7 @@ import { BASEURL } from '@/lib/Constants';
 import { NAV } from '@/lib/site';
 import { projects as projectsData } from '@/lib/data/projects';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 type SanityEntry = {
   slug: string | null;
@@ -28,9 +27,9 @@ export async function GET() {
   });
 }
 
-const createSitemapEntry = (path: string, date: string) => ({
+const createSitemapEntry = (path: string, date?: string) => ({
   url: `${BASEURL}${path}`,
-  lastModified: new Date(date).toISOString(),
+  lastModified: date ? new Date(date).toISOString() : undefined,
 });
 
 const mapSanityEntriesToSitemapEntries = (
@@ -43,10 +42,15 @@ const mapSanityEntriesToSitemapEntries = (
       createSitemapEntry(`${pathPrefix}/${slug}`, publishedAt)
     );
 
+// Static nav routes have no real freshness signal, so they're emitted
+// without a <lastmod> rather than stamping the request time as if it meant
+// something.
 const mapRoutesToSitemapEntries = (routes: readonly { href: string }[]) =>
-  routes.map(({ href }) => createSitemapEntry(href, new Date().toISOString()));
+  routes.map(({ href }) => createSitemapEntry(href));
 
-const generateSitemapXml = (urls: { url: string; lastModified: string }[]) => {
+const generateSitemapXml = (
+  urls: { url: string; lastModified?: string }[]
+) => {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${urls
@@ -54,7 +58,7 @@ const generateSitemapXml = (urls: { url: string; lastModified: string }[]) => {
       (url) => `
     <url>
       <loc>${url.url}</loc>
-      <lastmod>${url.lastModified}</lastmod>
+      ${url.lastModified ? `<lastmod>${url.lastModified}</lastmod>` : ''}
     </url>
   `
     )
