@@ -38,8 +38,13 @@ const NotesRail = ({ annotations, activeId, pinnedId, onHover, onPin, className 
           >
             <span className='font-mono text-[0.7rem] font-bold text-mark'>{i + 1}</span>
             <span>
+              {/* data-annot-control: exempts this button from useAnnotatedCode's
+                  document-level outside-pointerdown release, so clicking an
+                  already-pinned note's own button reaches onClick and toggles
+                  it off instead of the pin being cleared first and re-pinned. */}
               <button
                 type='button'
+                data-annot-control
                 onPointerEnter={(e) => {
                   if (e.pointerType === 'touch') return;
                   onHover(a.id);

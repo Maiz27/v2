@@ -20,8 +20,10 @@ export function useAnnotatedCode(html: string, annotations: CodeAnnotation[]) {
   const wrapRef = useRef<HTMLDivElement>(null);
 
   const [isWide, setIsWide] = useState(true);
-  const [hoverIdRaw, setHoverId] = useState<string | null>(null);
-  const [pinnedIdRaw, setPinnedIdRaw] = useState<string | null>(null);
+  // Raw selections are scoped to the html they were made against, not just
+  // the annotation id — see the derivation below for why.
+  const [hoverIdRaw, setHoverIdRaw] = useState<{ id: string; html: string } | null>(null);
+  const [pinnedIdRaw, setPinnedIdRaw] = useState<{ id: string; html: string } | null>(null);
   const [popPos, setPopPos] = useState<{ x: number; y: number } | null>(null);
 
   const byId = useCallback(
@@ -46,16 +48,31 @@ export function useAnnotatedCode(html: string, annotations: CodeAnnotation[]) {
     return () => media.removeEventListener('change', apply);
   }, []);
 
-  // A hover/pin id left over from a previous tab's (or the previous html's)
-  // annotations doesn't belong to what's on screen now. Rather than clearing
-  // it with a setState-in-effect when `html` changes, it's simply not
-  // recognized as active/pinned once it stops matching the current
-  // annotations — the stale id goes inert on its own the moment the content
+  // A hover/pin selection left over from a previous tab's (or the previous
+  // html's) annotations doesn't belong to what's on screen now. Rather than
+  // clearing it with a setState-in-effect when `html` changes, it's simply
+  // not recognized as active/pinned once it stops matching the current
+  // html — the stale selection goes inert on its own the moment the content
   // under it changes, no extra render needed.
+  //
+  // Matching by id alone isn't enough: two different tabs can both contain
+  // an annotation with the same id, and an id-only check would treat a pin
+  // made in one tab as still valid after switching to the other — silently
+  // pinning the wrong note instead of going inert. Each raw selection is
+  // stored as `{ id, html }`, and validity requires both to match the
+  // current html, not just the id.
   const hoverId =
-    hoverIdRaw !== null && annotations.some((a) => a.id === hoverIdRaw) ? hoverIdRaw : null;
+    hoverIdRaw !== null &&
+    hoverIdRaw.html === html &&
+    annotations.some((a) => a.id === hoverIdRaw.id)
+      ? hoverIdRaw.id
+      : null;
   const pinnedId =
-    pinnedIdRaw !== null && annotations.some((a) => a.id === pinnedIdRaw) ? pinnedIdRaw : null;
+    pinnedIdRaw !== null &&
+    pinnedIdRaw.html === html &&
+    annotations.some((a) => a.id === pinnedIdRaw.id)
+      ? pinnedIdRaw.id
+      : null;
 
   // A pin wins over a passing hover, in both layouts.
   const activeId = pinnedId ?? hoverId;
@@ -63,18 +80,29 @@ export function useAnnotatedCode(html: string, annotations: CodeAnnotation[]) {
   const popId = isWide ? null : activeId;
 
   // Toggle pin by annotation id, validated against the current pin the same
-  // way reads are: a stale raw pin from another tab never gets treated as
-  // "already pinned to this id", so clicking a same-named id in a new tab
-  // pins it rather than instantly toggling it back off.
+  // way reads are: a stale raw pin from another tab's html never gets
+  // treated as "already pinned to this id" purely because the id string
+  // matches, so clicking a same-named id in a new tab pins it rather than
+  // instantly toggling it back off.
   const togglePinnedId = useCallback(
     (id: string) => {
       setPinnedIdRaw((current) => {
-        const validCurrent =
-          current !== null && annotations.some((a) => a.id === current) ? current : null;
-        return validCurrent === id ? null : id;
+        const validCurrentId =
+          current !== null && current.html === html && annotations.some((a) => a.id === current.id)
+            ? current.id
+            : null;
+        return validCurrentId === id ? null : { id, html };
       });
     },
-    [annotations]
+    [annotations, html]
+  );
+
+  // External-facing hover setter (NotesRail's onHover): pairs the id with
+  // the current html so it validates against this render's content, not
+  // whatever was on screen when the id was captured.
+  const setHoverId = useCallback(
+    (id: string | null) => setHoverIdRaw(id === null ? null : { id, html }),
+    [html]
   );
 
   const togglePin = useCallback(
@@ -100,12 +128,12 @@ export function useAnnotatedCode(html: string, annotations: CodeAnnotation[]) {
     const over = (e: Event) => {
       if (e instanceof PointerEvent && e.pointerType === 'touch') return;
       const t = (e.target as HTMLElement).closest('[data-annot]');
-      if (t) setHoverId(t.getAttribute('data-annot'));
+      if (t) setHoverIdRaw({ id: t.getAttribute('data-annot')!, html });
     };
     const out = (e: Event) => {
       if (e instanceof PointerEvent && e.pointerType === 'touch') return;
       const t = (e.target as HTMLElement).closest('[data-annot]');
-      if (t) setHoverId(null);
+      if (t) setHoverIdRaw(null);
     };
 
     // Tap/click-to-pin via pointerdown+pointerup rather than a native click.
@@ -171,18 +199,22 @@ export function useAnnotatedCode(html: string, annotations: CodeAnnotation[]) {
   // narrow: wrapRef wraps the full-width code block, so on mobile a tap meant to
   // dismiss almost always lands on the code *inside* wrapRef and never closed
   // the popover — the whole reported bug. Tapping another mark is intentionally
-  // exempt so the pointerup toggle can switch the pin to it instead.
+  // exempt so the pointerup toggle can switch the pin to it instead. A note's
+  // own control button in NotesRail (marked data-annot-control) is exempt too:
+  // without this, pointerdown fires first and clears the pin before the
+  // button's click handler runs, so clicking an already-pinned note's button
+  // would clear then instantly re-pin it instead of toggling it off.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setPinnedIdRaw(null);
-        setHoverId(null);
+        setHoverIdRaw(null);
       }
     };
     const onDown = (e: Event) => {
-      if ((e.target as HTMLElement).closest('[data-annot]')) return;
+      if ((e.target as HTMLElement).closest('[data-annot], [data-annot-control]')) return;
       setPinnedIdRaw(null);
-      setHoverId(null);
+      setHoverIdRaw(null);
     };
     document.addEventListener('keydown', onKey);
     document.addEventListener('pointerdown', onDown);
