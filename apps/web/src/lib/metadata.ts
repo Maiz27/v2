@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { BASEURL } from './Constants';
+import { OWNER } from './site';
 
 /** The site logo, used as the default social image. */
 const DEFAULT_IMAGE = `${BASEURL}/imgs/logo/logo.png`;
@@ -59,7 +60,7 @@ export function buildMetadata({
       url,
       title,
       description,
-      siteName: title,
+      siteName: OWNER.name,
       images: [{ url: socialImage }],
     } as Metadata['openGraph'],
     twitter: {
