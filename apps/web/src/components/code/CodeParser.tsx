@@ -2,6 +2,7 @@ import { highlight, highlightAnnotated } from '@/lib/highlight';
 import type { CodeAnnotation } from '@/lib/annotations';
 import { Snippet } from '@/lib/sanity/types';
 import AnnotatedListing from './AnnotatedListing';
+import { LISTING_GRID } from './NotesRail';
 
 type Props = {
   id: string;
@@ -45,26 +46,33 @@ const CodeParser = async ({ id, snippet, annotations }: Props) => {
 
   return (
     <figure id={id} className='my-10 scroll-m-16 min-w-0'>
-      <figcaption className='flex items-baseline justify-between gap-4 min-w-0 border border-b-0 border-rule bg-paper-raised px-4 py-2.5'>
-        <span className='font-mono text-[0.75rem] text-ink-soft truncate'>
-          {filename}
-        </span>
-        {source && (
-          <a
-            href={source}
-            target='_blank'
-            rel='noreferrer noopener'
-            className='link-underline shrink-0 font-mono text-[0.7rem] text-mark'
-          >
-            view source
-          </a>
-        )}
-      </figcaption>
-      <div
-        data-nosnippet
-        className='border border-rule'
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      {/* Same grid as the annotated listing, with the notes column left
+          empty: a plain snippet keeps the exact code-column width of its
+          annotated neighbors instead of stretching full-bleed next to them. */}
+      <div className={LISTING_GRID}>
+        <div className='min-w-0'>
+          <figcaption className='flex items-baseline justify-between gap-4 min-w-0 border border-b-0 border-rule bg-paper-raised px-4 py-2.5'>
+            <span className='font-mono text-[0.75rem] text-ink-soft truncate'>
+              {filename}
+            </span>
+            {source && (
+              <a
+                href={source}
+                target='_blank'
+                rel='noreferrer noopener'
+                className='link-underline shrink-0 font-mono text-[0.7rem] text-mark'
+              >
+                view source
+              </a>
+            )}
+          </figcaption>
+          <div
+            data-nosnippet
+            className='border border-rule'
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        </div>
+      </div>
     </figure>
   );
 };

@@ -3,6 +3,19 @@ import type { AnnotationKind, CodeAnnotation } from '@/lib/annotations';
 const kindLabel = (kind: AnnotationKind) =>
   kind === 'decision' ? 'Decision' : 'Context';
 
+/**
+ * The two-column listing grid every code figure shares (code panel left,
+ * margin-notes column right). The 13rem column matches this rail's width, and
+ * every listing applies the grid whether or not it currently has notes — only
+ * the rail's contents come and go. Reserving the column unconditionally keeps
+ * the code column the same width across a whole page: a tab switch inside a
+ * group, or a mix of annotated and plain snippets, never shifts layout.
+ * 13rem + a 1.5rem gap is as small as the rail reads comfortably — every rem
+ * shaved here goes straight to the code column, which is the scarce side.
+ */
+export const LISTING_GRID =
+  'xl:grid xl:grid-cols-[minmax(0,1fr)_13rem] xl:gap-6';
+
 type Props = {
   annotations: CodeAnnotation[];
   activeId: string | null;
