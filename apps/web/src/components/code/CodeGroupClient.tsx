@@ -42,7 +42,11 @@ const CodeGroupClient = ({
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const activePanel = panels[active];
-  const hasAnnotations = panels.some((p) => p.annotations.length > 0);
+  // Scoped to the active panel only: a group mixing annotated and
+  // non-annotated tabs must not reserve the notes column (or gate the
+  // popover) off some other tab's annotations, or switching to a
+  // non-annotated tab leaves the grid layout in place with an empty rail.
+  const hasAnnotations = (activePanel?.annotations.length ?? 0) > 0;
 
   const { codeRef, wrapRef, innerHtml, isWide, activeId, pinnedId, popId, popPos, byId, setHoverId, togglePinnedId, CARD_WIDTH } =
     useAnnotatedCode(activePanel?.html ?? '', activePanel?.annotations ?? []);
