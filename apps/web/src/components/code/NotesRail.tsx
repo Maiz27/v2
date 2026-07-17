@@ -67,7 +67,7 @@ const NotesRail = ({ annotations, activeId, pinnedId, onHover, onPin, className 
                   onHover(null);
                 }}
                 onClick={() => onPin(a.id)}
-                className={`focus:outline-none focus-visible:ring-2 focus-visible:ring-mark focus-visible:ring-offset-2 focus-visible:ring-offset-paper ${isPinned ? 'font-medium' : ''}`}
+                className={`focus:outline-hidden focus-visible:ring-2 focus-visible:ring-mark focus-visible:ring-offset-2 focus-visible:ring-offset-paper ${isPinned ? 'font-medium' : ''}`}
               >
                 <span
                   className={`mb-1 block font-mono text-[0.62rem] uppercase tracking-[0.14em] ${

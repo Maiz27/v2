@@ -485,7 +485,7 @@ const RouteTransition = () => {
         .find((a) => a.playState !== 'finished');
 
       if (arrivalAnimation) {
-        arrivalAnimation.finished.then(completeArrival).catch(() => {});
+        arrivalAnimation.finished.then(completeArrival).catch(completeArrival);
       } else {
         completeArrival();
       }
