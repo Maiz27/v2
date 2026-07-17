@@ -290,6 +290,58 @@ label[for] {
     border-color 0.2s ease;
 }
 
+/* ---- Route transition: SSR'd arrival curtain ----
+   RouteTransition renders the curtain server-side already covering
+   (startCovered) so a fresh load never flashes the raw page underneath, but
+   the old reveal only ever fired from a JS timer after hydration — on a slow
+   device that's real, user-visible FCP/LCP delay. These keyframes are the
+   reveal itself, baked into the SSR markup: they start at first paint with no
+   JS involved and run on a fixed schedule (mirrors reveal()'s own timings, so
+   the JS-driven and CSS-driven reveals are indistinguishable). This is also
+   the no-JS guarantee for arrival: even if the bundle never loads, the
+   curtain still lifts on schedule. `.ledger-arrival` is only ever stamped on
+   the root for that first SSR paint; RouteTransition's mount effect watches
+   these animations via the WAAPI and hands off to `finish()` once they're
+   done (see the `startCovered` branch there). */
+@keyframes ledger-arrival-panel {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes ledger-arrival-text {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-180%);
+  }
+}
+@keyframes ledger-arrival-rule {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+/* Delays double as the old ARRIVAL_HOLD_MS hold; every offset below matches
+   reveal()'s own delay + duration pairing exactly. */
+[data-motion='on'] .ledger-arrival .ledger-arrival-label {
+  animation: ledger-arrival-text 300ms cubic-bezier(0.5, 0, 0.75, 0) 380ms forwards;
+}
+[data-motion='on'] .ledger-arrival .ledger-arrival-eyebrow {
+  animation: ledger-arrival-text 300ms cubic-bezier(0.5, 0, 0.75, 0) 420ms forwards;
+}
+[data-motion='on'] .ledger-arrival .ledger-arrival-rule {
+  animation: ledger-arrival-rule 260ms cubic-bezier(0.5, 0, 0.75, 0) 380ms forwards;
+}
+[data-motion='on'] .ledger-arrival .ledger-arrival-panel {
+  animation: ledger-arrival-panel 620ms cubic-bezier(0.65, 0, 0.35, 1) 500ms forwards;
+}
+
 /* ---- Rich text (case study body) ---- */
 .ledger-prose h2,
 .ledger-prose h3 {
