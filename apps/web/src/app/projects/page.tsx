@@ -4,7 +4,9 @@ import ArchiveTable from '@/components/projects/ArchiveTable';
 import { projects as projectsData } from '@/lib/data/projects';
 import { getDynamicMetaData } from '@/lib/utilities';
 
-export const revalidate = 60;
+// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
+// for a missed webhook.
+export const revalidate = 86400;
 
 export async function generateMetadata() {
   const data = await getDynamicMetaData('/projects');

@@ -4,7 +4,9 @@ import { OWNER } from '@/lib/site';
 import { getCvData } from '@/lib/cv/data';
 import { getDynamicMetaData } from '@/lib/utilities';
 
-export const revalidate = 60;
+// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
+// for a missed webhook.
+export const revalidate = 86400;
 
 export async function generateMetadata() {
   const data = await getDynamicMetaData('/cv');

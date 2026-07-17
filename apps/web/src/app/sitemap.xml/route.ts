@@ -3,7 +3,9 @@ import { BASEURL } from '@/lib/Constants';
 import { NAV } from '@/lib/site';
 import { projects as projectsData } from '@/lib/data/projects';
 
-export const revalidate = 3600;
+// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
+// for a missed webhook.
+export const revalidate = 86400;
 
 type SanityEntry = {
   slug: string | null;
