@@ -175,30 +175,30 @@ export default async function Home() {
           <ul className='space-y-2 font-mono text-[0.75rem]'>
             <li>
               <a
-                href={`mailto:${about?.email ?? OWNER.email}`}
+                href={`mailto:${OWNER.email}`}
                 className='underline decoration-dotted underline-offset-4 hover:text-mark'
               >
-                {about?.email ?? OWNER.email}
+                {OWNER.email}
               </a>
             </li>
             <li>
               <a
-                href={about?.github ?? OWNER.github}
+                href={OWNER.github}
                 target='_blank'
                 rel='noreferrer noopener'
                 className='underline decoration-dotted underline-offset-4 hover:text-mark'
               >
-                {about?.githubLabel ?? OWNER.githubLabel}
+                {OWNER.githubLabel}
               </a>
             </li>
             <li>
               <a
-                href={about?.linkedin ?? OWNER.linkedin}
+                href={OWNER.linkedin}
                 target='_blank'
                 rel='noreferrer noopener'
                 className='underline decoration-dotted underline-offset-4 hover:text-mark'
               >
-                {about?.linkedinLabel ?? OWNER.linkedinLabel}
+                {OWNER.linkedinLabel}
               </a>
             </li>
           </ul>

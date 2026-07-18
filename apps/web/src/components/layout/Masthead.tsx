@@ -3,13 +3,18 @@ import { HiOutlineEnvelope, HiOutlineDocumentText } from 'react-icons/hi2';
 import { SiGithub } from 'react-icons/si';
 import Reveal from '@/components/motion/Reveal';
 import { OWNER } from '@/lib/site';
+import { fetchSanityData } from '@/lib/sanity/client';
+import { getAboutMe } from '@/lib/sanity/queries';
+import type { GetAboutMeResult } from '@/lib/sanity/types';
 
 /**
  * The running head on every page. Owner name doubles as the link home. The
  * right-side actions (Email / GitHub / CV) collapse to quiet line icons below
  * md and show their labels from md up (fix #11). Load-staggered on first paint.
+ * The role line is Sanity-managed (aboutMe.role), OWNER.role as fallback.
  */
-const Masthead = () => {
+const Masthead = async () => {
+  const about = await fetchSanityData<GetAboutMeResult>(getAboutMe).catch(() => null);
   return (
     <Reveal
       as='header'
@@ -26,7 +31,7 @@ const Masthead = () => {
         className='ledger-load hidden text-ink-faint sm:inline'
         style={{ '--i': 1 } as React.CSSProperties}
       >
-        {OWNER.role}
+        {about?.role ?? OWNER.role}
       </span>
       <nav
         className='ledger-load flex items-center gap-5'

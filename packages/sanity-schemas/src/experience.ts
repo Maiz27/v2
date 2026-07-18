@@ -18,12 +18,6 @@ export default defineType({
       validation: (Rule) => Rule.required().max(200),
     }),
     defineField({
-      name: 'partTime',
-      title: 'Part time',
-      type: 'boolean',
-      initialValue: false,
-    }),
-    defineField({
       name: 'duration',
       title: 'Duration',
       type: 'duration',
@@ -42,9 +36,12 @@ export default defineType({
       of: [{ type: 'reference', to: { type: 'tool' } }],
     }),
     defineField({
-      name: 'description',
-      title: 'Job description',
-      type: 'description',
+      name: 'cvBullets',
+      title: 'CV Bullets',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description:
+        'Resume-voice accomplishment bullets for this role, rendered on /cv (mirrors project.cvBlurb).',
     }),
   ],
   preview: {

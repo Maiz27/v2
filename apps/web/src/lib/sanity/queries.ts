@@ -2,31 +2,25 @@ import groq from 'groq';
 
 export const getAboutMe = groq`*[_type == "aboutMe"]{
   name,
+  role,
   bio,
   "imageUrl": image.asset->url,
   heroLabel,
   heroHeadline,
   heroDescription,
   currentStatusLabel,
-  currentStatus,
-  email,
-  github,
-  githubLabel,
-  linkedin,
-  linkedinLabel
+  currentStatus
 }[0]`;
 
 export const getCv = groq`*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{
   summary,
-  experience[]{
-    bullets,
-    experience->{
-      title,
-      location,
-      duration,
-      company{name, label, href},
-      tools[]->{name}
-    }
+  experience[]->{
+    title,
+    location,
+    duration,
+    company{name, label, href},
+    tools[]->{name},
+    cvBullets
   },
   projects[]->{
     title,

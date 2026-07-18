@@ -19,36 +19,8 @@ export default defineType({
       title: 'Experience',
       type: 'array',
       description:
-        'Experience shown on the CV. Each entry links an Experience document (title, company, location, duration, tech) and layers the resume-specific accomplishment bullets on top.',
-      of: [
-        {
-          type: 'object',
-          name: 'cvExperienceEntry',
-          fields: [
-            defineField({
-              name: 'experience',
-              title: 'Experience',
-              type: 'reference',
-              to: {type: 'experience'},
-              validation: (Rule) => Rule.required(),
-            }),
-            defineField({
-              name: 'bullets',
-              title: 'Bullets',
-              type: 'array',
-              of: [{type: 'string'}],
-              description: 'Resume-specific accomplishment bullets for this role.',
-              validation: (Rule) => Rule.required().min(1),
-            }),
-          ],
-          preview: {
-            select: {title: 'experience.title', subtitle: 'experience.company.name'},
-            prepare({title, subtitle}) {
-              return {title: title ?? 'Experience', subtitle: subtitle ?? undefined}
-            },
-          },
-        },
-      ],
+        'Experience shown on the CV. Array order is the display order — each entry links an Experience document, which carries its own resume bullets (CV Bullets field) alongside title, company, location, duration and tech.',
+      of: [{type: 'reference', to: {type: 'experience'}}],
       validation: (Rule) => Rule.required().min(1),
     }),
     defineField({

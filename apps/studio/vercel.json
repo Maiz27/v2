@@ -1,5 +1,5 @@
 {
-  "installCommand": "pnpm install --frozen-lockfile --prod=false && cd ../../packages/sanity-schemas && pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile --prod=false",
   "buildCommand": "pnpm build",
   "framework": null
 }

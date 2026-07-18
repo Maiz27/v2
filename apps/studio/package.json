@@ -19,16 +19,16 @@
     "sanity"
   ],
   "dependencies": {
-    "@v2/sanity-schemas": "workspace:*",
-    "@sanity/code-input": "^7.2.6",
-    "@sanity/vision": "^6.4.0",
     "@codemirror/lang-java": "^6.0.2",
     "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/language": "^6.12.4",
     "@codemirror/legacy-modes": "^6.5.3",
+    "@sanity/code-input": "^7.2.6",
+    "@sanity/vision": "^6.5.0",
+    "@v2/sanity-schemas": "workspace:*",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "sanity": "^6.4.0",
+    "sanity": "^6.5.0",
     "styled-components": "^6.4.3"
   },
   "devDependencies": {
