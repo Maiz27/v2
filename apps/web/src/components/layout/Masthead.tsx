@@ -14,7 +14,7 @@ import type { GetAboutMeResult } from '@/lib/sanity/types';
  * The role line is Sanity-managed (aboutMe.role), OWNER.role as fallback.
  */
 const Masthead = async () => {
-  const about = await fetchSanityData<GetAboutMeResult>(getAboutMe);
+  const about = await fetchSanityData<GetAboutMeResult>(getAboutMe).catch(() => null);
   return (
     <Reveal
       as='header'

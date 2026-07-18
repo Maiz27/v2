@@ -18,7 +18,10 @@ export async function generateMetadata() {
 
 const Cv = async () => {
   const [{ summary, experience, projects, education, skillGroups }, about] =
-    await Promise.all([getCvData(), fetchSanityData<GetAboutMeResult>(getAboutMe)]);
+    await Promise.all([
+      getCvData(),
+      fetchSanityData<GetAboutMeResult>(getAboutMe).catch(() => null),
+    ]);
 
   return (
     <div className='cv-page mx-auto max-w-3xl px-6 md:px-10 print:max-w-none print:px-0'>
