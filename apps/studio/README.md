@@ -43,7 +43,7 @@ This project's Sanity schemas are managed in a separate package, `@v2/sanity-sch
 The following schemas are available:
 
 - **`about`**: A singleton schema to manage your personal information, including your name, bio, image, and stats.
-- **`experience`**: A schema to manage your work experience, including company details, duration, job description, and technologies used.
+- **`experience`**: A schema to manage your work experience, including company details, duration, and technologies used. Resume bullets live on the `cv` document, which references these.
 - **`faq`**: A schema to create a list of frequently asked questions.
 - **`metadata`**: A singleton schema to manage the metadata for your website, which is crucial for SEO.
 - **`project`**: A schema to manage your projects, including title, description, images, technologies, and a rich text content field for detailed project descriptions.

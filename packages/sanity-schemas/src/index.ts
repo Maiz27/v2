@@ -8,7 +8,6 @@ import cv from './cv';
 
 import { duration } from './objects/duration';
 import { company } from './objects/company';
-import { jobDescription } from './objects/jobDescription';
 import { projectImage } from './objects/projectImage';
 import { snippet, snippetGroup } from './objects/codeBlock';
 
@@ -24,7 +23,6 @@ export const schemaTypes = [
   cv,
   duration,
   company,
-  jobDescription,
   projectImage,
   blockContent,
   snippet,
