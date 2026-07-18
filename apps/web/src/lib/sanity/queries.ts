@@ -8,12 +8,7 @@ export const getAboutMe = groq`*[_type == "aboutMe"]{
   heroHeadline,
   heroDescription,
   currentStatusLabel,
-  currentStatus,
-  email,
-  github,
-  githubLabel,
-  linkedin,
-  linkedinLabel
+  currentStatus
 }[0]`;
 
 export const getCv = groq`*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{

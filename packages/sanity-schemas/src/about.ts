@@ -63,36 +63,6 @@ export default defineType({
       description: 'What you\'re currently working on',
       validation: (Rule) => Rule.required(),
     }),
-    defineField({
-      name: 'email',
-      title: 'Email',
-      type: 'string',
-      validation: (Rule) => Rule.required().email(),
-    }),
-    defineField({
-      name: 'github',
-      title: 'GitHub URL',
-      type: 'url',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'githubLabel',
-      title: 'GitHub Label',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'linkedin',
-      title: 'LinkedIn URL',
-      type: 'url',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'linkedinLabel',
-      title: 'LinkedIn Label',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
   ],
   preview: {
     select: {
