@@ -104,7 +104,19 @@ const Cv = async () => {
                   {role.org && (
                     <span className='font-body font-normal text-ink-soft'>
                       {' '}
-                      &middot; {role.org}
+                      &middot;{' '}
+                      {role.orgHref ? (
+                        <a
+                          href={role.orgHref}
+                          target='_blank'
+                          rel='noreferrer noopener'
+                          className='underline decoration-dotted underline-offset-4 hover:text-mark print:no-underline'
+                        >
+                          {role.org}
+                        </a>
+                      ) : (
+                        role.org
+                      )}
                     </span>
                   )}
                 </h3>
@@ -113,6 +125,7 @@ const Cv = async () => {
                 </span>
               </div>
               <p className='mt-0.5 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-faint print:text-[7.5pt]'>
+                {role.orgLabel && <>{role.orgLabel} &middot; </>}
                 {role.place}
               </p>
               <ul className='mt-3 space-y-2 print:mt-2 print:space-y-1.5'>

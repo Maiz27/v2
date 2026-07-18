@@ -13,6 +13,10 @@ import type { GetCvResult } from '@/lib/sanity/types';
 export type CvRole = {
   title: string;
   org: string;
+  /** Company website, when set — renders the org name as an external link. */
+  orgHref?: string;
+  /** Company type, e.g. "Agency", "Startup" — prefixed onto `place`. */
+  orgLabel?: string;
   place: string;
   /** Human-readable range, e.g. "October 2022 to Present". */
   dates: string;
@@ -81,6 +85,8 @@ const formatDates = (
 const mapExperience = (exp: RawExperience): CvRole => ({
   title: exp?.title ?? '',
   org: exp?.company?.name ?? '',
+  orgHref: exp?.company?.href || undefined,
+  orgLabel: exp?.company?.label || undefined,
   place: exp?.location ?? '',
   dates: formatDates(exp?.duration),
   bullets: exp?.cvBullets ?? [],
@@ -124,9 +130,10 @@ const mapProject = (project: RawProject): CvProject => {
  * Fetch the CV singleton from Sanity and map it into `CvData`. `education` and
  * `skillGroups` map through unchanged; `experience` and `projects` are both
  * plain reference arrays on the `cv` doc (array order is display order) that
- * get reference-expanded here — `experience` pulls title/org/place/dates/tech
- * and resume bullets (`cvBullets`) from the linked `experience` doc, `projects`
- * pulls its display `meta`/`hrefLabel` plus `cvBlurb` from the linked project.
+ * get reference-expanded here — `experience` pulls title/org/orgHref/orgLabel/
+ * place/dates/tech and resume bullets (`cvBullets`) from the linked
+ * `experience` doc, `projects` pulls its display `meta`/`hrefLabel` plus
+ * `cvBlurb` from the linked project.
  */
 export async function getCvData(): Promise<CvData> {
   const cv = await fetchSanityData<GetCvResult>(getCv);

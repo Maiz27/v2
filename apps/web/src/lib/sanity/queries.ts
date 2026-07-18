@@ -18,7 +18,7 @@ export const getCv = groq`*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{
     title,
     location,
     duration,
-    company{name},
+    company{name, label, href},
     tools[]->{name},
     cvBullets
   },
