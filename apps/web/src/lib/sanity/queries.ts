@@ -14,15 +14,13 @@ export const getAboutMe = groq`*[_type == "aboutMe"]{
 
 export const getCv = groq`*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{
   summary,
-  experience[]{
-    bullets,
-    experience->{
-      title,
-      location,
-      duration,
-      company{name, label, href},
-      tools[]->{name}
-    }
+  experience[]->{
+    title,
+    location,
+    duration,
+    company{name},
+    tools[]->{name},
+    cvBullets
   },
   projects[]->{
     title,

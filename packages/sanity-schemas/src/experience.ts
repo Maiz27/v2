@@ -35,6 +35,14 @@ export default defineType({
       type: 'array',
       of: [{ type: 'reference', to: { type: 'tool' } }],
     }),
+    defineField({
+      name: 'cvBullets',
+      title: 'CV Bullets',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description:
+        'Resume-voice accomplishment bullets for this role, rendered on /cv (mirrors project.cvBlurb).',
+    }),
   ],
   preview: {
     select: {

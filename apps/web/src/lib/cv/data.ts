@@ -59,7 +59,7 @@ const bareUrl = (url: string): string =>
 
 type RawCv = NonNullable<GetCvResult>;
 type RawProject = NonNullable<RawCv['projects']>[number];
-type RawExperienceEntry = NonNullable<RawCv['experience']>[number];
+type RawExperience = NonNullable<RawCv['experience']>[number];
 
 /** "October 2022" — long month + year, en-US, from a `YYYY-MM-DD` date string. */
 const formatMonthYear = (dateStr: string): string => {
@@ -78,20 +78,17 @@ const formatDates = (
   return from ? `${from} to ${to}` : '';
 };
 
-const mapExperience = (entry: RawExperienceEntry): CvRole => {
-  const exp = entry.experience;
-  return {
-    title: exp?.title ?? '',
-    org: exp?.company?.name ?? '',
-    place: exp?.location ?? '',
-    dates: formatDates(exp?.duration),
-    bullets: entry.bullets ?? [],
-    tech: (exp?.tools ?? [])
-      .map((t) => t?.name)
-      .filter((name): name is string => Boolean(name))
-      .join(' / '),
-  };
-};
+const mapExperience = (exp: RawExperience): CvRole => ({
+  title: exp?.title ?? '',
+  org: exp?.company?.name ?? '',
+  place: exp?.location ?? '',
+  dates: formatDates(exp?.duration),
+  bullets: exp?.cvBullets ?? [],
+  tech: (exp?.tools ?? [])
+    .map((t) => t?.name)
+    .filter((name): name is string => Boolean(name))
+    .join(' / '),
+});
 
 /** "Flutter / Dart" — tech stack only. */
 const projectStack = (project: RawProject): string =>
@@ -125,10 +122,11 @@ const mapProject = (project: RawProject): CvProject => {
 
 /**
  * Fetch the CV singleton from Sanity and map it into `CvData`. `education` and
- * `skillGroups` map through unchanged; `experience` entries are reference-expanded
- * (title/org/place/dates/tech derived from the linked `experience` doc, bullets
- * kept CV-side) and `projects` are reference-expanded with their display
- * `meta`/`hrefLabel` derived here.
+ * `skillGroups` map through unchanged; `experience` and `projects` are both
+ * plain reference arrays on the `cv` doc (array order is display order) that
+ * get reference-expanded here — `experience` pulls title/org/place/dates/tech
+ * and resume bullets (`cvBullets`) from the linked `experience` doc, `projects`
+ * pulls its display `meta`/`hrefLabel` plus `cvBlurb` from the linked project.
  */
 export async function getCvData(): Promise<CvData> {
   const cv = await fetchSanityData<GetCvResult>(getCv);
