@@ -15,7 +15,7 @@ The site is proof of work: long-form, first-person case studies grounded in real
 - **Sanity CMS**: A headless CMS to manage content with ease.
 - **Sanity Type-Safe Content**: Utilizes the `@v2/sanity-schemas` package for end-to-end type safety with Sanity content.
 - **TypeScript**: Static type checking for better code quality.
-- **Framer Motion**: An open-source motion library to power animations.
+- **Shiki**: Server-side syntax highlighting for the interactive, annotated code snippets in case studies.
 
 ## Type Generation
 
@@ -55,10 +55,9 @@ Then, fill in the following environment variables:
 
 - `NEXT_PUBLIC_SANITY_PROJECT_ID`: Your Sanity project ID.
 - `NEXT_PUBLIC_SANITY_DATASET`: Your Sanity dataset name (e.g., `production`).
-- `NEXT_PUBLIC_GITHUB_USERNAME`: Your GitHub username, used for the activity calendar.
-- `RESEND_API_KEY`: Your API key for Resend, used for the contact form.
+- `SANITY_REVALIDATE_SECRET`: Shared secret for the Sanity webhook that revalidates pages on publish (`/api/revalidate`).
 - `NEXT_PUBLIC_DOMAIN`: The domain of your website (e.g., `magedfaiz.xyz`).
-- `NEXT_PUBLIC_EMAIL`: The email address you want to receive contact form submissions at.
+- `NEXT_PUBLIC_EMAIL`: The email address shown as the contact link in the footer.
 - `NODE_ENV`: The node environment (e.g., `development` or `production`).
 
 ## Available Scripts

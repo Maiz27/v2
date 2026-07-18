@@ -6,7 +6,7 @@
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"],
-      "env": ["RESEND_API_KEY", "SANITY_STUDIO_PROJECT_ID", "SANITY_STUDIO_PROJECT_TITLE"]
+      "env": ["SANITY_STUDIO_PROJECT_ID", "SANITY_STUDIO_PROJECT_TITLE"]
     },
     "lint": {
       "dependsOn": ["^lint"]
