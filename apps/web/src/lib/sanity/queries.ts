@@ -2,6 +2,7 @@ import groq from 'groq';
 
 export const getAboutMe = groq`*[_type == "aboutMe"]{
   name,
+  role,
   bio,
   "imageUrl": image.asset->url,
   heroLabel,

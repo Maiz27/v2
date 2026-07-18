@@ -12,6 +12,13 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'role',
+      title: 'Role',
+      type: 'string',
+      description:
+        'Professional identity line shown in the masthead and the CV header (e.g. "Full Stack Developer"). Code falls back to a built-in default until this is set.',
+    }),
+    defineField({
       name: 'bio',
       title: 'Bio',
       type: 'blockContent',
