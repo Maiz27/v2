@@ -3,8 +3,7 @@ import { BASEURL } from '@/lib/Constants';
 import { NAV } from '@/lib/site';
 import { projects as projectsData } from '@/lib/data/projects';
 
-// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
-// for a missed webhook.
+// Keep this literal aligned with REVALIDATE_FALLBACK in @/lib/site.
 export const revalidate = 86400;
 
 type SanityEntry = {
@@ -13,7 +12,7 @@ type SanityEntry = {
 };
 
 export async function GET() {
-  const allProjects: SanityEntry[] = await projectsData.forSeo();
+  const allProjects: SanityEntry[] = (await projectsData.forSeo()) ?? [];
 
   const projects = mapSanityEntriesToSitemapEntries(allProjects, '/projects');
 
@@ -29,12 +28,12 @@ export async function GET() {
   });
 }
 
-const createSitemapEntry = (path: string, date?: string) => ({
+export const createSitemapEntry = (path: string, date?: string) => ({
   url: `${BASEURL}${path}`,
   lastModified: date ? new Date(date).toISOString() : undefined,
 });
 
-const mapSanityEntriesToSitemapEntries = (
+export const mapSanityEntriesToSitemapEntries = (
   entries: SanityEntry[],
   pathPrefix: string
 ) =>
@@ -47,10 +46,20 @@ const mapSanityEntriesToSitemapEntries = (
 // Static nav routes have no real freshness signal, so they're emitted
 // without a <lastmod> rather than stamping the request time as if it meant
 // something.
-const mapRoutesToSitemapEntries = (routes: readonly { href: string }[]) =>
+export const mapRoutesToSitemapEntries = (routes: readonly { href: string }[]) =>
   routes.map(({ href }) => createSitemapEntry(href));
 
-const generateSitemapXml = (
+// The sitemap spec requires entity-escaped URLs inside <loc>; a slug carrying
+// & or ' would otherwise emit invalid XML that crawlers reject.
+const escapeXml = (value: string) =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll("'", '&apos;')
+    .replaceAll('"', '&quot;');
+
+export const generateSitemapXml = (
   urls: { url: string; lastModified?: string }[]
 ) => {
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -59,7 +68,7 @@ const generateSitemapXml = (
     .map(
       (url) => `
     <url>
-      <loc>${url.url}</loc>
+      <loc>${escapeXml(url.url)}</loc>
       ${url.lastModified ? `<lastmod>${url.lastModified}</lastmod>` : ''}
     </url>
   `
