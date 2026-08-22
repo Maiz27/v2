@@ -62,7 +62,7 @@ const SiteFooter = () => {
         <span>
           &copy; {year} {OWNER.name}
         </span>
-        <span>Set in Besley, Source Serif 4 &amp; Fragment Mono</span>
+        <span>Set in STIX Two Text, IBM Plex Sans &amp; IBM Plex Mono</span>
       </div>
     </footer>
   );

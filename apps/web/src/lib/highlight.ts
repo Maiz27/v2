@@ -5,14 +5,31 @@ import {
   type ResolvedAnnotations,
 } from './annotations';
 
-/** The Ledger listing theme: a light editorial palette on the paper surface. */
-export const LEDGER_SHIKI_THEME = 'vitesse-light';
+/**
+ * The listing theme: Nord's desaturated arctic palette sits naturally on the
+ * Negative theme's graphite + ice-blue tokens without turning listings neon.
+ * The background is overridden to the paper-sunken token in globals.css.
+ */
+export const LEDGER_SHIKI_THEME = 'nord';
+
+/**
+ * Three Nord tokens fall below WCAG AA on our surfaces (comments 3.92:1 on the
+ * sunken listing background; comments/errors/meta drop to 2.8-3.7:1 under the
+ * annotation highlight washes). These lightened stand-ins clear 4.6:1 on the
+ * sunken background AND both wash colors while keeping Nord's hue.
+ */
+const CONTRAST_REPLACEMENTS = {
+  '#616e88': '#8992a6', // comments
+  '#bf616a': '#ca7c83', // errors / regex
+  '#5e81ac': '#7694b8', // meta / punctuation accents
+};
 
 /** Highlight a snippet with Shiki, no annotations. */
 export async function highlight(code: string, lang: string): Promise<string> {
   return codeToHtml(code, {
     lang: lang || 'typescript',
     theme: LEDGER_SHIKI_THEME,
+    colorReplacements: CONTRAST_REPLACEMENTS,
   });
 }
 
@@ -44,6 +61,7 @@ export async function highlightAnnotated(
   const html = await codeToHtml(code, {
     lang: lang || 'typescript',
     theme: LEDGER_SHIKI_THEME,
+    colorReplacements: CONTRAST_REPLACEMENTS,
     decorations: ranges,
   });
 

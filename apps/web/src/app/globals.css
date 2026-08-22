@@ -1,17 +1,22 @@
 @import 'tailwindcss';
 
+/* The Negative theme: a matte-dark proof sheet. Flat graphite paper, cool
+   silver ink, one ice-blue annotation color; no glow, gradient, or luminous
+   shadow. paper-raised lifts surfaces (popovers, chips), paper-sunken recesses
+   them (code listings, like exposed film). ink-faint (68% L on 16% L paper)
+   clears WCAG AA at ~6.3:1. */
 @theme {
-  --color-paper: oklch(96.4% 0.009 85);
-  --color-paper-raised: oklch(98.4% 0.006 88);
-  --color-ink: oklch(24% 0.018 70);
-  --color-ink-soft: oklch(40% 0.02 70);
-  /* Bumped from 57% -> 53% L so faint text clears WCAG AA (4.5:1) on paper;
-     was 4.04:1 (Lighthouse a11y color-contrast, #7d766d). Now ~4.76:1. */
-  --color-ink-faint: oklch(53% 0.016 75);
-  --color-rule: oklch(86% 0.014 82);
-  --color-rule-strong: oklch(70% 0.018 78);
-  --color-mark: oklch(51% 0.165 30);
-  --color-mark-soft: oklch(93.5% 0.028 32);
+  --color-paper: oklch(16% 0.012 240);
+  --color-paper-raised: oklch(19.5% 0.014 240);
+  --color-paper-sunken: oklch(13% 0.012 240);
+  --color-ink: oklch(94% 0.008 220);
+  --color-ink-soft: oklch(79% 0.012 220);
+  --color-ink-faint: oklch(68% 0.012 220);
+  --color-rule: oklch(34% 0.012 235);
+  --color-rule-strong: oklch(50% 0.012 230);
+  --color-mark: oklch(78% 0.1 225);
+  --color-mark-soft: oklch(28% 0.04 225);
+  --color-mark-context: oklch(27% 0.012 235);
 
   --animate-scroll-progress: scroll-progress linear;
 
@@ -26,9 +31,9 @@
 }
 
 @theme inline {
-  --font-display: var(--font-besley), 'Georgia', serif;
-  --font-body: var(--font-source-serif), 'Georgia', serif;
-  --font-mono: var(--font-fragment-mono), monospace;
+  --font-display: var(--font-stix-two), 'Georgia', serif;
+  --font-body: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), monospace;
 }
 
 ::selection {
@@ -38,6 +43,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Native dark scrollbars, form controls, and UA chrome. */
+  color-scheme: dark;
 }
 
 /* Tailwind v4 preflight resets cursor on buttons; the Ledger wants pointer on
@@ -69,9 +76,11 @@ label[for] {
   font-family: var(--font-mono);
 }
 
-/* ---- Shiki listing ---- */
+/* ---- Shiki listing ----
+   Listings sit on the sunken surface, recessed below the page rather than
+   raised, so code reads as its own plane (exposed film) without a plate. */
 .ledger-body .shiki {
-  background: var(--color-paper-raised) !important;
+  background: var(--color-paper-sunken) !important;
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
   font-family: var(--font-mono);
@@ -102,13 +111,17 @@ label[for] {
   background-size: 0% 100%;
 }
 
-/* Two kinds read differently at a glance: decisions in red, context in grey. */
+/* Two kinds read differently at a glance: decisions in the ice-blue mark,
+   context in grey. */
 .ledger-body .annot-decision {
   text-decoration-color: var(--color-mark);
 }
 .ledger-body .annot-context {
   text-decoration-color: var(--color-ink-faint);
-  background-image: linear-gradient(oklch(91% 0.006 80), oklch(91% 0.006 80));
+  background-image: linear-gradient(
+    var(--color-mark-context),
+    var(--color-mark-context)
+  );
 }
 
 .ledger-body .annot::after {
@@ -260,7 +273,8 @@ label[for] {
   }
 }
 .ledger-body .ledger-pop {
-  box-shadow: 0 14px 34px -18px oklch(24% 0.018 70 / 0.4);
+  /* Near-black shadow so elevation still reads on the dark paper. */
+  box-shadow: 0 14px 34px -14px oklch(4% 0.01 240 / 0.75);
 }
 [data-motion='on'] .ledger-body .ledger-pop {
   animation: ledger-pop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -274,7 +288,7 @@ label[for] {
   opacity: 0;
   transform: translateY(0.5rem);
   pointer-events: none;
-  box-shadow: 0 12px 30px -18px oklch(24% 0.018 70 / 0.45);
+  box-shadow: 0 12px 30px -14px oklch(4% 0.01 240 / 0.75);
 }
 .ledger-to-top[data-visible='true'] {
   opacity: 1;
@@ -429,6 +443,11 @@ label[for] {
   .ledger-body .draw-b::after,
   .ledger-body .draw-b-hair::after {
     background: #000;
+  }
+  /* Token borders are cool grey on screen; print flattens them to black so
+     the whole document is genuinely monochrome. */
+  .ledger-body * {
+    border-color: #000;
   }
   .ledger-body a {
     color: #000 !important;

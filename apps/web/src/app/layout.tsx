@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Besley, Source_Serif_4, Fragment_Mono } from 'next/font/google';
+import { STIX_Two_Text, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import MotionGate from '@/components/motion/MotionGate';
 import RouteTransition from '@/components/transitions/RouteTransition';
@@ -8,24 +8,28 @@ import { INITIAL_MOTION_STATE } from '@/lib/motion';
 import { OWNER } from '@/lib/site';
 import './globals.css';
 
-const besley = Besley({
+const stixTwo = STIX_Two_Text({
   subsets: ['latin'],
-  variable: '--font-besley',
+  variable: '--font-stix-two',
 });
 
-const sourceSerif = Source_Serif_4({
+const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
-  variable: '--font-source-serif',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-plex-sans',
 });
 
-const fragmentMono = Fragment_Mono({
+const plexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-fragment-mono',
+  // 700 included: mono elements use font-bold (masthead name, index numbers),
+  // and without the real face the browser synthesizes a smeared bold.
+  weight: ['400', '500', '700'],
+  variable: '--font-plex-mono',
 });
 
 export const viewport: Viewport = {
-  themeColor: '#f4f1ea',
+  // --color-paper (oklch 16% 0.012 240) in sRGB, for browser chrome.
+  themeColor: '#090e12',
 };
 
 // Static fallback only: every route defines its own generateMetadata (driven
@@ -47,7 +51,7 @@ export default function RootLayout({
       lang='en'
       data-motion={INITIAL_MOTION_STATE}
       data-scroll-behavior='smooth'
-      className={`${besley.variable} ${sourceSerif.variable} ${fragmentMono.variable}`}
+      className={`${stixTwo.variable} ${plexSans.variable} ${plexMono.variable}`}
     >
       <body className='ledger-body min-h-dvh'>
         <MotionGate />
