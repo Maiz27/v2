@@ -30,4 +30,15 @@ describe('panel selection identity', () => {
       )
     ).toEqual({ id: 'shared', panelKey: 'second' });
   });
+
+  it('unpins when toggling the same annotation in the same panel', () => {
+    expect(
+      toggledPanelSelection(
+        { id: 'shared', panelKey: 'first' },
+        'shared',
+        'first',
+        annotations
+      )
+    ).toBeNull();
+  });
 });

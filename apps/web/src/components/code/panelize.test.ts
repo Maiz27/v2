@@ -72,4 +72,41 @@ describe('panelize', () => {
     expect(panel.annotations).toEqual([annotation]);
     expect(panel.html).toBe('annotated:tsx:const answer = 42;');
   });
+
+  it('prefers override annotations over the authored ones', async () => {
+    const authored = {
+      _type: 'codeAnnotation',
+      _key: 'authored-key',
+      id: 'authored',
+      kind: 'context',
+      match: 'answer',
+      body: 'Authored on the snippet.',
+    } satisfies AuthoredAnnotation;
+    const override = {
+      _type: 'codeAnnotation',
+      _key: 'override-key',
+      id: 'override',
+      kind: 'decision',
+      match: '42',
+      body: 'Passed in by the caller.',
+    } satisfies AuthoredAnnotation;
+
+    const panel = await panelize({
+      panelKey: 'group:tab',
+      snippet: {
+        _type: 'snippet',
+        filename: 'src/answer.ts',
+        code: { _type: 'code', language: 'tsx', code: 'const answer = 42;' },
+        annotations: [authored],
+      },
+      annotations: [override],
+    });
+
+    expect(highlighters.highlightAnnotated).toHaveBeenCalledWith(
+      'const answer = 42;',
+      'tsx',
+      [override]
+    );
+    expect(panel.annotations).toEqual([override]);
+  });
 });
