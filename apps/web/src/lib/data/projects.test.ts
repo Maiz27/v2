@@ -20,12 +20,22 @@ type AccessorCase = {
   variables?: { slug: string };
 };
 
-const bySlugCase: AccessorCase = {
-  name: 'bySlug',
-  query: 'getProjectBySlug',
-  read: () => projects.bySlug('example'),
-  variables: { slug: 'example' },
-};
+/* Reads whose failure must not read as an empty result: bySlug would
+   notFound() a live case study, forSeo would cache a projects-less sitemap.
+   Both propagate instead (error boundary / stale cached response). */
+const propagatingCases: AccessorCase[] = [
+  {
+    name: 'bySlug',
+    query: 'getProjectBySlug',
+    read: () => projects.bySlug('example'),
+    variables: { slug: 'example' },
+  },
+  {
+    name: 'forSeo',
+    query: 'getProjectsForSEO',
+    read: () => projects.forSeo(),
+  },
+];
 
 const degradableCases: AccessorCase[] = [
   {
@@ -39,11 +49,6 @@ const degradableCases: AccessorCase[] = [
     read: () => projects.featured(),
   },
   {
-    name: 'forSeo',
-    query: 'getProjectsForSEO',
-    read: () => projects.forSeo(),
-  },
-  {
     name: 'metadataFor',
     query: 'getProjectMetadata',
     read: () => projects.metadataFor('example'),
@@ -51,7 +56,7 @@ const degradableCases: AccessorCase[] = [
   },
 ];
 
-const accessorCases: AccessorCase[] = [...degradableCases, bySlugCase];
+const accessorCases: AccessorCase[] = [...degradableCases, ...propagatingCases];
 
 describe('project data accessors', () => {
   beforeEach(() => {
@@ -75,13 +80,13 @@ describe('project data accessors', () => {
     await expect(read()).resolves.toBeNull();
   });
 
-  /* A fetch failure must not read as "no such project": swallowing it would
-     have the detail route notFound() a live case study during an outage.
-     Errors propagate to the route's error boundary instead. */
-  it('propagates fetch failures from bySlug', async () => {
-    const failure = new Error('Sanity unavailable');
-    fetchSanityData.mockRejectedValueOnce(failure);
+  it.each(propagatingCases)(
+    'propagates fetch failures from $name',
+    async ({ read }) => {
+      const failure = new Error('Sanity unavailable');
+      fetchSanityData.mockRejectedValueOnce(failure);
 
-    await expect(projects.bySlug('example')).rejects.toBe(failure);
-  });
+      await expect(read()).rejects.toBe(failure);
+    }
+  );
 });

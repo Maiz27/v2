@@ -12,7 +12,9 @@ type SanityEntry = {
 };
 
 export async function GET() {
-  const allProjects: SanityEntry[] = (await projectsData.forSeo()) ?? [];
+  // A forSeo failure throws through: Next keeps serving the previously cached
+  // sitemap instead of this render caching a projects-less one for a day.
+  const allProjects: SanityEntry[] = await projectsData.forSeo();
 
   const projects = mapSanityEntriesToSitemapEntries(allProjects, '/projects');
 

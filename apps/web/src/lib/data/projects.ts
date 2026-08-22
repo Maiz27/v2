@@ -43,9 +43,13 @@ export const projects = {
    */
   bySlug: (slug: string) =>
     fetchSanityData<GetProjectBySlugResult>(getProjectBySlug, { slug }),
-  /** Slug + publish date for every project, for the sitemap. */
-  forSeo: () =>
-    read(() => fetchSanityData<GetProjectsForSEOResult>(getProjectsForSEO)),
+  /**
+   * Slug + publish date for every project, for the sitemap. Failures
+   * propagate: swallowing one would bake a projects-less sitemap into the
+   * route cache for a day, while a throw keeps the previously cached sitemap
+   * serving (stale-but-correct).
+   */
+  forSeo: () => fetchSanityData<GetProjectsForSEOResult>(getProjectsForSEO),
   /** The metadata projection for a single project by slug. */
   metadataFor: (slug: string) =>
     read(() =>
