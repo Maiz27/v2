@@ -21,3 +21,10 @@ export const NAV = [
   { name: 'Archive', href: '/projects' },
   { name: 'CV', href: '/cv' },
 ] as const;
+
+/**
+ * Sanity webhooks drive freshness; this daily interval covers missed webhooks.
+ * Next 16 only extracts literal route config values, so each route must repeat
+ * this number in its `revalidate` export instead of importing this constant.
+ */
+export const REVALIDATE_FALLBACK = 86400;

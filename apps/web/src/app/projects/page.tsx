@@ -4,8 +4,7 @@ import ArchiveTable from '@/components/projects/ArchiveTable';
 import { projects as projectsData } from '@/lib/data/projects';
 import { getDynamicMetaData } from '@/lib/utilities';
 
-// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
-// for a missed webhook.
+// Keep this literal aligned with REVALIDATE_FALLBACK in @/lib/site.
 export const revalidate = 86400;
 
 export async function generateMetadata() {
@@ -14,7 +13,7 @@ export async function generateMetadata() {
 }
 
 const Projects = async () => {
-  const projects = await projectsData.list();
+  const projects = (await projectsData.list()) ?? [];
 
   return (
     <div className='mx-auto max-w-4xl px-6 md:px-10'>

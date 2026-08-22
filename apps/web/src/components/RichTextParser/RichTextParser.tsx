@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import Image from 'next/image';
 import {
   PortableText,
@@ -7,41 +7,56 @@ import {
 } from '@portabletext/react';
 import CodeParser from '@/components/code/CodeParser';
 import CodeGroup from '@/components/code/CodeGroup';
+import { buildImageUrl } from '@/lib/data/images';
 import { createSlug } from '@/lib/utilities';
-import { buildOutline, plainText } from '@/lib/outline';
-import { urlFor } from '@/lib/sanity/client';
-import { BlockContent, Snippet, SnippetGroup } from '@/lib/sanity/types';
+import { plainText } from '@/lib/outline';
+import type { Outline } from '@/lib/outline';
+import type {
+  GetAboutMeResult,
+  GetProjectBySlugResult,
+  Snippet,
+  SnippetGroup,
+} from '@/lib/sanity/types';
 
-type props = {
-  content: BlockContent;
+type ProjectContent = NonNullable<
+  NonNullable<GetProjectBySlugResult>['content']
+>;
+type AboutContent = NonNullable<GetAboutMeResult>['bio'];
+type ProjectImage = Extract<ProjectContent[number], { _type: 'image' }>;
+type RichTextImage = Omit<ProjectImage, 'altText'> & {
+  altText?: ProjectImage['altText'];
+};
+
+type Props = {
+  content: ProjectContent | AboutContent;
+  outline: Outline;
 };
 
 /**
- * Renders a case study's Portable Text as Ledger typography: serif body capped
+ * Renders a case study's Portable Text with body text capped
  * around 62ch, section headings carrying a numbered mono index, quotes, lists,
  * inline code, and first-class code listings via the code/ components.
  *
- * Heading ids, the numbered h2 badge and code-snippet ids all come from
- * `buildOutline` — the single traversal the Contents rail also renders against
- * — so the body anchors and the TOC hrefs are guaranteed to match. Only h4
- * (which is body-only, never in the TOC) derives its id inline via the shared
- * `plainText` + `createSlug`.
+ * Heading ids, the numbered h2 badge and code-snippet ids all come from the
+ * outline that the Contents rail renders, so body anchors and TOC hrefs match.
+ * Only h4, which is body-only and never in the TOC, derives its id inline via
+ * the shared `plainText` and `createSlug`.
  */
-const RichTextParser = memo(({ content }: props) => {
-  const outline = buildOutline(content);
-  let imageIndex = 0;
+const RichTextParser = memo(({ content, outline }: Props) => {
+  const components = useMemo<PortableTextReactComponents>(() => {
+    const imageNumbers = new Map<string, number>();
+    let imageIndex = 0;
 
-  const components: PortableTextReactComponents = {
-    types: {
-      image: ({ value }) => {
-        const imgUrl = urlFor(value).url();
-        imageIndex++;
-        // `altText` comes from the getProjectBySlug content projection
-        // ("altText": asset->altText), which the generic Portable Text image
-        // type from @portabletext/react doesn't know about. Cast until that's
-        // reflected in a query-specific type; regenerate lib/sanity/types.ts
-        // via `pnpm generate:types` if the schema changes.
-        const altText = (value as { altText?: string | null }).altText;
+    content.forEach((block) => {
+      if (block._type === 'image') {
+        imageNumbers.set(block._key, ++imageIndex);
+      }
+    });
+
+    return {
+      types: {
+      image: ({ value }: PortableTextTypeComponentProps<RichTextImage>) => {
+        const imgUrl = buildImageUrl(value);
         return (
           <figure className='my-8 border border-rule bg-paper-raised p-1.5'>
             <Image
@@ -49,7 +64,10 @@ const RichTextParser = memo(({ content }: props) => {
               height={800}
               src={imgUrl}
               loading='lazy'
-              alt={altText ?? `Figure ${imageIndex}`}
+              alt={
+                value.altText ??
+                `Figure ${imageNumbers.get(value._key) ?? 1}`
+              }
               className='h-auto w-full'
             />
           </figure>
@@ -70,7 +88,7 @@ const RichTextParser = memo(({ content }: props) => {
         return <CodeGroup group={value} id={id} />;
       },
     },
-    marks: {
+      marks: {
       strong: ({ children }) => (
         <strong className='font-semibold text-ink'>{children}</strong>
       ),
@@ -86,7 +104,7 @@ const RichTextParser = memo(({ content }: props) => {
         );
       },
     },
-    block: {
+      block: {
       h2: ({ children, value }) => {
         const item = outline.itemFor(value._key);
         const id = item?.id ?? createSlug(plainText(value));
@@ -122,21 +140,22 @@ const RichTextParser = memo(({ content }: props) => {
       normal: ({ children }) => <p>{children}</p>,
       blockquote: ({ children }) => <blockquote>{children}</blockquote>,
     },
-    list: {
+      list: {
       bullet: ({ children }) => <ul>{children}</ul>,
       number: ({ children }) => <ol>{children}</ol>,
     },
-    listItem: {
+      listItem: {
       bullet: ({ children }) => <li>{children}</li>,
       number: ({ children }) => <li>{children}</li>,
     },
-    hardBreak: () => <br />,
-    unknownMark: ({ children }) => <>{children}</>,
-    unknownType: () => null,
-    unknownBlockStyle: ({ children }) => <p>{children}</p>,
-    unknownList: ({ children }) => <ul>{children}</ul>,
-    unknownListItem: ({ children }) => <li>{children}</li>,
-  };
+      hardBreak: () => <br />,
+      unknownMark: ({ children }) => <>{children}</>,
+      unknownType: () => null,
+      unknownBlockStyle: ({ children }) => <p>{children}</p>,
+      unknownList: ({ children }) => <ul>{children}</ul>,
+      unknownListItem: ({ children }) => <li>{children}</li>,
+    };
+  }, [content, outline]);
 
   return (
     <div className='ledger-prose'>

@@ -1,17 +1,12 @@
-import { buildOutline } from '@/lib/outline';
-import { BlockContent } from '@/lib/sanity/types';
+import { Outline } from '@/lib/outline';
 
 /**
  * The case-study Contents rail, driven by the real Portable Text. It indexes
  * every section heading (h2 numbered to match the body index, h3 nested) and
- * every code snippet by filename. The list — including the ids/anchors and the
- * numbered h2 badge — comes straight from `buildOutline`, the same single
- * traversal RichTextParser renders against, so the anchors always line up and
- * nobody maintains this list by hand.
+ * every code snippet by filename. The list, including its ids, anchors, and
+ * numbered h2 badges, comes from the same outline as RichTextParser.
  */
-const Contents = ({ content }: { content: BlockContent }) => {
-  const { items } = buildOutline(content);
-
+const Contents = ({ outline: { items } }: { outline: Outline }) => {
   if (items.length === 0) return null;
 
   return (

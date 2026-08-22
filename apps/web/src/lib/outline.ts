@@ -12,6 +12,11 @@ export type OutlineItem =
   | { type: 'h3'; id: string; text: string; key: string }
   | { type: 'code'; id: string; text: string; key: string };
 
+export type Outline = {
+  items: OutlineItem[];
+  itemFor: (key: string | undefined) => OutlineItem | undefined;
+};
+
 /** Heading levels that make it into the Contents rail. h4 is body-only. */
 const OUTLINE_HEADING_TAGS = ['h2', 'h3'];
 
@@ -44,10 +49,7 @@ export const plainText = (block: {
  * independently with their own counters and slug logic and had to stay in
  * lockstep by hand; now they both read from here.
  */
-export function buildOutline(content: BlockContent): {
-  items: OutlineItem[];
-  itemFor: (key: string | undefined) => OutlineItem | undefined;
-} {
+export function buildOutline(content: BlockContent): Outline {
   const items: OutlineItem[] = [];
   const byKey = new Map<string, OutlineItem>();
   let headingCounter = 0;

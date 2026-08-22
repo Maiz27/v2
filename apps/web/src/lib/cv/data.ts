@@ -6,8 +6,7 @@
  *
  * Separator convention matches the rest of the site: " / " between stack items.
  */
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getCv } from '@/lib/sanity/queries';
+import { cv as cvData } from '@/lib/data/cv';
 import type { GetCvResult } from '@/lib/sanity/types';
 
 export type CvRole = {
@@ -58,7 +57,7 @@ export type CvData = {
 };
 
 /** Strip the protocol and any trailing slash: "https://a.com/b/" -> "a.com/b". */
-const bareUrl = (url: string): string =>
+export const bareUrl = (url: string): string =>
   url.replace(/^https?:\/\//, '').replace(/\/$/, '');
 
 type RawCv = NonNullable<GetCvResult>;
@@ -66,7 +65,7 @@ type RawProject = NonNullable<RawCv['projects']>[number];
 type RawExperience = NonNullable<RawCv['experience']>[number];
 
 /** "October 2022" — long month + year, en-US, from a `YYYY-MM-DD` date string. */
-const formatMonthYear = (dateStr: string): string => {
+export const formatMonthYear = (dateStr: string): string => {
   // Use UTC to avoid timezone shifts for date-only strings
   const [year, month] = dateStr.split('-').map(Number);
   const date = new Date(Date.UTC(year, month - 1));
@@ -74,7 +73,7 @@ const formatMonthYear = (dateStr: string): string => {
 };
 
 /** "October 2022 to Present" / "January 2024 to June 2026" from a duration. */
-const formatDates = (
+export const formatDates = (
   duration: { from?: string; to?: string } | null | undefined,
 ): string => {
   const from = duration?.from ? formatMonthYear(duration.from) : '';
@@ -82,7 +81,7 @@ const formatDates = (
   return from ? `${from} to ${to}` : '';
 };
 
-const mapExperience = (exp: RawExperience): CvRole => ({
+export const mapExperience = (exp: RawExperience): CvRole => ({
   title: exp?.title ?? '',
   org: exp?.company?.name ?? '',
   orgHref: exp?.company?.href || undefined,
@@ -111,7 +110,7 @@ const projectDateLabel = (project: RawProject): string => {
   return year ? `${year}${statusSuffix}` : '';
 };
 
-const mapProject = (project: RawProject): CvProject => {
+export const mapProject = (project: RawProject): CvProject => {
   const link = project.href ?? project.source ?? '';
   const stack = projectStack(project);
   const dateLabel = projectDateLabel(project);
@@ -135,11 +134,11 @@ const mapProject = (project: RawProject): CvProject => {
  * `experience` doc, `projects` pulls its display `meta`/`hrefLabel` plus
  * `cvBlurb` from the linked project.
  */
-export async function getCvData(): Promise<CvData> {
-  const cv = await fetchSanityData<GetCvResult>(getCv);
+export async function getCvData(): Promise<CvData | null> {
+  const cv = await cvData.get();
 
   if (!cv) {
-    throw new Error('No `cv` document found in Sanity.');
+    return null;
   }
 
   return {

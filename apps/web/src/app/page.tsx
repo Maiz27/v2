@@ -8,12 +8,12 @@ import { PersonSchema } from '@/lib/schema';
 import { projects as projectsData } from '@/lib/data/projects';
 import { about as aboutData } from '@/lib/data/about';
 import { getDynamicMetaData } from '@/lib/utilities';
-import { GetProjectsResult } from '@/lib/sanity/types';
+import type { GetProjectsResult } from '@/lib/sanity/types';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import { OWNER } from '@/lib/site';
+import { buildOutline } from '@/lib/outline';
 
-// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
-// for a missed webhook.
+// Keep this literal aligned with REVALIDATE_FALLBACK in @/lib/site.
 export const revalidate = 86400;
 
 export async function generateMetadata() {
@@ -26,13 +26,25 @@ const primaryTool = (tools: GetProjectsResult[number]['tools']) =>
   tools?.[0]?.name ?? '';
 
 export default async function Home() {
-  const [projects, featured, about] = await Promise.all([
+  const [projectResults, featuredResults, about] = await Promise.all([
     projectsData.list(),
     projectsData.featured(),
     aboutData.get(),
   ]);
+  const projects = projectResults ?? [];
+  const featured = featuredResults ?? [];
   const selected = featured.filter((p) => p.slug?.current);
-  const archive: GetProjectsResult = projects.filter((p) => !p.featured && p.slug?.current);
+  const featuredSlugs = new Set(
+    featured.flatMap((project) =>
+      project.slug?.current ? [project.slug.current] : []
+    )
+  );
+  // Selected and archive stay complementary by sharing the fetched featured slugs.
+  const archive: GetProjectsResult = projects.filter(
+    (project) =>
+      project.slug?.current && !featuredSlugs.has(project.slug.current)
+  );
+  const aboutOutline = about?.bio ? buildOutline(about.bio) : null;
 
   return (
     <div className='mx-auto max-w-6xl px-6 md:px-10'>
@@ -159,8 +171,8 @@ export default async function Home() {
         </Reveal>
         <div className='grid gap-10 py-10 md:grid-cols-[minmax(0,1fr)_14rem]'>
           <div className='max-w-[58ch] space-y-5'>
-            {about?.bio && (
-              <RichTextParser content={about.bio} />
+            {about?.bio && aboutOutline && (
+              <RichTextParser content={about.bio} outline={aboutOutline} />
             )}
             <div className='mt-8 border-t border-rule pt-4'>
               <p className='font-mono text-[0.65rem] uppercase tracking-[0.18em] text-ink-faint'>

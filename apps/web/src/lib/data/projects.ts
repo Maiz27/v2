@@ -20,17 +20,31 @@ import type {
   GetProjectMetadataResult,
 } from '@/lib/sanity/types';
 
+const read = async <T>(request: () => Promise<T>): Promise<T | null> => {
+  try {
+    return await request();
+  } catch {
+    return null;
+  }
+};
+
 export const projects = {
   /** All projects, newest first. */
-  list: () => fetchSanityData<GetProjectsResult>(getProjects),
+  list: () => read(() => fetchSanityData<GetProjectsResult>(getProjects)),
   /** The featured projects for the home page. */
-  featured: () => fetchSanityData<GetFeaturedProjectsResult>(getFeaturedProjects),
+  featured: () =>
+    read(() => fetchSanityData<GetFeaturedProjectsResult>(getFeaturedProjects)),
   /** A single project (with full case-study content) by slug. */
   bySlug: (slug: string) =>
-    fetchSanityData<GetProjectBySlugResult>(getProjectBySlug, { slug }),
+    read(() =>
+      fetchSanityData<GetProjectBySlugResult>(getProjectBySlug, { slug })
+    ),
   /** Slug + publish date for every project, for the sitemap. */
-  forSeo: () => fetchSanityData<GetProjectsForSEOResult>(getProjectsForSEO),
+  forSeo: () =>
+    read(() => fetchSanityData<GetProjectsForSEOResult>(getProjectsForSEO)),
   /** The metadata projection for a single project by slug. */
   metadataFor: (slug: string) =>
-    fetchSanityData<GetProjectMetadataResult>(getProjectMetadata, { slug }),
+    read(() =>
+      fetchSanityData<GetProjectMetadataResult>(getProjectMetadata, { slug })
+    ),
 };
