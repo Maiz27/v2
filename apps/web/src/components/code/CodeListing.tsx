@@ -496,7 +496,15 @@ export default function CodeListing({
 
   const headerNode = isTabbed ? (
     <div className='flex items-stretch justify-between gap-2 min-w-0 border border-b-0 border-rule-strong bg-paper-raised'>
-      <div role='tablist' className='flex min-w-0 overflow-x-auto'>
+      <div
+        role='tablist'
+        aria-label={
+          header.kind === 'tabs' && header.title
+            ? header.title
+            : 'Code snippets'
+        }
+        className='flex min-w-0 overflow-x-auto'
+      >
         {panels.map((panel, index) => {
           const isActive = index === activeIndex;
           const tabId = `${id}-tab-${index}`;
