@@ -13,7 +13,13 @@ export async function generateMetadata() {
 }
 
 const Projects = async () => {
-  const projects = (await projectsData.list()) ?? [];
+  const projects = await projectsData.list();
+  // The list IS this page: rendering a failed read as an empty archive would
+  // cache it for a day. Throwing keeps the previously cached page serving, or
+  // lands on the error boundary on a cold cache.
+  if (!projects) {
+    throw new Error('projects.list failed; refusing to render an empty archive');
+  }
 
   return (
     <div className='mx-auto max-w-4xl px-6 md:px-10'>
