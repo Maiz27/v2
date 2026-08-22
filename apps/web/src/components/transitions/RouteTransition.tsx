@@ -2,13 +2,12 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { setRouteTransitionEntering } from './route-transition-flag';
 import { INITIAL_MOTION_STATE } from '@/lib/motion';
 
 /**
  * Ledger route transition. A paper panel slides up over the page with a 2px
- * oxide-red hairline on its leading edge; at full cover the destination rises
- * through a line mask (mono eyebrow + Besley label) as a red rule draws
+ * mark-colored hairline on its leading edge; at full cover the destination rises
+ * through a line mask (mono eyebrow + display label) as a mark-colored rule draws
  * beneath. Navigation commits under cover; the rule becomes an indeterminate
  * sweep while the route renders; the panel then lifts up off the incoming page.
  *
@@ -56,7 +55,7 @@ const EASE_INOUT = 'cubic-bezier(0.65, 0, 0.35, 1)';
 const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const EASE_IN = 'cubic-bezier(0.5, 0, 0.75, 0)';
 
-function destinationForPath(pathname: string): Destination {
+export function destinationForPath(pathname: string): Destination {
   if (pathname === '/') return { eyebrow: 'Index', label: 'The work' };
   if (pathname === '/cv')
     return { eyebrow: 'Curriculum vitae', label: 'Maged Faiz' };
@@ -208,7 +207,6 @@ const RouteTransition = () => {
 
     const finish = () => {
       phaseRef.current = 'idle';
-      setRouteTransitionEntering(false);
       clearTimers();
       pulse?.cancel();
       pulse = null;
@@ -283,7 +281,6 @@ const RouteTransition = () => {
 
     const commit = (href: string) => {
       phaseRef.current = 'waiting';
-      setRouteTransitionEntering(true);
       router.push(href);
       startPulse();
       watchdog = window.setTimeout(() => {
@@ -381,7 +378,6 @@ const RouteTransition = () => {
       preserveScroll = true;
       instantCover(destinationForPath(window.location.pathname));
       phaseRef.current = 'waiting';
-      setRouteTransitionEntering(true);
       startPulse();
       watchdog = window.setTimeout(() => {
         if (phaseRef.current === 'waiting') reveal();
@@ -500,7 +496,6 @@ const RouteTransition = () => {
       cancelRunning();
       if (phaseRef.current !== 'idle') {
         phaseRef.current = 'idle';
-        setRouteTransitionEntering(false);
       }
     };
   }, [router]);

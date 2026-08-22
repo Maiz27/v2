@@ -11,19 +11,19 @@ import { getDomain, getMonthYear } from '@/lib/utilities';
 import { buildMetadata } from '@/lib/metadata';
 import { BASEURL } from '@/lib/Constants';
 import { PersonSchema } from '@/lib/schema';
+import { buildOutline } from '@/lib/outline';
 import { CreativeWork } from 'schema-dts';
 
-// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
-// for a missed webhook.
+// Keep this literal aligned with REVALIDATE_FALLBACK in @/lib/site.
 export const revalidate = 86400;
 
-type Params = { [key: string]: string | undefined };
+type Params = { slug: string };
 
 const page = async ({ params }: { params: Promise<Params> }) => {
   const { slug } = await params;
-  const project = await projects.bySlug(slug!);
+  const project = await projects.bySlug(slug);
 
-  if (!project) {
+  if (!project?.content) {
     return notFound();
   }
 
@@ -40,6 +40,7 @@ const page = async ({ params }: { params: Promise<Params> }) => {
   } = project;
 
   const stack = tools.map((t) => t.name).join(' / ');
+  const outline = buildOutline(content);
 
   const projectJsonLd: CreativeWork = {
     '@type': 'CreativeWork',
@@ -132,10 +133,10 @@ const page = async ({ params }: { params: Promise<Params> }) => {
         </Reveal>
 
         <div className='gap-16 py-12 lg:grid lg:grid-cols-[11rem_minmax(0,1fr)]'>
-          <Contents content={content!} />
+          <Contents outline={outline} />
 
           <article>
-            <RichTextParser content={content!} />
+            <RichTextParser content={content} outline={outline} />
           </article>
         </div>
         </main>
@@ -154,7 +155,7 @@ export async function generateMetadata({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const project = await projects.metadataFor(slug!);
+  const project = await projects.metadataFor(slug);
   if (project) {
     const { slug: projectSlug, contentTitle, description, images, title } = project;
 

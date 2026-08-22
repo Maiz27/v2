@@ -5,8 +5,9 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: OWNER.name,
     short_name: OWNER.name,
-    background_color: '#f4f1ea',
-    theme_color: '#f4f1ea',
+    // --color-paper (oklch 16% 0.012 240) in sRGB.
+    background_color: '#090e12',
+    theme_color: '#090e12',
     icons: [
       {
         src: '/imgs/logo/android-chrome-192x192.png',

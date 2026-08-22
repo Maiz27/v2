@@ -4,8 +4,7 @@ import ArchiveTable from '@/components/projects/ArchiveTable';
 import { projects as projectsData } from '@/lib/data/projects';
 import { getDynamicMetaData } from '@/lib/utilities';
 
-// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
-// for a missed webhook.
+// Keep this literal aligned with REVALIDATE_FALLBACK in @/lib/site.
 export const revalidate = 86400;
 
 export async function generateMetadata() {
@@ -15,6 +14,12 @@ export async function generateMetadata() {
 
 const Projects = async () => {
   const projects = await projectsData.list();
+  // The list IS this page: rendering a failed read as an empty archive would
+  // cache it for a day. Throwing keeps the previously cached page serving, or
+  // lands on the error boundary on a cold cache.
+  if (!projects) {
+    throw new Error('projects.list failed; refusing to render an empty archive');
+  }
 
   return (
     <div className='mx-auto max-w-4xl px-6 md:px-10'>

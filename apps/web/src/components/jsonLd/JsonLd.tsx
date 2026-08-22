@@ -4,12 +4,13 @@ type Props = {
   schema: Thing;
 };
 
+function withContext(schema: Thing): WithContext<Thing> {
+  const context: WithContext<Thing>['@context'] = 'https://schema.org';
+  return Object.assign({ '@context': context }, schema);
+}
+
 const JsonLd = ({ schema }: Props) => {
-  const jsonLd: WithContext<Thing> = {
-    '@context': 'https://schema.org',
-    '@type': (schema as any)['@type'],
-    ...(schema as object),
-  };
+  const jsonLd = withContext(schema);
 
   return (
     <script

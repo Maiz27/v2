@@ -1,14 +1,11 @@
 import Link from 'next/link';
 import PrintButton from '@/components/cv/PrintButton';
-import { OWNER } from '@/lib/site';
 import { getCvData } from '@/lib/cv/data';
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getAboutMe } from '@/lib/sanity/queries';
-import type { GetAboutMeResult } from '@/lib/sanity/types';
+import { about as aboutData } from '@/lib/data/about';
+import { OWNER } from '@/lib/site';
 import { getDynamicMetaData } from '@/lib/utilities';
 
-// Freshness is webhook-driven (see /api/revalidate); this is only a fallback
-// for a missed webhook.
+// Keep this literal aligned with REVALIDATE_FALLBACK in @/lib/site.
 export const revalidate = 86400;
 
 export async function generateMetadata() {
@@ -17,11 +14,14 @@ export async function generateMetadata() {
 }
 
 const Cv = async () => {
-  const [{ summary, experience, projects, education, skillGroups }, about] =
-    await Promise.all([
-      getCvData(),
-      fetchSanityData<GetAboutMeResult>(getAboutMe).catch(() => null),
-    ]);
+  const [cv, about] = await Promise.all([getCvData(), aboutData.get()]);
+  const {
+    summary = '',
+    experience = [],
+    projects = [],
+    education = { degree: '', place: '', detail: '' },
+    skillGroups = [],
+  } = cv ?? {};
 
   return (
     <div className='cv-page mx-auto max-w-3xl px-6 md:px-10 print:max-w-none print:px-0'>

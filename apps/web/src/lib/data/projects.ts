@@ -20,17 +20,39 @@ import type {
   GetProjectMetadataResult,
 } from '@/lib/sanity/types';
 
+const read = async <T>(request: () => Promise<T>): Promise<T | null> => {
+  try {
+    return await request();
+  } catch {
+    return null;
+  }
+};
+
 export const projects = {
   /** All projects, newest first. */
-  list: () => fetchSanityData<GetProjectsResult>(getProjects),
+  list: () => read(() => fetchSanityData<GetProjectsResult>(getProjects)),
   /** The featured projects for the home page. */
-  featured: () => fetchSanityData<GetFeaturedProjectsResult>(getFeaturedProjects),
-  /** A single project (with full case-study content) by slug. */
+  featured: () =>
+    read(() => fetchSanityData<GetFeaturedProjectsResult>(getFeaturedProjects)),
+  /**
+   * A single project (with full case-study content) by slug. Unlike the
+   * degradable reads above, a fetch failure here propagates to the route's
+   * error boundary: swallowing it would make the page notFound() a case study
+   * that exists, serving a deindexable 404 during a transient outage. A
+   * successful null remains the only not-found signal.
+   */
   bySlug: (slug: string) =>
     fetchSanityData<GetProjectBySlugResult>(getProjectBySlug, { slug }),
-  /** Slug + publish date for every project, for the sitemap. */
+  /**
+   * Slug + publish date for every project, for the sitemap. Failures
+   * propagate: swallowing one would bake a projects-less sitemap into the
+   * route cache for a day, while a throw keeps the previously cached sitemap
+   * serving (stale-but-correct).
+   */
   forSeo: () => fetchSanityData<GetProjectsForSEOResult>(getProjectsForSEO),
   /** The metadata projection for a single project by slug. */
   metadataFor: (slug: string) =>
-    fetchSanityData<GetProjectMetadataResult>(getProjectMetadata, { slug }),
+    read(() =>
+      fetchSanityData<GetProjectMetadataResult>(getProjectMetadata, { slug })
+    ),
 };

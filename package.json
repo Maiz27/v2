@@ -17,6 +17,7 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
+    "test": "turbo test",
     "dev:web": "pnpm --filter web dev",
     "dev:studio": "pnpm --filter studio dev",
     "build:web": "pnpm --filter web build",

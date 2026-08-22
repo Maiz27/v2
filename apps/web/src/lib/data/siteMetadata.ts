@@ -9,6 +9,11 @@ import type { GetMetadataResult } from '@/lib/sanity/types';
 
 export const siteMetadata = {
   /** The title/description metadata document for a route slug (e.g. '/'). */
-  forSlug: (slug: string) =>
-    fetchSanityData<GetMetadataResult>(getMetadata, { slug }),
+  forSlug: async (slug: string): Promise<GetMetadataResult | null> => {
+    try {
+      return await fetchSanityData<GetMetadataResult>(getMetadata, { slug });
+    } catch {
+      return null;
+    }
+  },
 };

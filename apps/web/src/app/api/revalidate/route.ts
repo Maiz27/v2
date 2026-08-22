@@ -24,7 +24,7 @@ type WebhookPayload = {
   slug?: string;
 };
 
-const pathsFor = ({ _type, slug }: WebhookPayload): string[] => {
+export const pathsFor = ({ _type, slug }: WebhookPayload): string[] => {
   switch (_type) {
     case 'project': {
       const paths = ['/', '/projects', '/sitemap.xml'];

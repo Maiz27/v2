@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "vitest run"
   },
   "dependencies": {
     "@portabletext/react": "^6.2.0",
@@ -35,6 +36,7 @@
     "autoprefixer": "^10.5.2",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.2.10",
-    "postcss": "^8.5.17"
+    "postcss": "^8.5.17",
+    "vitest": "4.1.11"
   }
 }

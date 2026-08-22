@@ -55,7 +55,7 @@ const ArchiveTable = ({ projects }: Props) => {
               className={`cursor-pointer rounded-sm border px-2.5 py-1 font-mono text-[0.62rem] uppercase tracking-[0.12em] transition-colors duration-200 ${
                 active
                   ? 'border-ink bg-ink text-paper'
-                  : 'border-rule text-ink-soft hover:border-rule-strong hover:text-ink'
+                  : 'border-rule-strong text-ink-soft hover:border-ink-faint hover:text-ink'
               }`}
             >
               {k}
@@ -89,7 +89,7 @@ const ArchiveTable = ({ projects }: Props) => {
                 <span className='tabular-nums'>{projectYear(project.date)}</span>
                 {primaryTool(project.tools) && (
                   <>
-                    <span className='text-rule-strong'>/</span>
+                    <span className='text-ink-faint'>/</span>
                     <span>{primaryTool(project.tools)}</span>
                   </>
                 )}

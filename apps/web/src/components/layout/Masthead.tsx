@@ -2,10 +2,8 @@ import Link from 'next/link';
 import { HiOutlineEnvelope, HiOutlineDocumentText } from 'react-icons/hi2';
 import { SiGithub } from 'react-icons/si';
 import Reveal from '@/components/motion/Reveal';
+import { about as aboutData } from '@/lib/data/about';
 import { OWNER } from '@/lib/site';
-import { fetchSanityData } from '@/lib/sanity/client';
-import { getAboutMe } from '@/lib/sanity/queries';
-import type { GetAboutMeResult } from '@/lib/sanity/types';
 
 /**
  * The running head on every page. Owner name doubles as the link home. The
@@ -14,7 +12,7 @@ import type { GetAboutMeResult } from '@/lib/sanity/types';
  * The role line is Sanity-managed (aboutMe.role), OWNER.role as fallback.
  */
 const Masthead = async () => {
-  const about = await fetchSanityData<GetAboutMeResult>(getAboutMe).catch(() => null);
+  const about = await aboutData.get();
   return (
     <Reveal
       as='header'

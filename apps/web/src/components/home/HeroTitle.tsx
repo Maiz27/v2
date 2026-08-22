@@ -11,8 +11,8 @@ type Props = {
  * Letters are grouped per word in a nowrap wrapper so a line can only ever
  * break between words, never mid-word. The visible letters are aria-hidden and
  * paired with an sr-only copy of the full string so screen readers hear one
- * clean line. A trailing period is inked red as a terminal accent, a small nod
- * to a cursor blinking after the line.
+ * clean line. A trailing period is set in the mark color, carrying the
+ * annotation accent into the headline itself.
  */
 const HeroTitle = ({ text, className }: Props) => {
   const hasTerminalPeriod = text.endsWith('.');
