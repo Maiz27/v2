@@ -7,6 +7,7 @@
  * grey (what it does).
  */
 import type { DecorationItem } from 'shiki';
+import type { Snippet } from '@/lib/sanity/types';
 
 export type AnnotationKind = 'decision' | 'context';
 
@@ -20,8 +21,14 @@ export type CodeAnnotation = {
   body: string;
 };
 
+type Assert<T extends true> = T;
+type GeneratedCodeAnnotation = NonNullable<Snippet['annotations']>[number];
+type _GeneratedAnnotationMatchesCodeAnnotation = Assert<
+  GeneratedCodeAnnotation extends CodeAnnotation ? true : false
+>;
+
 /** Index of the `n`th (1-based) occurrence of `needle`, or -1 if not found. */
-function nthIndexOf(haystack: string, needle: string, n: number): number {
+export function nthIndexOf(haystack: string, needle: string, n: number): number {
   let index = -1;
   for (let i = 0; i < n; i++) {
     index = haystack.indexOf(needle, index + 1);
