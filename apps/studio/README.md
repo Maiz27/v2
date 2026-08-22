@@ -28,6 +28,16 @@ Then, fill in the following environment variables:
 - `SANITY_STUDIO_PROJECT_TITLE`: The title of your Sanity Studio project.
 - `SANITY_STUDIO_PROJECT_ID`: Your Sanity project ID.
 
+### Revalidation webhook
+
+Configure a Sanity webhook to send `POST` requests to `/api/revalidate` on the deployed web app. Set the webhook secret to the web app's `SANITY_REVALIDATE_SECRET` value and use this GROQ projection:
+
+```groq
+{_type, "slug": slug.current}
+```
+
+Trigger the webhook on create, update, and delete for `project`, `aboutMe`, `cv`, `metadata`, `tool`, `experience`, and `kind` documents.
+
 After setting the environment variables, you may need to initialize the project with your Sanity project ID:
 
 ```bash

@@ -33,6 +33,6 @@ Story-driven, first-person, honest about mistakes, lightly funny, never salesy. 
 - Freelancer template sites with services/pricing/FAQ sections.
 - AI-slop landing pages: centered hero stack, icon-title-text card grids, gradient text.
 
-## Current identity (Ledger)
+## Current identity (Negative)
 
-Warm paper background, ink text, and a single brick-red accent (`--color-mark`). Typeset in Besley (serif display), Source Serif (body), and Fragment Mono (labels and code). Editorial, print-inspired layout: hairline rules, numbered section markers, generous type scale. This is a full departure from the original dark near-black / periwinkle / Space Grotesk identity, which is retired.
+Matte-dark graphite paper (`oklch(16% 0.012 240)`), cool silver ink, and a single ice-blue accent (`--color-mark`). Typeset in STIX Two Text (display), IBM Plex Sans (body), and IBM Plex Mono (labels and code). Code listings are recessed on a darker sunken surface and highlighted with Shiki's `nord` theme. The editorial, print-inspired layout keeps its hairline rules, numbered section markers, and generous type scale.
