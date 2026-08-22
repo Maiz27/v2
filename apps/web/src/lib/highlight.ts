@@ -40,9 +40,9 @@ export async function highlight(code: string, lang: string): Promise<string> {
  *
  * Annotation resolution is delegated to `resolveAnnotations`, which never
  * throws: a bad authored annotation (wrong `match`/`occurrence`) is skipped and
- * surfaced via `misses` instead of crashing the page. Misses are `console.warn`ed
- * outside production so they're visible in dev/server logs, and returned to the
- * caller alongside the html.
+ * surfaced via `misses` instead of crashing the page. Misses are returned to
+ * the caller alongside the html; panelize (the sole caller) warns about them
+ * in dev with the snippet's filename for context.
  */
 export async function highlightAnnotated(
   code: string,
@@ -50,13 +50,6 @@ export async function highlightAnnotated(
   annotations: CodeAnnotation[]
 ): Promise<{ html: string; misses: ResolvedAnnotations['misses'] }> {
   const { ranges, misses } = resolveAnnotations(code, annotations);
-
-  if (misses.length > 0 && process.env.NODE_ENV !== 'production') {
-    console.warn(
-      `highlightAnnotated: ${misses.length} annotation(s) did not match the code and were skipped:`,
-      misses
-    );
-  }
 
   const html = await codeToHtml(code, {
     lang: lang || 'typescript',

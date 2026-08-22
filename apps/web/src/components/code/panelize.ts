@@ -25,10 +25,22 @@ export async function panelize({
   const text = snippet.code.code ?? '';
   const language = snippet.code.language || 'typescript';
   const annotations = annotationOverride ?? snippet.annotations ?? [];
-  const html =
-    annotations.length > 0
-      ? (await highlightAnnotated(text, language, annotations)).html
-      : await highlight(text, language);
+  let html: string;
+  if (annotations.length > 0) {
+    const annotated = await highlightAnnotated(text, language, annotations);
+    html = annotated.html;
+    /* An authored annotation that no longer matches the code is skipped, not
+       fatal; surface it here where the filename gives the author something to
+       search for. */
+    if (annotated.misses.length > 0 && process.env.NODE_ENV !== 'production') {
+      console.warn(
+        `panelize: ${annotated.misses.length} annotation(s) in ${snippet.filename} did not match the code and were skipped:`,
+        annotated.misses
+      );
+    }
+  } else {
+    html = await highlight(text, language);
+  }
 
   return {
     panelKey,
