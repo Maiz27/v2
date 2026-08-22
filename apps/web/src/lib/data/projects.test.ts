@@ -20,7 +20,14 @@ type AccessorCase = {
   variables?: { slug: string };
 };
 
-const accessorCases: AccessorCase[] = [
+const bySlugCase: AccessorCase = {
+  name: 'bySlug',
+  query: 'getProjectBySlug',
+  read: () => projects.bySlug('example'),
+  variables: { slug: 'example' },
+};
+
+const degradableCases: AccessorCase[] = [
   {
     name: 'list',
     query: 'getProjects',
@@ -30,12 +37,6 @@ const accessorCases: AccessorCase[] = [
     name: 'featured',
     query: 'getFeaturedProjects',
     read: () => projects.featured(),
-  },
-  {
-    name: 'bySlug',
-    query: 'getProjectBySlug',
-    read: () => projects.bySlug('example'),
-    variables: { slug: 'example' },
   },
   {
     name: 'forSeo',
@@ -49,6 +50,8 @@ const accessorCases: AccessorCase[] = [
     variables: { slug: 'example' },
   },
 ];
+
+const accessorCases: AccessorCase[] = [...degradableCases, bySlugCase];
 
 describe('project data accessors', () => {
   beforeEach(() => {
@@ -66,9 +69,19 @@ describe('project data accessors', () => {
     );
   });
 
-  it.each(accessorCases)('returns null when $name fails', async ({ read }) => {
+  it.each(degradableCases)('returns null when $name fails', async ({ read }) => {
     fetchSanityData.mockRejectedValueOnce(new Error('Sanity unavailable'));
 
     await expect(read()).resolves.toBeNull();
+  });
+
+  /* A fetch failure must not read as "no such project": swallowing it would
+     have the detail route notFound() a live case study during an outage.
+     Errors propagate to the route's error boundary instead. */
+  it('propagates fetch failures from bySlug', async () => {
+    const failure = new Error('Sanity unavailable');
+    fetchSanityData.mockRejectedValueOnce(failure);
+
+    await expect(projects.bySlug('example')).rejects.toBe(failure);
   });
 });

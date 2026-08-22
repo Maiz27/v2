@@ -34,11 +34,15 @@ export const projects = {
   /** The featured projects for the home page. */
   featured: () =>
     read(() => fetchSanityData<GetFeaturedProjectsResult>(getFeaturedProjects)),
-  /** A single project (with full case-study content) by slug. */
+  /**
+   * A single project (with full case-study content) by slug. Unlike the
+   * degradable reads above, a fetch failure here propagates to the route's
+   * error boundary: swallowing it would make the page notFound() a case study
+   * that exists, serving a deindexable 404 during a transient outage. A
+   * successful null remains the only not-found signal.
+   */
   bySlug: (slug: string) =>
-    read(() =>
-      fetchSanityData<GetProjectBySlugResult>(getProjectBySlug, { slug })
-    ),
+    fetchSanityData<GetProjectBySlugResult>(getProjectBySlug, { slug }),
   /** Slug + publish date for every project, for the sitemap. */
   forSeo: () =>
     read(() => fetchSanityData<GetProjectsForSEOResult>(getProjectsForSEO)),
