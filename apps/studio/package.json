@@ -22,20 +22,20 @@
     "@codemirror/lang-java": "^6.0.2",
     "@codemirror/lang-javascript": "^6.2.5",
     "@codemirror/language": "^6.12.4",
-    "@codemirror/legacy-modes": "^6.5.3",
-    "@sanity/code-input": "^7.2.6",
-    "@sanity/vision": "^6.5.0",
+    "@codemirror/legacy-modes": "^6.5.4",
+    "@sanity/code-input": "^7.3.8",
+    "@sanity/vision": "^6.12.0",
     "@v2/sanity-schemas": "workspace:*",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "sanity": "^6.5.0",
-    "styled-components": "^6.4.3"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sanity": "^6.12.0",
+    "styled-components": "^6.5.3"
   },
   "devDependencies": {
-    "@sanity/eslint-config-studio": "^6.0.0",
-    "@types/react": "^19.2.17",
-    "eslint": "^9.39.5",
-    "prettier": "^3.9.5",
+    "@sanity/eslint-config-studio": "^7.0.0",
+    "@types/react": "^19.2.18",
+    "eslint": "^10.9.1",
+    "prettier": "^3.9.6",
     "typescript": "^5.9.3"
   },
   "prettier": {
