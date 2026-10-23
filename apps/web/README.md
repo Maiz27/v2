@@ -70,8 +70,8 @@ Then, fill in the following environment variables:
 Case study drafts (`drafts.<id>` documents) can be reviewed on the real site before publishing in Studio.
 
 1. In [sanity.io/manage](https://www.sanity.io/manage), open the project, go to **API > Tokens**, and add a token with the **Viewer** role. Set it as `SANITY_API_READ_TOKEN`.
-2. Set `SANITY_PREVIEW_SECRET` to a long random string.
-3. Open `https://<your-site>/api/draft?secret=<SANITY_PREVIEW_SECRET>&slug=<project-slug>`. The case study renders with any unpublished edits and a "Draft preview" banner at the top.
+2. Set `SANITY_PREVIEW_SECRET` to a random hex string, for example from `openssl rand -hex 32`. The value travels in a query parameter, so characters such as `+`, `&` and `#` would be decoded differently and fail the check.
+3. Open `https://<your-site>/api/draft?secret=<SANITY_PREVIEW_SECRET>&slug=<project-slug>`. The case study renders with any unpublished edits and a "Draft preview" banner at the top. That URL carries the secret: don't share it, and rotate the secret if it leaks, since it stays in browser history and in the host's request logs. The route redirects to the case study, so later requests never send it as a referrer.
 4. Use the banner's **Exit preview** link (or open `/api/draft/disable`) to leave. Closing the browser also ends the session.
 
 Draft mode only affects the browser that holds its cookie: those requests skip the cache and render fresh, while every other visitor keeps getting the cached published page.
