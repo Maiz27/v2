@@ -48,9 +48,9 @@ export const thumbnailUrl = (url: string): string => {
 
 /**
  * The heading's font size, stepped down by length so a long case-study title
- * still fits its three-line clamp. The thumbnail narrows the measure to about
- * 548px (roughly 24 characters a line at the smallest step), so the steps
- * come sooner when there is one.
+ * still fits its line clamp (three lines, four beside a thumbnail). The
+ * thumbnail narrows the measure to about 548px, roughly 20 characters a
+ * line at the smallest step, so the steps come sooner when there is one.
  */
 export const headingSize = (text: string, hasThumbnail: boolean): number => {
   const n = text.length;
@@ -224,10 +224,12 @@ export const renderCaseStudyCard = async ({
             flexBasis: 0,
           }}
         >
+          {/* The thumbnail narrows the measure to about 20 characters a
+              line, so a long heading gets a fourth line there. */}
           <div
             style={{
               display: 'block',
-              lineClamp: 3,
+              lineClamp: thumbnail ? 4 : 3,
               fontFamily: FONT.display,
               fontWeight: 700,
               fontSize: size,
