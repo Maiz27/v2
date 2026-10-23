@@ -7,6 +7,8 @@ import {
 } from '@portabletext/react';
 import CodeParser from '@/components/code/CodeParser';
 import CodeGroup from '@/components/code/CodeGroup';
+import Figure from '@/components/projects/Figure';
+import { figureNumbers, normalizeLayout } from '@/components/projects/figures';
 import { buildImageUrl } from '@/lib/data/images';
 import { createSlug } from '@/lib/utilities';
 import { plainText } from '@/lib/outline';
@@ -26,6 +28,7 @@ type ProjectImage = Extract<ProjectContent[number], { _type: 'image' }>;
 type RichTextImage = Omit<ProjectImage, 'altText'> & {
   altText?: ProjectImage['altText'];
 };
+type RichTextFigure = Extract<ProjectContent[number], { _type: 'figure' }>;
 
 type Props = {
   content: ProjectContent | AboutContent;
@@ -44,6 +47,7 @@ type Props = {
  */
 const RichTextParser = memo(({ content, outline }: Props) => {
   const components = useMemo<PortableTextReactComponents>(() => {
+    const figureNumberFor = figureNumbers(content);
     const imageNumbers = new Map<string, number>();
     let imageIndex = 0;
 
@@ -73,6 +77,14 @@ const RichTextParser = memo(({ content, outline }: Props) => {
           </figure>
         );
       },
+      figure: ({ value }: PortableTextTypeComponentProps<RichTextFigure>) => (
+        <Figure
+          n={figureNumberFor.get(value._key) ?? 1}
+          images={value.images ?? []}
+          caption={value.caption}
+          layout={normalizeLayout(value.layout)}
+        />
+      ),
       snippet: ({
         value,
       }: PortableTextTypeComponentProps<Snippet & { _key: string }>) => {

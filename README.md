@@ -28,6 +28,16 @@ This monorepo is organized using pnpm workspaces and Turborepo. The workspaces a
 - `apps/web`: The Next.js frontend application.
 - `apps/studio`: The Sanity CMS studio for content management.
 - `packages/*`: Shared packages and utilities, including `@v2/sanity-schemas` for type-safe Sanity content.
+- `scripts/` (gitignored, local to the owner's machine): the content pipeline. `scripts/case-studies/` holds one authoring file per case study plus a Portable Text DSL that pushes to Sanity drafts only; `scripts/visuals/` holds the reproducible Playwright shot list that produces every plate and figure image. The rules for both live in `scripts/case-studies/HANDOFF.md` and `scripts/visuals/README.md`.
+
+## Content rules
+
+The site renders what Sanity holds, and the authoring scripts are the source of truth for the case studies, so a few rules keep the two in step:
+
+- **Code is quoted, never edited.** Every snippet is copied verbatim from the real repository file it links to (elisions only via `// ...`), and every annotation `match` must occur in that code. Prose can be rewritten; code cannot. Re-audit a case study after its project repository changes.
+- **Drafts only.** Scripts write `drafts.<id>`; publishing happens in Studio after review, which can be done on the real site through draft preview (see `apps/web/README.md`).
+- **Every case study is a showcase.** The hero "plate" is composed from the project's gallery in order: a landscape main screen, a portrait phone shot, then two landscape details, all fresh captures. The plate carries no label or caption. Body figures sit where the prose refers to them and never repeat a plate tile. `apps/web/README.md` documents the rendering rules; `PRODUCT.md` the visual ones.
+- **Voice.** First person, plain, honest about mistakes; straight apostrophes, no em dashes. Describe the work, not who typed it.
 
 ## Getting Started
 

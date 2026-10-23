@@ -23,11 +23,13 @@ export default defineType({
       // you want and decide how you want to deal with it where you want to
       // use your content.
       styles: [
+        // Values are stored; only the titles are editor copy. H2 and H3 feed
+        // the case-study contents (apps/web/src/lib/outline.ts).
         { title: 'Normal', value: 'normal' },
-        { title: 'H1', value: 'h1' },
-        { title: 'H2', value: 'h2' },
-        { title: 'H3', value: 'h3' },
-        { title: 'H4', value: 'h4' },
+        { title: 'Heading 1 (avoid: the page title is the H1)', value: 'h1' },
+        { title: 'Heading 2 (numbered section)', value: 'h2' },
+        { title: 'Heading 3 (subsection)', value: 'h3' },
+        { title: 'Heading 4 (not in contents)', value: 'h4' },
         { title: 'Quote', value: 'blockquote' },
       ],
       lists: [
@@ -45,7 +47,7 @@ export default defineType({
         // Annotations can be any object structure – e.g. a link or a footnote.
         annotations: [
           {
-            title: 'URL',
+            title: 'Link',
             name: 'link',
             type: 'object',
             fields: [
@@ -53,24 +55,26 @@ export default defineType({
                 title: 'URL',
                 name: 'href',
                 type: 'string',
+                description:
+                  'A full address starting with https://, http://, mailto: or tel:.',
                 validation: (Rule: {
-                  custom: (arg0: (href: string) => true | 'Invalid URL') => any;
+                  custom: (arg0: (href: string | undefined) => true | string) => any;
                 }) =>
-                  Rule.custom((href: string) => {
+                  Rule.custom((href: string | undefined) => {
                     const validPrefixes = [
                       'http://',
                       'https://',
                       'mailto:',
                       'tel:',
                     ];
-                    const isValid = validPrefixes.some((prefix) =>
-                      href.startsWith(prefix)
-                    );
+                    const isValid =
+                      typeof href === 'string' &&
+                      validPrefixes.some((prefix) => href.startsWith(prefix));
 
                     if (isValid) {
                       return true;
                     } else {
-                      return 'Invalid URL';
+                      return 'Start the link with https://, http://, mailto: or tel:.';
                     }
                   }),
               },
@@ -84,14 +88,23 @@ export default defineType({
     // as a block type.
     defineArrayMember({
       type: 'image',
+      title: 'Image (legacy, unnumbered: use Figure)',
       options: { hotspot: true },
+    }),
+    // Numbered screenshot figure (single or pair). The bare `image` above
+    // stays for legacy content.
+    defineArrayMember({
+      type: 'figure',
+      title: 'Figure (screenshots)',
     }),
     // Custom Code Block
     defineArrayMember({
       type: 'snippet',
+      title: 'Code snippet',
     }),
     defineArrayMember({
       type: 'snippetGroup',
+      title: 'Code tabs',
     }),
   ],
 });

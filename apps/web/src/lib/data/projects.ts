@@ -4,7 +4,7 @@
  * wrong query with the wrong type. The GROQ exports are the existing ones from
  * `lib/sanity/queries`, unchanged — this only collapses the query+type pairing.
  */
-import { fetchSanityData } from '@/lib/sanity/client';
+import { fetchSanityData, fetchSanityPreviewData } from '@/lib/sanity/client';
 import {
   getProjects,
   getFeaturedProjects,
@@ -44,6 +44,13 @@ export const projects = {
   bySlug: (slug: string) =>
     fetchSanityData<GetProjectBySlugResult>(getProjectBySlug, { slug }),
   /**
+   * `bySlug` through the drafts perspective, for draft preview: an unpublished
+   * `drafts.<id>` edit wins over the published document. Failures (including
+   * a missing preview token) propagate the same way bySlug's do.
+   */
+  draftBySlug: (slug: string) =>
+    fetchSanityPreviewData<GetProjectBySlugResult>(getProjectBySlug, { slug }),
+  /**
    * Slug + publish date for every project, for the sitemap. Failures
    * propagate: swallowing one would bake a projects-less sitemap into the
    * route cache for a day, while a throw keeps the previously cached sitemap
@@ -55,4 +62,13 @@ export const projects = {
     read(() =>
       fetchSanityData<GetProjectMetadataResult>(getProjectMetadata, { slug })
     ),
+  /**
+   * The same projection for the Open Graph image route. Failures propagate:
+   * that route caches its PNG for a day, so a swallowed outage would bake the
+   * generic site card in place of a real case study's card. A thrown error
+   * is not cached, so the previous image keeps serving or the next request
+   * retries. A successful null remains the only unknown-slug signal.
+   */
+  metadataForOg: (slug: string) =>
+    fetchSanityData<GetProjectMetadataResult>(getProjectMetadata, { slug }),
 };

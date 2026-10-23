@@ -2,8 +2,13 @@ import { Metadata } from 'next';
 import { BASEURL } from './Constants';
 import { OWNER } from './site';
 
-/** The site logo, used as the default social image. */
-const DEFAULT_IMAGE = `${BASEURL}/imgs/logo/logo.png`;
+/**
+ * The default social image: the site card rendered by app/opengraph-image.tsx.
+ * Routes without their own opengraph-image file need it set explicitly,
+ * because a page-level `openGraph` object replaces its parent's wholesale and
+ * would otherwise drop the root card.
+ */
+const DEFAULT_IMAGE = `${BASEURL}/opengraph-image`;
 
 /** X/Twitter handle for the site, if configured. */
 const TWITTER_SITE = '@maiz27';
@@ -14,11 +19,14 @@ type BuildMetadataArgs = {
   /** Route path, e.g. '/projects/v2' or '/'. */
   path: string;
   /**
-   * Social/OG image URL. Defaults to the site logo. Note the project metadata
+   * Social/OG image URL. Defaults to the site card. Note the project metadata
    * projection returns a single URL string (`images[0].image.asset->url`), so
-   * this is a string, not an array.
+   * this is a string, not an array. Pass `null` to emit no `images` at all so
+   * a co-located opengraph-image file supplies them: Next only applies
+   * file-based OG/Twitter images when the same segment's metadata has no
+   * `images` key.
    */
-  image?: string;
+  image?: string | null;
   type?: 'website' | 'article';
 };
 
@@ -37,7 +45,10 @@ export function buildMetadata({
   type = 'website',
 }: BuildMetadataArgs): Metadata {
   const url = `${BASEURL}${path}`;
-  const socialImage = image || DEFAULT_IMAGE;
+  // null: leave `images` unset (Next then fills Twitter from the file-based
+  // OG image too); otherwise the given URL or the site card.
+  const images =
+    image === null ? {} : { images: [{ url: image || DEFAULT_IMAGE }] };
 
   return {
     metadataBase: new URL(BASEURL),
@@ -61,12 +72,12 @@ export function buildMetadata({
       title,
       description,
       siteName: OWNER.name,
-      images: [{ url: socialImage }],
+      ...images,
     } as Metadata['openGraph'],
     twitter: {
       card: 'summary_large_image',
       ...(TWITTER_SITE ? { site: TWITTER_SITE } : {}),
-      images: [{ url: socialImage }],
+      ...images,
     },
     robots: {
       index: true,

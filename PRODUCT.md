@@ -27,6 +27,13 @@ Story-driven, first-person, honest about mistakes, lightly funny, never salesy. 
 - Every claim on the site must be backed by real code. No invented metrics, no fake logos, no testimonial carousels.
 - Stripping must not mean bland. The design has to carry personality on typography, color commitment, and motion, because the content layer got quieter.
 
+## Visual rules
+
+- The hero plate is a composed showcase from fresh captures of the real product: the main screen, a phone companion, and a detail or two. Never a single logo, a brand card, or a stale screenshot.
+- Figures sit where the prose refers to them, not in a gallery at the end.
+- Captions are dated ("Stalemates, October 2026: ..."), so a reader knows when the screen was true.
+- Screenshots go in plain recessed frames: no device frames, no shadows, no rounded corners.
+
 ## Anti-references
 
 - Generic dark developer portfolio: near-black, neon accent, tool-icon wall, "I build scalable web apps" hero.

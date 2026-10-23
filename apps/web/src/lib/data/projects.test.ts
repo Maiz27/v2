@@ -1,8 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const fetchSanityData = vi.hoisted(() => vi.fn());
+const { fetchSanityData, fetchSanityPreviewData } = vi.hoisted(() => ({
+  fetchSanityData: vi.fn(),
+  fetchSanityPreviewData: vi.fn(),
+}));
 
-vi.mock('@/lib/sanity/client', () => ({ fetchSanityData }));
+vi.mock('@/lib/sanity/client', () => ({ fetchSanityData, fetchSanityPreviewData }));
 vi.mock('@/lib/sanity/queries', () => ({
   getFeaturedProjects: 'getFeaturedProjects',
   getProjectBySlug: 'getProjectBySlug',
@@ -34,6 +37,12 @@ const propagatingCases: AccessorCase[] = [
     name: 'forSeo',
     query: 'getProjectsForSEO',
     read: () => projects.forSeo(),
+  },
+  {
+    name: 'metadataForOg',
+    query: 'getProjectMetadata',
+    read: () => projects.metadataForOg('example'),
+    variables: { slug: 'example' },
   },
 ];
 
@@ -89,4 +98,29 @@ describe('project data accessors', () => {
       await expect(read()).rejects.toBe(failure);
     }
   );
+});
+
+describe('draftBySlug', () => {
+  beforeEach(() => {
+    fetchSanityData.mockReset();
+    fetchSanityPreviewData.mockReset();
+  });
+
+  it('runs the bySlug query through the preview client', async () => {
+    const result = { query: 'getProjectBySlug' };
+    fetchSanityPreviewData.mockResolvedValueOnce(result);
+
+    await expect(projects.draftBySlug('example')).resolves.toBe(result);
+    expect(fetchSanityPreviewData).toHaveBeenCalledWith('getProjectBySlug', {
+      slug: 'example',
+    });
+    expect(fetchSanityData).not.toHaveBeenCalled();
+  });
+
+  it('propagates preview fetch failures', async () => {
+    const failure = new Error('SANITY_API_READ_TOKEN is not configured');
+    fetchSanityPreviewData.mockRejectedValueOnce(failure);
+
+    await expect(projects.draftBySlug('example')).rejects.toBe(failure);
+  });
 });

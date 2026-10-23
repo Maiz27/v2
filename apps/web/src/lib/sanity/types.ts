@@ -15,6 +15,36 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type FigureImage = {
+  _type: "figureImage";
+  image: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  alt: string;
+};
+
+export type Figure = {
+  _type: "figure";
+  images: Array<
+    {
+      _key: string;
+    } & FigureImage
+  >;
+  caption?: string;
+  layout?: "column" | "wide";
+};
+
 export type SnippetGroup = {
   _type: "snippetGroup";
   title?: string;
@@ -39,13 +69,6 @@ export type Snippet = {
     _type: "codeAnnotation";
     _key: string;
   }>;
-};
-
-export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
 };
 
 export type BlockContent = Array<
@@ -77,6 +100,9 @@ export type BlockContent = Array<
     }
   | ({
       _key: string;
+    } & Figure)
+  | ({
+      _key: string;
     } & Snippet)
   | ({
       _key: string;
@@ -93,6 +119,7 @@ export type ProjectImage = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  alt?: string;
 };
 
 export type Company = {
@@ -411,9 +438,11 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | SanityImageAssetReference
+  | FigureImage
+  | Figure
   | SnippetGroup
   | Snippet
-  | SanityImageAssetReference
   | BlockContent
   | ProjectImage
   | Company
@@ -533,7 +562,7 @@ export type GetFeaturedProjectsResult = Array<{
 
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjectBySlug
-// Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },  "images": images[].image.asset->url,  contentTitle,  content[]{    ...,    _type == "image" => {      "altText": asset->altText    }  },}[0]
+// Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },  "images": images[]{    _key,    alt,    "url": image.asset->url,    "width": image.asset->metadata.dimensions.width,    "height": image.asset->metadata.dimensions.height,    "lqip": image.asset->metadata.lqip  },  contentTitle,  content[]{    ...,    _type == "image" => {      "altText": asset->altText    },    _type == "figure" => {      caption,      layout,      images[]{        _key,        alt,        "url": image.asset->url,        "width": image.asset->metadata.dimensions.width,        "height": image.asset->metadata.dimensions.height,        "lqip": image.asset->metadata.lqip      }    }  },}[0]
 export type GetProjectBySlugResult = {
   title: string;
   slug: Slug | null;
@@ -549,7 +578,14 @@ export type GetProjectBySlugResult = {
     iconName: string | null;
     iconSvg: string | null;
   }>;
-  images: Array<string | null> | null;
+  images: Array<{
+    _key: string;
+    alt: string | null;
+    url: string | null;
+    width: number | null;
+    height: number | null;
+    lqip: string | null;
+  }> | null;
   contentTitle: string | null;
   content: Array<
     | {
@@ -569,6 +605,20 @@ export type GetProjectBySlugResult = {
         level?: number;
         _type: "block";
         _key: string;
+      }
+    | {
+        _key: string;
+        _type: "figure";
+        images: Array<{
+          _key: string;
+          alt: string;
+          url: string | null;
+          width: number | null;
+          height: number | null;
+          lqip: string | null;
+        }>;
+        caption: string | null;
+        layout: "column" | "wide" | null;
       }
     | {
         asset?: SanityImageAssetReference;
@@ -666,7 +716,7 @@ declare module "@sanity/client" {
     '*[_type == "aboutMe"]{\n  name,\n  role,\n  bio,\n  "imageUrl": image.asset->url,\n  heroLabel,\n  heroHeadline,\n  heroDescription,\n  currentStatusLabel,\n  currentStatus\n}[0]': GetAboutMeResult;
     '*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{\n  summary,\n  experience[]->{\n    title,\n    location,\n    duration,\n    company{name, label, href},\n    tools[]->{name},\n    cvBullets\n  },\n  projects[]->{\n    title,\n    tools[]->{name},\n    date,\n    status,\n    href,\n    source,\n    cvBlurb\n  },\n  education,\n  skillGroups\n}': GetCvResult;
     '*[_type == "project" && featured == true] | order(date desc)[0..3]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n   name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n}': GetFeaturedProjectsResult;
-    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n  "images": images[].image.asset->url,\n  contentTitle,\n  content[]{\n    ...,\n    _type == "image" => {\n      "altText": asset->altText\n    }\n  },\n}[0]': GetProjectBySlugResult;
+    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n  "images": images[]{\n    _key,\n    alt,\n    "url": image.asset->url,\n    "width": image.asset->metadata.dimensions.width,\n    "height": image.asset->metadata.dimensions.height,\n    "lqip": image.asset->metadata.lqip\n  },\n  contentTitle,\n  content[]{\n    ...,\n    _type == "image" => {\n      "altText": asset->altText\n    },\n    _type == "figure" => {\n      caption,\n      layout,\n      images[]{\n        _key,\n        alt,\n        "url": image.asset->url,\n        "width": image.asset->metadata.dimensions.width,\n        "height": image.asset->metadata.dimensions.height,\n        "lqip": image.asset->metadata.lqip\n      }\n    }\n  },\n}[0]': GetProjectBySlugResult;
     '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  description,\n  "images": images[0].image.asset->url,\n  contentTitle,\n}[0]': GetProjectMetadataResult;
     '*[_type == "project"]{\n  "slug": slug.current,\n  "publishedAt": date,\n}': GetProjectsForSEOResult;
     '*[_type == "metadata" && slug.current == $slug]{\n  "slug": slug.current,\n  title,\n  description,\n}[0]': GetMetadataResult;

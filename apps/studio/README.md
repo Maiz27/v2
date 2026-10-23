@@ -36,13 +36,53 @@ Configure a Sanity webhook to send `POST` requests to `/api/revalidate` on the d
 {_type, "slug": slug.current}
 ```
 
-Trigger the webhook on create, update, and delete for `project`, `aboutMe`, `cv`, `metadata`, `tool`, `experience`, and `kind` documents.
+Trigger the webhook on create, update, and delete for `project`, `aboutMe`, `cv`, `metadata`, `tool`, `experience`, and `projectKind` documents.
 
 After setting the environment variables, you may need to initialize the project with your Sanity project ID:
 
 ```bash
 sanity init
 ```
+
+## Editing in Studio
+
+The left-hand menu has three parts:
+
+- **About Me** and **CV** exist once each, so there is no button to create, duplicate or delete them.
+- **Projects** (all projects newest first, or only the ones featured on home) and **Experience** (newest role first).
+- **Settings** holds Page metadata (one entry per route: `/`, `/projects`, `/cv`), Project kinds (the archive filter) and Tools (the tech stacks).
+
+Every field says where it shows on the site. Red messages block publishing; yellow ones are advice the site still copes without, kept as warnings so documents saved before the rule existed still publish.
+
+### Editing a project
+
+A project opens on its **Overview** tab. The tabs:
+
+- **Overview**: title, slug, kind, status, date (projects are listed newest first by it), featured, description and tech stack. The description is capped at 200 characters because it shows on cards, as the search description and on the share image. Keep 2 to 4 projects featured: the home page lists the 4 newest. The first tool is the one cards name.
+- **Links**: the live URL and the public repository.
+- **Plate**: the gallery the hero plate under the case-study header is built from. See below.
+- **Case study**: the headline and the article. Start sections at Heading 2 (they are numbered and listed in the contents); Heading 3 adds a subsection. Insert a **Figure** for screenshots and a **Code snippet** or **Code tabs** for code.
+- **CV**: the blurb used when the CV document lists this project.
+
+### The plate order rule
+
+The plate uses the first four gallery images, and their order sets their role:
+
+1. the main screen, landscape;
+2. the companion, normally a portrait phone shot;
+3. and 4. two landscape details.
+
+If every image is portrait they sit in one row. The plate has no label or caption. The first image is also the card image and the share-image thumbnail. Every image needs alt text. Drag to reorder; the Order index field only labels the list. The full layout rules are in the web app's README, under "Case-study visuals".
+
+### Figures and code
+
+- A **Figure** takes one image, or two shown side by side as a pair (use pairs for phone shots), each with its own alt text. Layout **Column** sits in the prose width; **Wide** spans the article column like a code listing. Figures are numbered in reading order from 01; the plate is unnumbered.
+- A **Code snippet**'s filename is the path from the repository root with forward slashes (`src/lib/gist.ts`); Code tabs shorten it to the shortest ending that tells the files apart. The source URL is optional and should point at the file in the public repository, ideally pinned to a commit.
+- An annotation's **Match** must be text that appears in the code exactly. **Occurrence** is 1-based and only needed when the match appears more than once. Studio warns when a match is not found; the site skips that note instead of failing the page.
+
+### Drafts and preview
+
+Edits save as a draft (`drafts.<id>`) and reach the site only when you press **Publish**; publishing fires the revalidation webhook above. To read a case-study draft on the real site before publishing, open `https://<site>/api/draft?secret=<SANITY_PREVIEW_SECRET>&slug=<project-slug>`; the web app's README, under "Draft Preview", has the setup.
 
 ## Schemas
 
@@ -54,7 +94,6 @@ The following schemas are available:
 
 - **`about`**: A singleton schema to manage your personal information, including your name, bio, image, and stats.
 - **`experience`**: A schema to manage your work experience, including company details, duration, and technologies used. Resume bullets live on the `experience` document's `cvBullets` field — the `cv` document only references `experience` entries, so edit bullets on the referenced experience document, not on `cv`.
-- **`faq`**: A schema to create a list of frequently asked questions.
 - **`metadata`**: A singleton schema to manage the metadata for your website, which is crucial for SEO.
 - **`project`**: A schema to manage your projects, including title, description, images, technologies, and a rich text content field for detailed project descriptions.
 - **`tool`**: A schema to manage the tools and technologies you use, including name, URL, and an icon (either from `react-icons` or a custom SVG).

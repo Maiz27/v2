@@ -318,7 +318,7 @@ function NotesRail({
                     if (event.pointerType !== 'touch') onHover(null);
                   }}
                   onClick={() => onPin(annotation.id)}
-                  className={`focus:outline-hidden focus-visible:ring-2 focus-visible:ring-mark focus-visible:ring-offset-2 focus-visible:ring-offset-paper ${
+                  className={`block w-full text-left focus:outline-hidden focus-visible:ring-2 focus-visible:ring-mark focus-visible:ring-offset-2 focus-visible:ring-offset-paper ${
                     isPinned ? 'font-medium' : ''
                   }`}
                 >

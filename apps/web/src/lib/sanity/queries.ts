@@ -69,12 +69,31 @@ export const getProjectBySlug = groq`*[_type == "project" && slug.current == $sl
     iconName,
     "iconSvg": iconSvg.asset->url
   },
-  "images": images[].image.asset->url,
+  "images": images[]{
+    _key,
+    alt,
+    "url": image.asset->url,
+    "width": image.asset->metadata.dimensions.width,
+    "height": image.asset->metadata.dimensions.height,
+    "lqip": image.asset->metadata.lqip
+  },
   contentTitle,
   content[]{
     ...,
     _type == "image" => {
       "altText": asset->altText
+    },
+    _type == "figure" => {
+      caption,
+      layout,
+      images[]{
+        _key,
+        alt,
+        "url": image.asset->url,
+        "width": image.asset->metadata.dimensions.width,
+        "height": image.asset->metadata.dimensions.height,
+        "lqip": image.asset->metadata.lqip
+      }
     }
   },
 }[0]`;

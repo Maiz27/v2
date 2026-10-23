@@ -29,11 +29,11 @@ describe('buildMetadata', () => {
       },
       openGraph: {
         type: 'website',
-        images: [{ url: 'https://www.example.com/imgs/logo/logo.png' }],
+        images: [{ url: 'https://www.example.com/opengraph-image' }],
       },
       twitter: {
         card: 'summary_large_image',
-        images: [{ url: 'https://www.example.com/imgs/logo/logo.png' }],
+        images: [{ url: 'https://www.example.com/opengraph-image' }],
       },
     });
   });
@@ -62,5 +62,19 @@ describe('buildMetadata', () => {
         images: [{ url: 'https://cdn.example.com/project.png' }],
       },
     });
+  });
+
+  it('omits images when image is null so a file-based OG image applies', () => {
+    const metadata = buildMetadata({
+      title: 'Case study',
+      description: 'A project write-up.',
+      path: '/projects/example',
+      image: null,
+      type: 'article',
+    });
+
+    expect(metadata.openGraph).not.toHaveProperty('images');
+    expect(metadata.twitter).not.toHaveProperty('images');
+    expect(metadata.twitter).toMatchObject({ card: 'summary_large_image' });
   });
 });

@@ -2,34 +2,37 @@ import {defineType, defineField} from 'sanity'
 
 export const company = defineType({
   name: 'company',
-  title: 'Job Company',
+  title: 'Job company',
   type: 'object',
   fields: [
     defineField({
       name: 'name',
-      title: 'Company Name',
+      title: 'Company name',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      description: 'Shown after the job title on the CV.',
+      validation: (Rule) => Rule.required().error('Add the company name.'),
     }),
     defineField({
       name: 'label',
-      title: 'Company Type',
+      title: 'Company type',
       type: 'string',
-      description: "Company Type, e.g. 'Agency', 'Startup', 'Enterprise' etc.",
+      description: "Optional, e.g. 'Agency', 'Startup', 'Enterprise'. Shown before the location on the CV.",
     }),
     defineField({
       name: 'href',
-      title: 'Company Website',
+      title: 'Company website',
       type: 'url',
+      description: 'Optional. Makes the company name a link on the CV.',
     }),
     defineField({
       name: 'logo',
-      title: 'Company Logo',
+      title: 'Company logo',
       type: 'image',
       options: {
         hotspot: true,
       },
-      description: 'Company Logo, preferably a png image',
+      description:
+        'Editor-only: labels the role in the Studio list and is not shown on the site. A square PNG works best.',
     }),
   ],
 })
