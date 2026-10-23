@@ -17,16 +17,29 @@ export const projectImage = defineType({
       type: 'image',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'alt',
+      title: 'Alt text',
+      type: 'string',
+      description: 'What the image shows, for screen readers.',
+    }),
+    defineField({
+      name: 'caption',
+      title: 'Caption',
+      type: 'string',
+      description: 'The plate shows the first non-empty caption among its images, so put the plate caption on the first image.',
+    }),
   ],
   preview: {
     select: {
       index: 'index',
+      caption: 'caption',
       media: 'image',
     },
     prepare(selection) {
-      const {index, media} = selection
+      const {index, caption, media} = selection
       return {
-        title: `Image (${index})`,
+        title: caption ? `Image (${index}): ${caption}` : `Image (${index})`,
         media: media,
       }
     },

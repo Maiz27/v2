@@ -86,6 +86,11 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
     }),
+    // Numbered screenshot figure (single or pair). The bare `image` above
+    // stays for legacy content.
+    defineArrayMember({
+      type: 'figure',
+    }),
     // Custom Code Block
     defineArrayMember({
       type: 'snippet',

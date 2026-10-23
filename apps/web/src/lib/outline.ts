@@ -1,6 +1,21 @@
 import { createSlug } from '@/lib/utilities';
 import { CODE_ID_PREFIX } from '@/lib/Constants';
-import { BlockContent, Snippet, SnippetGroup } from '@/lib/sanity/types';
+import {
+  BlockContent,
+  GetProjectBySlugResult,
+  Snippet,
+  SnippetGroup,
+} from '@/lib/sanity/types';
+
+/**
+ * Raw schema blocks, or the case-study query's projected blocks (whose
+ * `figure` images are flattened to url/size fields). The outline only reads
+ * headings and code blocks, which both shapes share.
+ */
+type OutlineSource = ReadonlyArray<
+  | BlockContent[number]
+  | NonNullable<NonNullable<GetProjectBySlugResult>['content']>[number]
+>;
 
 /**
  * A single entry in a case study's outline. `key` is the Portable Text block's
@@ -49,7 +64,7 @@ export const plainText = (block: {
  * independently with their own counters and slug logic and had to stay in
  * lockstep by hand; now they both read from here.
  */
-export function buildOutline(content: BlockContent): Outline {
+export function buildOutline(content: OutlineSource): Outline {
   const items: OutlineItem[] = [];
   const byKey = new Map<string, OutlineItem>();
   let headingCounter = 0;

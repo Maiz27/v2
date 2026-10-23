@@ -24,6 +24,6 @@
     "build:studio": "pnpm --filter studio build",
     "lint:web": "pnpm --filter web lint",
     "lint:studio": "pnpm --filter studio lint",
-    "generate:types": "pnpm --filter studio exec sanity schema extract --enforce-required-fields && pnpm --filter studio exec sanity typegen generate"
+    "generate:types": "pnpm --filter studio exec sanity schema extract --enforce-required-fields --force && pnpm --filter studio exec sanity typegen generate"
   }
 }
