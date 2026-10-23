@@ -6,6 +6,7 @@ import RouteTransition from '@/components/transitions/RouteTransition';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 import { INITIAL_MOTION_STATE } from '@/lib/motion';
 import { OWNER } from '@/lib/site';
+import { BASEURL } from '@/lib/Constants';
 import './globals.css';
 
 const stixTwo = STIX_Two_Text({
@@ -37,6 +38,8 @@ export const viewport: Viewport = {
 // this. A layout-level Sanity fetch here would just be a second, discarded
 // round trip on every navigation.
 export const metadata: Metadata = {
+  // Resolves the file-based OG image URLs on routes that do not call buildMetadata (e.g. not-found).
+  metadataBase: new URL(BASEURL),
   title: OWNER.name,
   description: `${OWNER.name}, ${OWNER.role}.`,
 };
