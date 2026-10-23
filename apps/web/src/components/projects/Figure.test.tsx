@@ -88,12 +88,12 @@ describe('Plate', () => {
   const rows = (html: string) =>
     html.match(/class="contents md:flex md:gap-2"/g) ?? [];
 
-  it('renders a single image as Plate 01: one full-width tile, preloaded', () => {
-    const html = render([{ ...shot(1), caption: 'Home' }]);
-    expect(html).toContain('id="plate-01"');
+  it('renders a single image as one full-width tile, preloaded, with no label', () => {
+    const html = render([shot(1)]);
+    expect(html).toContain('id="plate"');
     expect(html).toContain('data-layout="single"');
-    expect(html).toContain('Plate 01');
-    expect(html).toContain('Home');
+    expect(html).not.toContain('<figcaption');
+    expect(html).not.toContain('Plate');
     expect(html).toContain('pt-12');
     expect(html).toContain('border border-rule bg-paper-sunken p-2');
     expect(html).toContain('grid grid-cols-1');
@@ -105,12 +105,7 @@ describe('Plate', () => {
   });
 
   it('composes four images into two proportional rows', () => {
-    const html = render([
-      shot(1),
-      phoneShot(2),
-      { ...shot(3), caption: 'A dated caption' },
-      shot(4),
-    ]);
+    const html = render([shot(1), phoneShot(2), shot(3), shot(4)]);
     expect(html).toContain('data-layout="composed"');
     expect(rows(html)).toHaveLength(2);
     expect(html.match(/<img /g)).toHaveLength(4);
@@ -118,10 +113,9 @@ describe('Plate', () => {
     expect(html).toContain('flex:1.6 1 0;aspect-ratio:1.6');
     expect(html).toContain('flex:0.4621 1 0;aspect-ratio:0.4621');
     expect(html).toContain('min-w-0');
-    // Only the first tile is eager; the caption is the first non-empty one.
+    // Only the first tile is eager.
     expect(html.match(/data-preload="true"/g)).toHaveLength(1);
     expect(html.match(/loading="lazy"/g)).toHaveLength(3);
-    expect(html).toContain('A dated caption');
     expect(html).toContain('alt="Shot 2"');
   });
 

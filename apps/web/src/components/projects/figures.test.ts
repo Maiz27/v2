@@ -5,8 +5,6 @@ import {
   figureLabel,
   figureNumbers,
   figureSizes,
-  firstFigureNumber,
-  heroPlateImage,
   normalizeLayout,
   planPlate,
 } from './figures';
@@ -23,19 +21,13 @@ describe('figureNumbers', () => {
     block('figure', 'f3'),
   ];
 
-  it('numbers only figure blocks, in reading order, from 1 by default', () => {
+  it('numbers only figure blocks, in reading order, from 1', () => {
     const numbers = figureNumbers(content);
     expect([...numbers]).toEqual([
       ['f1', 1],
       ['f2', 2],
       ['f3', 3],
     ]);
-  });
-
-  it('continues from the plate when started at 2', () => {
-    const numbers = figureNumbers(content, firstFigureNumber(true));
-    expect(numbers.get('f1')).toBe(2);
-    expect(numbers.get('f3')).toBe(4);
     expect(numbers.has('legacy')).toBe(false);
   });
 
@@ -44,19 +36,12 @@ describe('figureNumbers', () => {
   });
 });
 
-describe('firstFigureNumber', () => {
-  it('starts at 02 after a hero plate and at 01 without one', () => {
-    expect(firstFigureNumber(true)).toBe(2);
-    expect(firstFigureNumber(false)).toBe(1);
-  });
-});
-
 /** A gallery image of the given intrinsic size. */
 const img = (
   n: number,
   width: number | null = 1440,
   height: number | null = 900,
-  extra: { caption?: string | null; url?: string | null } = {}
+  extra: { url?: string | null } = {}
 ) => ({
   _key: `k${n}`,
   alt: `Shot ${n}`,
@@ -70,28 +55,6 @@ const landscape = (n: number) => img(n, 1440, 900); // 1.6
 const phone = (n: number) => img(n, 1170, 2532); // ~0.4621
 const keys = (rows: { image: { _key: string } }[][]) =>
   rows.map((row) => row.map((tile) => tile.image._key));
-
-describe('heroPlateImage', () => {
-  const image = landscape(1);
-
-  it('returns the first gallery image the plate can show', () => {
-    expect(heroPlateImage([image, landscape(2)])).toBe(image);
-  });
-
-  it('skips images the plate cannot show, so numbering matches the plate', () => {
-    expect(heroPlateImage([img(1, null, null), image])).toBe(image);
-    expect(heroPlateImage([img(1, 1440, 900, { url: null }), image])).toBe(
-      image
-    );
-  });
-
-  it('returns null for a missing, empty, or unusable gallery', () => {
-    expect(heroPlateImage(null)).toBeNull();
-    expect(heroPlateImage(undefined)).toBeNull();
-    expect(heroPlateImage([])).toBeNull();
-    expect(heroPlateImage([img(1, 1440, 900, { url: null })])).toBeNull();
-  });
-});
 
 describe('planPlate', () => {
   it('returns null without a usable image', () => {
@@ -218,24 +181,14 @@ describe('planPlate', () => {
     expect(plan.tiles.map((t) => t.image._key)).not.toContain('k5');
   });
 
-  it('takes the first non-empty caption among the shown images', () => {
-    const plan = planPlate([
-      img(1, 1440, 900, { caption: '  ' }),
-      img(2, 1440, 900, { caption: 'Home, October 2026.' }),
-      img(3, 1440, 900, { caption: 'Later' }),
-    ])!;
-    expect(plan.caption).toBe('Home, October 2026.');
-    expect(planPlate([landscape(1)])!.caption).toBeNull();
-  });
 });
 
 describe('labels and ids', () => {
   it('pads to two digits', () => {
-    expect(figureLabel('plate', 1)).toBe('Plate 01');
-    expect(figureLabel('figure', 2)).toBe('Fig. 02');
-    expect(figureLabel('figure', 12)).toBe('Fig. 12');
-    expect(figureId('plate', 1)).toBe('plate-01');
-    expect(figureId('figure', 3)).toBe('fig-03');
+    expect(figureLabel(2)).toBe('Fig. 02');
+    expect(figureLabel(12)).toBe('Fig. 12');
+    expect(figureId(1)).toBe('fig-01');
+    expect(figureId(3)).toBe('fig-03');
   });
 });
 

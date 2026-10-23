@@ -1,15 +1,13 @@
 import type { CSSProperties } from 'react';
-import { CaptionBar, FrameImage } from './Figure';
+import { FrameImage } from './Figure';
 import {
   type FigureImageData,
   type PlateLayout,
   type PlateTile,
-  figureId,
-  figureLabel,
   planPlate,
 } from './figures';
 
-type PlateSourceImage = FigureImageData & { caption?: string | null };
+type PlateSourceImage = FigureImageData;
 
 type Props = {
   /** The project's gallery; the first four usable images make the plate. */
@@ -60,11 +58,11 @@ const tileStyle = (ratio: number): CSSProperties => {
 
 /**
  * The case study's hero plate: a composed showcase of the gallery's first
- * screens under the case header, labelled "Plate 01". Layout rules live in
- * `planPlate`; this only renders the plan. The first tile is
- * priority-loaded because it sits near the fold. The caption is the first
- * non-empty gallery caption among the shown images. Renders nothing without
- * a usable image.
+ * screens under the case header. It carries no label or caption (the header
+ * above it already names the project; each tile has its own alt). Layout
+ * rules live in `planPlate`; this only renders the plan. The first tile is
+ * priority-loaded because it sits near the fold. Renders nothing without a
+ * usable image.
  */
 export default function Plate({ images, fallbackAlt }: Props) {
   const plan = planPlate(images);
@@ -74,7 +72,7 @@ export default function Plate({ images, fallbackAlt }: Props) {
 
   return (
     <figure
-      id={figureId('plate', 1)}
+      id='plate'
       data-layout={plan.layout}
       className='min-w-0 scroll-m-16 pt-12'
     >
@@ -102,7 +100,6 @@ export default function Plate({ images, fallbackAlt }: Props) {
           </div>
         ))}
       </div>
-      <CaptionBar label={figureLabel('plate', 1)} caption={plan.caption} />
     </figure>
   );
 }

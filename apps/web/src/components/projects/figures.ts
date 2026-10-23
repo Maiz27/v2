@@ -20,41 +20,28 @@ export type FigureImageData = {
 export const FALLBACK_DIMENSIONS = { width: 1600, height: 1000 } as const;
 
 /**
- * The hero plate's main screen: the first gallery image the plate can show
- * (see `planPlate`). The page uses it to decide whether "Plate 01" exists,
- * so body figure numbering always agrees with what the plate renders.
- */
-export const heroPlateImage = <T extends PlateSource>(
-  images: readonly T[] | null | undefined
-): PlateImage<T> | null => planPlate(images)?.tiles[0]?.image ?? null;
-
-/** "Plate 01" takes the first number, so body figures continue from 02. */
-export const firstFigureNumber = (hasPlate: boolean): number =>
-  hasPlate ? 2 : 1;
-
-/**
- * Number every `figure` block in reading order, starting at `start`. Other
- * block types (including legacy bare images) never consume a number.
+ * Number every `figure` block in reading order from 1. The hero plate is
+ * unnumbered and uncaptioned, so it never shifts the count. Other block
+ * types (including legacy bare images) never consume a number.
  */
 export const figureNumbers = (
-  content: ReadonlyArray<{ _type: string; _key: string }>,
-  start = 1
+  content: ReadonlyArray<{ _type: string; _key: string }>
 ): Map<string, number> => {
   const numbers = new Map<string, number>();
-  let next = start;
+  let next = 1;
   content.forEach((block) => {
     if (block._type === 'figure') numbers.set(block._key, next++);
   });
   return numbers;
 };
 
-/** Two-digit plate/figure label, e.g. `Fig. 02` or `Plate 01`. */
-export const figureLabel = (kind: 'figure' | 'plate', n: number): string =>
-  `${kind === 'plate' ? 'Plate' : 'Fig.'} ${String(n).padStart(2, '0')}`;
+/** Two-digit figure label, e.g. `Fig. 02`. */
+export const figureLabel = (n: number): string =>
+  `Fig. ${String(n).padStart(2, '0')}`;
 
-/** Anchor id for a numbered figure or plate, e.g. `fig-02`, `plate-01`. */
-export const figureId = (kind: 'figure' | 'plate', n: number): string =>
-  `${kind === 'plate' ? 'plate' : 'fig'}-${String(n).padStart(2, '0')}`;
+/** Anchor id for a numbered figure, e.g. `fig-02`. */
+export const figureId = (n: number): string =>
+  `fig-${String(n).padStart(2, '0')}`;
 
 export const normalizeLayout = (
   layout: string | null | undefined
@@ -100,7 +87,6 @@ export type PlateSource = {
   url: string | null;
   width: number | null;
   height: number | null;
-  caption?: string | null;
 };
 
 /** A gallery image the plate can lay out: it has a URL and real dimensions. */
@@ -139,8 +125,6 @@ export type PlatePlan<T> = {
   rows: PlateTile<T>[][];
   /** Every tile in reading order (the rows, flattened). */
   tiles: PlateTile<T>[];
-  /** The first non-empty caption among the shown images. */
-  caption: string | null;
 };
 
 /** The plate shows at most this many gallery images. */
@@ -236,8 +220,5 @@ export const planPlate = <T extends PlateSource>(
       });
     });
 
-  const caption =
-    shown.map((image) => image.caption?.trim()).find(Boolean) ?? null;
-
-  return { layout, rows, tiles: rows.flat(), caption };
+  return { layout, rows, tiles: rows.flat() };
 };

@@ -33,11 +33,6 @@ type RichTextFigure = Extract<ProjectContent[number], { _type: 'figure' }>;
 type Props = {
   content: ProjectContent | AboutContent;
   outline: Outline;
-  /**
-   * Number of the first body figure. The page passes 2 when a hero plate
-   * ("Plate 01") renders above the article, so figures continue from it.
-   */
-  firstFigure?: number;
 };
 
 /**
@@ -50,9 +45,9 @@ type Props = {
  * Only h4, which is body-only and never in the TOC, derives its id inline via
  * the shared `plainText` and `createSlug`.
  */
-const RichTextParser = memo(({ content, outline, firstFigure = 1 }: Props) => {
+const RichTextParser = memo(({ content, outline }: Props) => {
   const components = useMemo<PortableTextReactComponents>(() => {
-    const figureNumberFor = figureNumbers(content, firstFigure);
+    const figureNumberFor = figureNumbers(content);
     const imageNumbers = new Map<string, number>();
     let imageIndex = 0;
 
@@ -84,7 +79,7 @@ const RichTextParser = memo(({ content, outline, firstFigure = 1 }: Props) => {
       },
       figure: ({ value }: PortableTextTypeComponentProps<RichTextFigure>) => (
         <Figure
-          n={figureNumberFor.get(value._key) ?? firstFigure}
+          n={figureNumberFor.get(value._key) ?? 1}
           images={value.images ?? []}
           caption={value.caption}
           layout={normalizeLayout(value.layout)}
@@ -172,7 +167,7 @@ const RichTextParser = memo(({ content, outline, firstFigure = 1 }: Props) => {
       unknownList: ({ children }) => <ul>{children}</ul>,
       unknownListItem: ({ children }) => <li>{children}</li>,
     };
-  }, [content, outline, firstFigure]);
+  }, [content, outline]);
 
   return (
     <div className='ledger-prose'>

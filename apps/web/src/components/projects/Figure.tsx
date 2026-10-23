@@ -48,8 +48,8 @@ type CaptionBarProps = {
 };
 
 /**
- * The mono caption strip under a plate or figure. Same language as a code
- * listing's filename bar: raised paper, hairline rule, uppercase label.
+ * The mono caption strip under a figure. Same language as a code listing's
+ * filename bar: raised paper, hairline rule, uppercase label.
  */
 export function CaptionBar({ label, caption }: CaptionBarProps) {
   return (
@@ -85,13 +85,13 @@ export default function Figure({ n, images, caption, layout }: FigureProps) {
     .slice(0, 2);
   if (!shown.length) return null;
 
-  const label = figureLabel('figure', n);
+  const label = figureLabel(n);
   const classes = figureClasses(layout, shown.length);
   const sizes = figureSizes(layout, shown.length);
 
   return (
     <figure
-      id={figureId('figure', n)}
+      id={figureId(n)}
       data-layout={layout}
       className={`my-10 min-w-0 scroll-m-16 ${classes.figure}`}
     >

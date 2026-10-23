@@ -6,10 +6,6 @@ import Reveal from '@/components/motion/Reveal';
 import Contents from '@/components/projects/Contents';
 import DraftBanner from '@/components/projects/DraftBanner';
 import Plate from '@/components/projects/Plate';
-import {
-  firstFigureNumber,
-  heroPlateImage,
-} from '@/components/projects/figures';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import JsonLd from '@/components/jsonLd/JsonLd';
@@ -149,13 +145,7 @@ const page = async ({ params }: { params: Promise<Params> }) => {
           <Contents outline={outline} />
 
           <article>
-            <RichTextParser
-              content={content}
-              outline={outline}
-              firstFigure={firstFigureNumber(
-                heroPlateImage(project.images) !== null
-              )}
-            />
+            <RichTextParser content={content} outline={outline} />
           </article>
         </div>
         </main>
