@@ -1,4 +1,5 @@
 import {defineType, defineField} from 'sanity'
+import {subtitle} from './studio'
 
 // The route paths the site asks for (getDynamicMetaData in apps/web).
 const ROUTES = ['/', '/projects', '/cv']
@@ -58,8 +59,9 @@ export default defineType({
     },
     prepare(selection: {title?: string; slug?: {current?: string}}) {
       const {title, slug} = selection
+      // A new entry has neither yet; never list it as "undefined".
       return {
-        title: `${slug?.current} - ${title}`,
+        title: subtitle(slug?.current, title) || 'Untitled page',
       }
     },
   },
