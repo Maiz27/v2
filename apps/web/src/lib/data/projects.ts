@@ -4,7 +4,7 @@
  * wrong query with the wrong type. The GROQ exports are the existing ones from
  * `lib/sanity/queries`, unchanged — this only collapses the query+type pairing.
  */
-import { fetchSanityData } from '@/lib/sanity/client';
+import { fetchSanityData, fetchSanityPreviewData } from '@/lib/sanity/client';
 import {
   getProjects,
   getFeaturedProjects,
@@ -43,6 +43,13 @@ export const projects = {
    */
   bySlug: (slug: string) =>
     fetchSanityData<GetProjectBySlugResult>(getProjectBySlug, { slug }),
+  /**
+   * `bySlug` through the drafts perspective, for draft preview: an unpublished
+   * `drafts.<id>` edit wins over the published document. Failures (including
+   * a missing preview token) propagate the same way bySlug's do.
+   */
+  draftBySlug: (slug: string) =>
+    fetchSanityPreviewData<GetProjectBySlugResult>(getProjectBySlug, { slug }),
   /**
    * Slug + publish date for every project, for the sitemap. Failures
    * propagate: swallowing one would bake a projects-less sitemap into the
