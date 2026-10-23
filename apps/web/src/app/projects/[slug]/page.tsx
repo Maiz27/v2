@@ -1,8 +1,15 @@
+import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import Masthead from '@/components/layout/Masthead';
 import SiteFooter from '@/components/layout/SiteFooter';
 import Reveal from '@/components/motion/Reveal';
 import Contents from '@/components/projects/Contents';
+import DraftBanner from '@/components/projects/DraftBanner';
+import Plate from '@/components/projects/Plate';
+import {
+  firstFigureNumber,
+  heroPlateImage,
+} from '@/components/projects/figures';
 import RichTextParser from '@/components/RichTextParser/RichTextParser';
 import ScrollProgress from '@/components/ui/ScrollProgress';
 import JsonLd from '@/components/jsonLd/JsonLd';
@@ -21,7 +28,10 @@ type Params = { slug: string };
 
 const page = async ({ params }: { params: Promise<Params> }) => {
   const { slug } = await params;
-  const project = await projects.bySlug(slug);
+  const { isEnabled } = await draftMode();
+  const project = isEnabled
+    ? await projects.draftBySlug(slug)
+    : await projects.bySlug(slug);
 
   if (!project?.content) {
     return notFound();
@@ -60,6 +70,7 @@ const page = async ({ params }: { params: Promise<Params> }) => {
         <Masthead />
 
         <main>
+        {isEnabled && <DraftBanner />}
         {/* Case header */}
         <Reveal as='section' className='draw-b-hair py-14 md:py-20'>
           <p
@@ -132,11 +143,19 @@ const page = async ({ params }: { params: Promise<Params> }) => {
           </dl>
         </Reveal>
 
+        <Plate images={project.images} fallbackAlt={`${title} screenshot`} />
+
         <div className='gap-16 py-12 lg:grid lg:grid-cols-[11rem_minmax(0,1fr)]'>
           <Contents outline={outline} />
 
           <article>
-            <RichTextParser content={content} outline={outline} />
+            <RichTextParser
+              content={content}
+              outline={outline}
+              firstFigure={firstFigureNumber(
+                heroPlateImage(project.images) !== null
+              )}
+            />
           </article>
         </div>
         </main>
@@ -157,13 +176,14 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = await projects.metadataFor(slug);
   if (project) {
-    const { slug: projectSlug, contentTitle, description, images, title } = project;
+    const { slug: projectSlug, contentTitle, description, title } = project;
 
     return buildMetadata({
       title: `${contentTitle || title}`,
       description,
       path: `/projects/${projectSlug?.current}`,
-      image: images ?? undefined,
+      // null: no explicit images entry, so the file-based opengraph-image route wins.
+      image: null,
       type: 'article',
     });
   }
