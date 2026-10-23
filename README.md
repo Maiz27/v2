@@ -36,7 +36,7 @@ The site renders what Sanity holds, and the authoring scripts are the source of 
 
 - **Code is quoted, never edited.** Every snippet is copied verbatim from the real repository file it links to (elisions only via `// ...`), and every annotation `match` must occur in that code. Prose can be rewritten; code cannot. Re-audit a case study after its project repository changes.
 - **Drafts only.** Scripts write `drafts.<id>`; publishing happens in Studio after review, which can be done on the real site through draft preview (see `apps/web/README.md`).
-- **Every case study is a showcase.** The hero "plate" is composed from the project's gallery in order: a landscape main screen, a portrait phone shot, then two landscape details, all fresh captures dated in the caption. Body figures sit where the prose refers to them and never repeat a plate tile. `apps/web/README.md` documents the rendering rules; `PRODUCT.md` the visual ones.
+- **Every case study is a showcase.** The hero "plate" is composed from the project's gallery in order: a landscape main screen, a portrait phone shot, then two landscape details, all fresh captures. The plate carries no label or caption. Body figures sit where the prose refers to them and never repeat a plate tile. `apps/web/README.md` documents the rendering rules; `PRODUCT.md` the visual ones.
 - **Voice.** First person, plain, honest about mistakes; straight apostrophes, no em dashes. Describe the work, not who typed it.
 
 ## Getting Started

@@ -72,11 +72,11 @@ The plate uses the first four gallery images, and their order sets their role:
 2. the companion, normally a portrait phone shot;
 3. and 4. two landscape details.
 
-If every image is portrait they sit in one row. Put the plate caption on the first image and date it ("Stalemates, October 2026: ..."): the plate shows the first caption it finds. The first image is also the card image and the share-image thumbnail. Every image needs alt text. Drag to reorder; the Order index field only labels the list. The full layout rules are in the web app's README, under "Case-study visuals".
+If every image is portrait they sit in one row. The plate has no label or caption. The first image is also the card image and the share-image thumbnail. Every image needs alt text. Drag to reorder; the Order index field only labels the list. The full layout rules are in the web app's README, under "Case-study visuals".
 
 ### Figures and code
 
-- A **Figure** takes one image, or two shown side by side as a pair (use pairs for phone shots), each with its own alt text. Layout **Column** sits in the prose width; **Wide** spans the article column like a code listing. Figures are numbered in reading order after the plate.
+- A **Figure** takes one image, or two shown side by side as a pair (use pairs for phone shots), each with its own alt text. Layout **Column** sits in the prose width; **Wide** spans the article column like a code listing. Figures are numbered in reading order from 01; the plate is unnumbered.
 - A **Code snippet**'s filename is the path from the repository root with forward slashes (`src/lib/gist.ts`); Code tabs shorten it to the shortest ending that tells the files apart. The source URL is optional and should point at the file in the public repository, ideally pinned to a commit.
 - An annotation's **Match** must be text that appears in the code exactly. **Occurrence** is 1-based and only needed when the match appears more than once. Studio warns when a match is not found; the site skips that note instead of failing the page.
 
