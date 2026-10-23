@@ -1,46 +1,69 @@
 import {defineType, defineField} from 'sanity'
 
+import {assetDimensions, subtitle} from '../studio'
+
+/** One image in a project's plate gallery (`project.images[]`). */
 export const projectImage = defineType({
   name: 'projectImage',
-  title: 'Project Image',
+  title: 'Plate image',
   type: 'object',
   fields: [
     defineField({
       name: 'index',
-      title: 'Order Index',
+      title: 'Order index',
       type: 'number',
-      validation: (Rule) => Rule.required(),
+      description:
+        'A label for this list only: the site follows the list order, not this number. Use the image\'s position, 1 for the first.',
+      validation: (Rule) => Rule.required().error('Add the image\'s position, 1 for the first.'),
     }),
     defineField({
       name: 'image',
       title: 'Image',
       type: 'image',
-      validation: (Rule) => Rule.required(),
+      description:
+        'A fresh capture of the real product. Position 1 is the main screen (landscape), 2 the companion (usually a portrait phone shot), 3 and 4 the landscape details.',
+      validation: (Rule) => Rule.required().error('Upload the screenshot.'),
     }),
     defineField({
       name: 'alt',
       title: 'Alt text',
       type: 'string',
-      description: 'What the image shows, for screen readers.',
+      description:
+        'What the screenshot shows, for people who cannot see it. One plain sentence, e.g. "The Stalemates board mid-game with the move list open."',
+      validation: (Rule) =>
+        Rule.custom((alt) =>
+          typeof alt === 'string' && alt.trim() !== ''
+            ? true
+            : 'Add alt text. Without it the site reads out "<title> screenshot", which says nothing about the image.',
+        ).warning(),
     }),
     defineField({
       name: 'caption',
       title: 'Caption',
       type: 'string',
-      description: 'The plate shows the first non-empty caption among its images, so put the plate caption on the first image.',
+      description:
+        'The plate shows the first non-empty caption among its images, so put the plate caption on the first image and date it ("Stalemates, October 2026: ..."). Leave the others empty.',
     }),
   ],
   preview: {
     select: {
       index: 'index',
       caption: 'caption',
+      alt: 'alt',
       media: 'image',
+      ref: 'image.asset._ref',
     },
-    prepare(selection) {
-      const {index, caption, media} = selection
+    prepare({index, caption, alt, media, ref}) {
+      const size = assetDimensions(ref)
+      const shape = size ? (size.height > size.width ? 'portrait' : 'landscape') : ''
       return {
-        title: caption ? `Image (${index}): ${caption}` : `Image (${index})`,
-        media: media,
+        title: caption || alt || 'Untitled image',
+        subtitle: subtitle(
+          typeof index === 'number' ? `Image ${index}` : '',
+          shape,
+          alt ? '' : 'missing alt text',
+        ),
+        media,
       }
     },
   },
