@@ -28,8 +28,14 @@ const FONT = {
 
 const WIDTH = 1200;
 const HEIGHT = 630;
-/** The thumbnail column: a little over a quarter of the sheet's measure. */
-const PLATE_WIDTH = 336;
+/**
+ * The thumbnail: a wide 16:10 window on the plate's main screen, so the
+ * card shows the product's actual screen rather than a tall crop of its
+ * middle. It takes a little under half the sheet's measure.
+ */
+const THUMB_WIDTH = 460;
+const THUMB_HEIGHT = 288;
+const THUMB_GAP = 48;
 
 /** Sanity image CDN params for the thumbnail: bounded width, no upscaling. */
 export const thumbnailUrl = (url: string): string => {
@@ -42,15 +48,16 @@ export const thumbnailUrl = (url: string): string => {
 
 /**
  * The heading's font size, stepped down by length so a long case-study title
- * still fits its three-line clamp. The thumbnail column narrows the measure,
- * so the steps come sooner when there is one.
+ * still fits its three-line clamp. The thumbnail narrows the measure to about
+ * 548px (roughly 24 characters a line at the smallest step), so the steps
+ * come sooner when there is one.
  */
 export const headingSize = (text: string, hasThumbnail: boolean): number => {
   const n = text.length;
   if (hasThumbnail) {
-    if (n <= 32) return 68;
-    if (n <= 52) return 60;
-    return 52;
+    if (n <= 30) return 64;
+    if (n <= 48) return 56;
+    return 48;
   }
   if (n <= 40) return 76;
   if (n <= 70) return 66;
@@ -195,40 +202,24 @@ export const renderCaseStudyCard = async ({
 
   return respond(
     <Sheet>
-      {/* Eyebrow row: the project over the text column, the plate label over
-          the plate, so the heading and the frame share a top edge. */}
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 56 }}>
-        <div style={{ ...eyebrowStyle, flexGrow: 1, flexBasis: 0 }}>
-          {`Case study · ${title}`}
-        </div>
-        {thumbnail ? (
-          <div
-            style={{
-              width: PLATE_WIDTH,
-              fontFamily: FONT.mono,
-              fontSize: 13,
-              letterSpacing: 2.6,
-              textTransform: 'uppercase',
-              color: COLOR.inkFaint,
-            }}
-          >
-            Plate 01
-          </div>
-        ) : null}
-      </div>
+      <div style={eyebrowStyle}>{`Case study · ${title}`}</div>
+      {/* Body row: the heading and the thumbnail share a top edge; the
+          description sits at the bottom of the text column. */}
       <div
         style={{
           display: 'flex',
+          alignItems: 'flex-start',
           flexGrow: 1,
           marginTop: 40,
           marginBottom: 44,
-          gap: 56,
+          gap: THUMB_GAP,
         }}
       >
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
+            alignSelf: 'stretch',
             flexGrow: 1,
             flexBasis: 0,
           }}
@@ -266,7 +257,9 @@ export const renderCaseStudyCard = async ({
           <div
             style={{
               display: 'flex',
-              width: PLATE_WIDTH,
+              width: THUMB_WIDTH,
+              height: THUMB_HEIGHT,
+              flexShrink: 0,
               border: `1px solid ${COLOR.rule}`,
               backgroundColor: COLOR.sunken,
               overflow: 'hidden',
@@ -276,8 +269,8 @@ export const renderCaseStudyCard = async ({
             <img
               src={thumbnail}
               alt=''
-              width={PLATE_WIDTH}
-              height={PLATE_WIDTH}
+              width={THUMB_WIDTH}
+              height={THUMB_HEIGHT}
               style={{
                 width: '100%',
                 height: '100%',
