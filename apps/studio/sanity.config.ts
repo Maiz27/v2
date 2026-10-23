@@ -2,7 +2,7 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from '@v2/sanity-schemas'
-import {myStructure} from './deskStructure'
+import {myStructure, SINGLETON_TYPES} from './deskStructure'
 import {codeInput} from '@sanity/code-input'
 import {StreamLanguage} from '@codemirror/language'
 
@@ -66,6 +66,17 @@ export default defineConfig({
       ],
     }),
   ],
+
+  document: {
+    // Singletons are opened from the structure at a fixed id, so they cannot be
+    // created again, duplicated or deleted.
+    actions: (previousActions, context) =>
+      SINGLETON_TYPES.has(context.schemaType)
+        ? previousActions.filter(({action}) => action !== 'delete' && action !== 'duplicate')
+        : previousActions,
+    newDocumentOptions: (previousOptions) =>
+      previousOptions.filter(({templateId}) => !SINGLETON_TYPES.has(templateId)),
+  },
 
   schema: {
     types: schemaTypes,
