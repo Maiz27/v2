@@ -2,20 +2,27 @@ import {defineType, defineField} from 'sanity'
 
 export const duration = defineType({
   name: 'duration',
-  title: 'Job Duration',
+  title: 'Job duration',
   type: 'object',
+  options: {columns: 2},
   fields: [
     defineField({
       name: 'from',
-      title: 'From Date',
+      title: 'From',
       type: 'date',
-      validation: (Rule) => Rule.required(),
+      description: 'The CV shows the month and year.',
+      validation: (Rule) => Rule.required().error('Add the start date.'),
     }),
     defineField({
       name: 'to',
-      title: 'To Date',
+      title: 'To',
       type: 'date',
-      description: 'Leave empty if still working here',
+      description: 'Leave empty while the role is current: the CV shows "Present".',
+      validation: (Rule) =>
+        Rule.custom((to, context) => {
+          const from = (context.parent as {from?: string} | undefined)?.from
+          return to && from && to < from ? 'The end date is before the start date.' : true
+        }).warning(),
     }),
   ],
 })
