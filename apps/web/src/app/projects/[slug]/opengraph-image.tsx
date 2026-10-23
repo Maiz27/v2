@@ -17,9 +17,11 @@ export default async function Image({
   params: Promise<Params>;
 }) {
   const { slug } = await params;
-  const project = await projects.metadataFor(slug);
+  // A failed read throws rather than falling back: this response is cached
+  // for a day, and a generic card baked in for a real case study would stick.
+  const project = await projects.metadataForOg(slug);
 
-  // Unknown slug or a failed read: a generic card beats a broken preview.
+  // Unknown slug: a generic card beats a broken preview.
   if (!project) return renderSiteCard();
 
   return renderCaseStudyCard({

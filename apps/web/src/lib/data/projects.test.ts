@@ -38,6 +38,12 @@ const propagatingCases: AccessorCase[] = [
     query: 'getProjectsForSEO',
     read: () => projects.forSeo(),
   },
+  {
+    name: 'metadataForOg',
+    query: 'getProjectMetadata',
+    read: () => projects.metadataForOg('example'),
+    variables: { slug: 'example' },
+  },
 ];
 
 const degradableCases: AccessorCase[] = [

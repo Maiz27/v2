@@ -62,4 +62,13 @@ export const projects = {
     read(() =>
       fetchSanityData<GetProjectMetadataResult>(getProjectMetadata, { slug })
     ),
+  /**
+   * The same projection for the Open Graph image route. Failures propagate:
+   * that route caches its PNG for a day, so a swallowed outage would bake the
+   * generic site card in place of a real case study's card. A thrown error
+   * is not cached, so the previous image keeps serving or the next request
+   * retries. A successful null remains the only unknown-slug signal.
+   */
+  metadataForOg: (slug: string) =>
+    fetchSanityData<GetProjectMetadataResult>(getProjectMetadata, { slug }),
 };
