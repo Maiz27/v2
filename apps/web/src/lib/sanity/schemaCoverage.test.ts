@@ -89,7 +89,7 @@ const readWhole = (path: string) =>
 describe('Studio fields and site queries', () => {
   it('finds the schema it checks', () => {
     expect(allFieldPaths).toContain('project.images');
-    expect(allFieldPaths).toContain('projectImage.caption');
+    expect(allFieldPaths).toContain('projectImage.alt');
   });
 
   it('reads every Studio field or lists it as editor-only', () => {

@@ -37,27 +37,19 @@ export const projectImage = defineType({
             : 'Add alt text. Without it the site reads out "<title> screenshot", which says nothing about the image.',
         ).warning(),
     }),
-    defineField({
-      name: 'caption',
-      title: 'Caption',
-      type: 'string',
-      description:
-        'The plate shows the first non-empty caption among its images, so put the plate caption on the first image and date it ("Stalemates, October 2026: ..."). Leave the others empty.',
-    }),
   ],
   preview: {
     select: {
       index: 'index',
-      caption: 'caption',
       alt: 'alt',
       media: 'image',
       ref: 'image.asset._ref',
     },
-    prepare({index, caption, alt, media, ref}) {
+    prepare({index, alt, media, ref}) {
       const size = assetDimensions(ref)
       const shape = size ? (size.height > size.width ? 'portrait' : 'landscape') : ''
       return {
-        title: caption || alt || 'Untitled image',
+        title: alt || 'Untitled image',
         subtitle: subtitle(
           typeof index === 'number' ? `Image ${index}` : '',
           shape,

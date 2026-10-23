@@ -72,7 +72,6 @@ export const getProjectBySlug = groq`*[_type == "project" && slug.current == $sl
   "images": images[]{
     _key,
     alt,
-    caption,
     "url": image.asset->url,
     "width": image.asset->metadata.dimensions.width,
     "height": image.asset->metadata.dimensions.height,

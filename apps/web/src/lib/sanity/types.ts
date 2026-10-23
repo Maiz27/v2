@@ -120,7 +120,6 @@ export type ProjectImage = {
     _type: "image";
   };
   alt?: string;
-  caption?: string;
 };
 
 export type Company = {
@@ -563,7 +562,7 @@ export type GetFeaturedProjectsResult = Array<{
 
 // Source: ../web/src/lib/sanity/queries.ts
 // Variable: getProjectBySlug
-// Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },  "images": images[]{    _key,    alt,    caption,    "url": image.asset->url,    "width": image.asset->metadata.dimensions.width,    "height": image.asset->metadata.dimensions.height,    "lqip": image.asset->metadata.lqip  },  contentTitle,  content[]{    ...,    _type == "image" => {      "altText": asset->altText    },    _type == "figure" => {      caption,      layout,      images[]{        _key,        alt,        "url": image.asset->url,        "width": image.asset->metadata.dimensions.width,        "height": image.asset->metadata.dimensions.height,        "lqip": image.asset->metadata.lqip      }    }  },}[0]
+// Query: *[_type == "project" && slug.current == $slug]{  title,  slug,  date,  status,  description,  href,  source,  tools[]->{    name,    href,    iconSource,    iconName,    "iconSvg": iconSvg.asset->url  },  "images": images[]{    _key,    alt,    "url": image.asset->url,    "width": image.asset->metadata.dimensions.width,    "height": image.asset->metadata.dimensions.height,    "lqip": image.asset->metadata.lqip  },  contentTitle,  content[]{    ...,    _type == "image" => {      "altText": asset->altText    },    _type == "figure" => {      caption,      layout,      images[]{        _key,        alt,        "url": image.asset->url,        "width": image.asset->metadata.dimensions.width,        "height": image.asset->metadata.dimensions.height,        "lqip": image.asset->metadata.lqip      }    }  },}[0]
 export type GetProjectBySlugResult = {
   title: string;
   slug: Slug | null;
@@ -582,7 +581,6 @@ export type GetProjectBySlugResult = {
   images: Array<{
     _key: string;
     alt: string | null;
-    caption: string | null;
     url: string | null;
     width: number | null;
     height: number | null;
@@ -718,7 +716,7 @@ declare module "@sanity/client" {
     '*[_type == "aboutMe"]{\n  name,\n  role,\n  bio,\n  "imageUrl": image.asset->url,\n  heroLabel,\n  heroHeadline,\n  heroDescription,\n  currentStatusLabel,\n  currentStatus\n}[0]': GetAboutMeResult;
     '*[_id in ["cv", "drafts.cv"]] | order(_id asc)[0]{\n  summary,\n  experience[]->{\n    title,\n    location,\n    duration,\n    company{name, label, href},\n    tools[]->{name},\n    cvBullets\n  },\n  projects[]->{\n    title,\n    tools[]->{name},\n    date,\n    status,\n    href,\n    source,\n    cvBlurb\n  },\n  education,\n  skillGroups\n}': GetCvResult;
     '*[_type == "project" && featured == true] | order(date desc)[0..3]{\n  title,\n  slug,\n  featured,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n   name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n   "mainImage": images[0].image.asset->url\n}': GetFeaturedProjectsResult;
-    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n  "images": images[]{\n    _key,\n    alt,\n    caption,\n    "url": image.asset->url,\n    "width": image.asset->metadata.dimensions.width,\n    "height": image.asset->metadata.dimensions.height,\n    "lqip": image.asset->metadata.lqip\n  },\n  contentTitle,\n  content[]{\n    ...,\n    _type == "image" => {\n      "altText": asset->altText\n    },\n    _type == "figure" => {\n      caption,\n      layout,\n      images[]{\n        _key,\n        alt,\n        "url": image.asset->url,\n        "width": image.asset->metadata.dimensions.width,\n        "height": image.asset->metadata.dimensions.height,\n        "lqip": image.asset->metadata.lqip\n      }\n    }\n  },\n}[0]': GetProjectBySlugResult;
+    '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  date,\n  status,\n  description,\n  href,\n  source,\n  tools[]->{\n    name,\n    href,\n    iconSource,\n    iconName,\n    "iconSvg": iconSvg.asset->url\n  },\n  "images": images[]{\n    _key,\n    alt,\n    "url": image.asset->url,\n    "width": image.asset->metadata.dimensions.width,\n    "height": image.asset->metadata.dimensions.height,\n    "lqip": image.asset->metadata.lqip\n  },\n  contentTitle,\n  content[]{\n    ...,\n    _type == "image" => {\n      "altText": asset->altText\n    },\n    _type == "figure" => {\n      caption,\n      layout,\n      images[]{\n        _key,\n        alt,\n        "url": image.asset->url,\n        "width": image.asset->metadata.dimensions.width,\n        "height": image.asset->metadata.dimensions.height,\n        "lqip": image.asset->metadata.lqip\n      }\n    }\n  },\n}[0]': GetProjectBySlugResult;
     '*[_type == "project" && slug.current == $slug]{\n  title,\n  slug,\n  description,\n  "images": images[0].image.asset->url,\n  contentTitle,\n}[0]': GetProjectMetadataResult;
     '*[_type == "project"]{\n  "slug": slug.current,\n  "publishedAt": date,\n}': GetProjectsForSEOResult;
     '*[_type == "metadata" && slug.current == $slug]{\n  "slug": slug.current,\n  title,\n  description,\n}[0]': GetMetadataResult;

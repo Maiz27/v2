@@ -24,7 +24,6 @@ async function countOtherFeatured(context: ValidationContext): Promise<number | 
 }
 
 type PlateImage = {
-  caption?: string
   image?: {asset?: {_ref?: string}}
 }
 
@@ -32,10 +31,6 @@ type PlateImage = {
  *  checked as warnings so documents saved before them still publish. */
 function plateAdvice(images: PlateImage[] | undefined): string | true {
   if (!images || images.length === 0) return true
-
-  if (!images[0]?.caption?.trim()) {
-    return 'Put the plate caption on the first image. The plate shows the first caption it finds, so a caption on a later image becomes the plate caption, and none leaves the plate uncaptioned.'
-  }
 
   const shown = images
     .slice(0, PLATE_SIZE)
@@ -199,7 +194,7 @@ export default defineType({
       title: 'Plate images',
       type: 'array',
       group: 'plate',
-      description: `The plate under the case-study header, built from the first ${PLATE_SIZE} images in this order: 1, the main screen (landscape); 2, a companion, normally a portrait phone shot; 3 and 4, two landscape details. If every image is portrait they sit in one row. The first image's caption is the plate caption (date it, e.g. "Stalemates, October 2026: ..."), and the first image is also the card image and the share-image thumbnail. Every image needs alt text. Drag to reorder: list order decides, not the Order index.`,
+      description: `The plate under the case-study header, built from the first ${PLATE_SIZE} images in this order: 1, the main screen (landscape); 2, a companion, normally a portrait phone shot; 3 and 4, two landscape details. If every image is portrait they sit in one row. The plate has no label or caption; the first image is also the card image and the share-image thumbnail. Every image needs alt text. Drag to reorder: list order decides, not the Order index.`,
       of: [defineArrayMember({type: 'projectImage'})],
       validation: (Rule) => [
         Rule.max(PLATE_SIZE).warning(
