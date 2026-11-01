@@ -5,7 +5,7 @@
  */
 export const OWNER = {
   name: 'Maged Faiz',
-  role: 'Full Stack Developer',
+  role: 'Full Stack Developer · Infrastructure',
   email: 'magedfaiz98@gmail.com',
   github: 'https://github.com/Maiz27',
   githubLabel: 'github.com/Maiz27',
