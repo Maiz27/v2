@@ -521,8 +521,9 @@ const RouteTransition = () => {
       // scanner can't terminate an arbitrary-value candidate that abuts a
       // template `${` (`z-[120]${...}` drops the z-index rule from the build,
       // sending the curtain behind every positioned element on the page).
+      // print:hidden keeps a curtain still covering the page out of a printout.
       className={
-        'pointer-events-none fixed inset-0 z-[120]' +
+        'pointer-events-none fixed inset-0 z-[120] print:hidden' +
         (startCovered ? ' ledger-arrival' : '')
       }
       style={{
