@@ -415,6 +415,12 @@ label[for] {
 
 /* ---- Print: the /cv document should print clean, black on white ---- */
 @media print {
+  /* color-scheme: dark makes Chrome paint the page margins dark when
+     background graphics are on; print is light on every surface. */
+  html {
+    color-scheme: light;
+    background: #fff;
+  }
   .ledger-body {
     /* min-h-dvh (screen layout) does not translate to the print medium: a
        dvh-based min-height persisting into print pagination is what was
@@ -462,7 +468,16 @@ label[for] {
   h3 {
     break-after: avoid;
   }
+  /* The empty margin boxes keep Chrome from printing its own date, title,
+     URL and page-number header and footer in the margins, while each page
+     keeps its 12mm margin. Browsers without margin-box support ignore them. */
   @page {
     margin: 12mm 12mm 10mm 12mm;
+    @top-center {
+      content: '';
+    }
+    @bottom-center {
+      content: '';
+    }
   }
 }
